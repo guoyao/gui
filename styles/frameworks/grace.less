@@ -8,19 +8,20 @@
 
 @component-background-color: #eeeeee;
 
+@default-grace-nav-item-width: 120px;
+
 .grace-nav {
   margin: 0;
   padding: 0;
   list-style-type: none;
   a {
-    min-width: 100px;
-    padding: 6px 10px;
     display: block;
     text-align: center;
     background-color: @component-background-color;
-    width: auto !important; // css hack for ie6
-    width: 100px; // css hack for ie6
-    white-space: nowrap; // css hack for ie6
+    padding: 6px 10px;
+    width: @default-grace-nav-item-width - 20;
+    white-space: nowrap;
+    overflow: hidden;
     &:hover {
       background-color: darken(@component-background-color, 10%);
     }
@@ -44,7 +45,7 @@
       _display: inline; // css hack for ie6
       ul {
         top: 0;
-        left: 120px;
+        left: @default-grace-nav-item-width;
       }
     }
   }
@@ -53,10 +54,10 @@
 .grace-nav-vertical {
   > li {
     float: none;
-    width: 120px;
+    width: @default-grace-nav-item-width;
   }
   ul {
     top: 0;
-    left: 120px;
+    left: @default-grace-nav-item-width;
   }
 }
