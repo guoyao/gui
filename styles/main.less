@@ -1,0 +1,60 @@
+/**
+ * User: guoyao
+ * Time: 07-24-2013 18:10
+ * Blog: http://www.guoyao.me
+ */
+
+@main-width: 1000px;
+@navigator-width: 200px;
+@default-padding: 10px;
+
+@import "frameworks/base";
+
+html, body {
+  text-align: center;
+  height: 100%;
+  font-family: arial;
+  font-size: 12px;
+}
+
+a {
+  text-decoration: none;
+  &:focus, &:active {
+    outline: none;
+  }
+}
+
+#main {
+  width: @main-width;
+  height: 100%;
+  margin: 0 auto;
+  padding: @default-padding 0;
+}
+
+#navigator {
+  width: @navigator-width;
+  height: 100%;
+  text-align: left;
+  float: left;
+  .bordered;
+  div {
+    margin: 5px;
+    padding: @default-padding / 2;
+    .border-radius;
+    &.selected {
+      background-color: #eeeeee;
+    }
+    a {
+      display: block;
+      padding: 3px 8px;
+    }
+  }
+}
+
+#shell {
+  height: 100%;
+  text-align: left;
+  margin-left: @navigator-width + @default-padding;
+  _margin-left: @navigator-width + @default-padding - 4; // bug: ie 6, 7, 8
+  .bordered;
+}
