@@ -25,6 +25,9 @@
       background-color: darken(@component-background-color, 10%);
     }
   }
+  li {
+    position: relative;
+  }
   > li { // ie6 does't support direct child selecotr('>'), we use js to imitate this feature for ie6
     float: left;
   }
@@ -33,14 +36,13 @@
   }
   ul {
     display: none;
+    position: absolute;
     margin: 0;
     padding: 0;
     list-style-type: none;
     li {
       _display: inline; // css hack for ie6
-      position: relative;
       ul {
-        position: absolute;
         top: 0;
         left: 120px;
       }
@@ -52,10 +54,8 @@
   > li {
     float: none;
     width: 120px;
-    position: relative;
   }
   ul {
-    position: absolute;
     top: 0;
     left: 120px;
   }
