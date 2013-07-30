@@ -8,20 +8,18 @@
 
     var document = window.document,
         console = window.console,
-        _debug = function (value) {
-            if (console) {
-                console.debug(value);
-            }
-            else {
-                alert(value);
+        browserInfo = {
+            isIE: $.browser.msie,
+            version: Number($.browser.version),
+            documentMode: Number(document.documentMode)
+        },
+        patcher = {
+            patch: function (plugin, $$elements) {
+                if (browserInfo.isIE && $.isFunction(plugin.iePatch)) {
+                    plugin.iePatch($$elements);
+                }
             }
         };
-
-    var browserInfo = {
-        isIE: $.browser.msie,
-        version: Number($.browser.version),
-        documentMode: Number(document.documentMode)
-    };
 
     $.fn.graceNav = function (options) {
 
@@ -32,36 +30,24 @@
 
         options = $.extend({}, defaults, options);
 
-        var init = function ($graceNav, isVertical) {
-            $graceNav.find("a").css({
-                width: options.itemWidth,
-                height: options.itemHeight,
-                lineHeight: options.itemHeight
-            });
+        function initEach($graceNav) {
+            var isVertical = $graceNav.hasClass("grace-nav-vertical");
             if (isVertical) {
                 $graceNav.find("ul").css("left", options.itemWidth);
             } else {
                 $graceNav.find("ul ul").css("left", options.itemWidth);
             }
-        };
+        }
 
-        return this.each(function () {
-            var $graceNav = $(this);
-            var isVertical = $graceNav.hasClass("grace-nav-vertical");
-            init($graceNav, isVertical);
-            if (browserInfo.isIE) {
-                if (browserInfo.version <= 6) {
-                    if (!isVertical) {
-                        $graceNav.find("> li").css("float", "left");
-                    }
-                    $graceNav.find("li").hover(function () {
-                        $(this).find("> ul").css("display", "block");
-                    }, function () {
-                        $(this).find("> ul").css("display", "none");
-                    });
-                }
-            }
+        this.find("a").css({
+            width: options.itemWidth,
+            height: options.itemHeight,
+            lineHeight: options.itemHeight
         });
+
+        patcher.patch($.fn.graceNav, this);
+
+        return  this.each(initEach);
     };
 
 })(window, jQuery);
