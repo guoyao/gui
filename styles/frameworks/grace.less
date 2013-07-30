@@ -8,7 +8,8 @@
 
 @component-background-color: #eeeeee;
 
-@default-grace-nav-item-width: 120px;
+@grace-nav-item-width: 120px;
+@grace-nav-item-height: 30px;
 
 .grace-nav {
   margin: 0;
@@ -18,8 +19,9 @@
     display: block;
     text-align: center;
     background-color: @component-background-color;
-    padding: 6px 10px;
-    width: @default-grace-nav-item-width - 20;
+    line-height: @grace-nav-item-height;
+    height: @grace-nav-item-height;
+    width: @grace-nav-item-width;
     white-space: nowrap;
     overflow: hidden;
     &:hover {
@@ -27,13 +29,14 @@
     }
   }
   li {
+    *display: inline; //  hack for ie6 at horizontal state(second layer only), and ie6, 7 at vertical state
     position: relative;
+    &:hover > ul { // ie6 does't support :hover class except link tag('a'), we use js to imitate this feature for ie6
+      display: block;
+    }
   }
   > li { // ie6 does't support direct child selecotr('>'), we use js to imitate this feature for ie6
     float: left;
-  }
-  li:hover > ul { // ie6 does't support :hover class except link tag('a'), we use js to imitate this feature for ie6
-    display: block;
   }
   ul {
     display: none;
@@ -41,12 +44,9 @@
     margin: 0;
     padding: 0;
     list-style-type: none;
-    li {
-      _display: inline; // css hack for ie6
-      ul {
-        top: 0;
-        left: @default-grace-nav-item-width;
-      }
+    ul {
+      top: 0;
+      left: @grace-nav-item-width;
     }
   }
 }
@@ -54,10 +54,10 @@
 .grace-nav-vertical {
   > li {
     float: none;
-    width: @default-grace-nav-item-width;
+    width: @grace-nav-item-width;
   }
   ul {
     top: 0;
-    left: @default-grace-nav-item-width;
+    left: @grace-nav-item-width;
   }
 }

@@ -4,7 +4,18 @@
  * Blog: http://www.guoyao.me
  */
 
-(function (document, $) {
+(function (window, $) {
+
+    var document = window.document,
+        console = window.console,
+        _debug = function (value) {
+            if (console) {
+                console.debug(value);
+            }
+            else {
+                alert(value);
+            }
+        };
 
     var browserInfo = {
         isIE: $.browser.msie,
@@ -12,25 +23,35 @@
         documentMode: Number(document.documentMode)
     };
 
-    $.fn.graceNav = function () {
+    $.fn.graceNav = function (options) {
+
+        var defaults = {
+            itemWidth: "120px",
+            itemHeight: "30px"
+        };
+
+        options = $.extend({}, defaults, options);
+
+        var init = function ($graceNav, isVertical) {
+            $graceNav.find("a").css({
+                width: options.itemWidth,
+                height: options.itemHeight,
+                lineHeight: options.itemHeight
+            });
+            if (isVertical) {
+                $graceNav.find("ul").css("left", options.itemWidth);
+            } else {
+                $graceNav.find("ul ul").css("left", options.itemWidth);
+            }
+        };
+
         return this.each(function () {
             var $graceNav = $(this);
             var isVertical = $graceNav.hasClass("grace-nav-vertical");
+            init($graceNav, isVertical);
             if (browserInfo.isIE) {
-                if (isVertical && (browserInfo.version <= 7 || browserInfo.documentMode <= 7)) {
-                    $graceNav.find("> li").hover(function () {
-                        if($(this).find("> ul").length > 0) {
-                            $(this).css("margin-bottom", "-3px");
-                        }
-                    }, function () {
-                        $(this).css("margin-bottom", 0);
-                    })
-                }
-                if(browserInfo.version <= 6) {
-                    if(isVertical) {
-                        $graceNav.find("> li").css("width", "120px");
-                    }
-                    else {
+                if (browserInfo.version <= 6) {
+                    if (!isVertical) {
                         $graceNav.find("> li").css("float", "left");
                     }
                     $graceNav.find("li").hover(function () {
@@ -43,4 +64,4 @@
         });
     };
 
-})(document, jQuery);
+})(window, jQuery);

@@ -5,5 +5,8 @@
  */
 
 (function ($) {
-    $(".grace-nav").graceNav();
+    $(".grace-nav").graceNav({
+//        itemWidth: "180px",
+//        itemHeight: "50px"
+    });
 })(jQuery);
