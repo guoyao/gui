@@ -30,20 +30,23 @@
 
         options = $.extend({}, defaults, options);
 
-        function initEach($graceNav) {
-            var isVertical = $graceNav.hasClass("grace-nav-vertical");
+        function initEach() {
+            var $graceNav = $(this),
+                isVertical = $graceNav.hasClass("grace-nav-vertical"),
+                option = $.extend({}, options, $graceNav.data());
+
+            $graceNav.find("a").css({
+                width: option.itemWidth,
+                height: option.itemHeight,
+                lineHeight: option.itemHeight
+            });
+
             if (isVertical) {
-                $graceNav.find("ul").css("left", options.itemWidth);
+                $graceNav.find("ul").css("left", option.itemWidth);
             } else {
-                $graceNav.find("ul ul").css("left", options.itemWidth);
+                $graceNav.find("ul ul").css("left", option.itemWidth);
             }
         }
-
-        this.find("a").css({
-            width: options.itemWidth,
-            height: options.itemHeight,
-            lineHeight: options.itemHeight
-        });
 
         patcher.patch($.fn.graceNav, this);
 

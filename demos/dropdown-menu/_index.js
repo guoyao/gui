@@ -6,7 +6,7 @@
 
 (function ($) {
     $(".grace-nav").graceNav({
-//        itemWidth: "180px",
-//        itemHeight: "50px"
+        itemWidth: "130px",
+        itemHeight: "35px"
     });
 })(jQuery);
