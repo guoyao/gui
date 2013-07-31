@@ -8,6 +8,7 @@
 .DS_Store
 .idea
 *.iml
+*.log
 out
 dist
 build
