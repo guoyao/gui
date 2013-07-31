@@ -18,3 +18,4 @@ target
 .settings
 bin
 styles/*.css
+node_modules
