@@ -25,7 +25,8 @@
 
         var defaults = {
             itemWidth: "120px",
-            itemHeight: "30px"
+            itemHeight: "30px",
+            border: ""
         };
 
         options = $.extend({}, defaults, options);
@@ -35,6 +36,8 @@
                 isVertical = $graceNav.hasClass("grace-nav-vertical"),
                 option = $.extend({}, options, $graceNav.data());
 
+            $graceNav.css("border", option.border)
+                .find("ul").css("border", option.border);
             $graceNav.find("a").css({
                 width: option.itemWidth,
                 height: option.itemHeight,
@@ -42,9 +45,11 @@
             });
 
             if (isVertical) {
-                $graceNav.find("ul").css("left", option.itemWidth);
+                $graceNav.css("width", option.itemWidth)
+                    .find("ul").css("left", option.itemWidth);
             } else {
-                $graceNav.find("ul ul").css("left", option.itemWidth);
+                $graceNav.css("height", option.itemHeight)
+                    .find("ul ul").css("left", option.itemWidth);
             }
         }
 
