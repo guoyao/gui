@@ -18,5 +18,6 @@ target
 .project
 .settings
 bin
-styles/*.css
 node_modules
+demo/js/grace*.js
+demo/css

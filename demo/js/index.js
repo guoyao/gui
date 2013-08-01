@@ -7,7 +7,7 @@
 (function (document, $) {
     var Env = {
         production: false,
-        demosDirectory: "demos"
+        modulesDirectory: "modules"
     };
 
     var modules = [
@@ -21,7 +21,7 @@
     }
 
     var getDemoResourceUrl = function (artifact, resource) {
-        var url = Env.demosDirectory + "/" + artifact + "/" + resource;
+        var url = Env.modulesDirectory + "/" + artifact + "/" + resource;
         if (!Env.production) {
             url += "?" + new Date().getTime();
         }
