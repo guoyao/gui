@@ -5,25 +5,110 @@
  */
 
 module.exports = function (grunt) {
+    "use strict";
 
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        banner: '/**\n' +
+            '* <%= pkg.name %>.js v<%= pkg.version %> by @guoyao\n' +
+            '* Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+            '* <%= pkg.description %>\n' +
+            '* <%= pkg.homepage %>\n' +
+            '* <%= _.pluck(pkg.licenses, "url").join(", ") %>\n' +
+            '*/\n',
+
+        jqueryCheck: 'if (!jQuery) { throw new Error(\"Graceful-web-ui requires jQuery\") }\n\n',
+
+        clean: {
+            dist: ['dist']
+        },
+
+        concat: {
+            options: {
+                banner: '<%= banner %><%= jqueryCheck %>',
+                stripBanners: false
+            },
+            grace: {
+                src: ['js/helper.js', 'js/nav.js', 'js/nav-ie-patch.js'],
+                dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
+            }
+        },
+
+        recess: {
+            options: {
+                compile: true
+            },
+            grace: {
+                files: {
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/grace.less'],
+                    'demo/css/index.css': ['demo/less/index.less']
+                }
+            },
+            min: {
+                options: {
+                    compress: true
+                },
+                files: {
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/grace.less']
+                }
+            }
+        },
+
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '<%= banner %>'
             },
-            build: {
-                src: 'src/<%= pkg.name %>.js',
-                dest: 'build/<%= pkg.name %>.min.js'
+            grace: {
+                files: {
+                    'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.grace.dest %>']
+                }
+            }
+        },
+
+        copy: {
+            demo: {
+                files: {
+                    'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
+                    'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                }
+            }
+        },
+
+        connect: {
+            server: {
+                options: {
+                    port: 3000,
+                    base: 'demo',
+                    keepalive: true
+                }
             }
         }
     });
 
-    // Load the plugin that provides the "uglify" task.
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-recess');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+
+    // JS distribution task.
+    grunt.registerTask('dist-js', ['concat', 'uglify']);
+
+    // CSS distribution task.
+    grunt.registerTask('dist-css', ['recess']);
+
+    // demo distribution task.
+    grunt.registerTask('dist-demo', ['copy:demo']);
+
+    // Full distribution task.
+    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js']);
+
+    // start local server for demo
+    grunt.registerTask('server', ['dist', 'dist-demo', 'connect']);
 
     // Default task(s).
-    grunt.registerTask('default', ['uglify']);
+    grunt.registerTask('default', ['dist', 'dist-demo']);
 
 };
