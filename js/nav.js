@@ -17,30 +17,24 @@
  * limitations under the License.
  * ======================================================================== */
 
-(function (window, $) {
+(function (window) {
     "use strict";
 
     var document = window.document,
         console = window.console,
-        browserInfo = {
-            isIE: $.browser.msie,
-            version: Number($.browser.version),
-            documentMode: Number(document.documentMode)
-        },
-        patcher = {
-            patch: function (plugin, $$elements) {
-                if (browserInfo.isIE && $.isFunction(plugin.iePatch)) {
-                    plugin.iePatch($$elements);
-                }
-            }
-        };
+        $ = window.jQuery,
+        grace = window.grace;
 
     $.fn.graceNav = function (options) {
 
         var defaults = {
+            backgroundColor: "#eeeeee",
+            border: "",
             itemWidth: "120px",
             itemHeight: "30px",
-            border: ""
+            itemOverColor: "#d5d5d5",
+            itemFadeIn: true,
+            animationDuration: 500
         };
 
         options = $.extend({}, defaults, options);
@@ -50,13 +44,23 @@
                 isVertical = $graceNav.hasClass("grace-nav-vertical"),
                 option = $.extend({}, options, $graceNav.data());
 
-            $graceNav.css("border", option.border)
-                .find("ul").css("border", option.border);
+            $graceNav.css({
+                backgroundColor: option.backgroundColor,
+                border: option.border
+            }).find("ul").css({
+                    backgroundColor: option.backgroundColor,
+                    border: option.border
+                });
+
             $graceNav.find("a").css({
                 width: option.itemWidth,
                 height: option.itemHeight,
                 lineHeight: option.itemHeight
-            });
+            }).hover(function () {
+                    $(this).css("backgroundColor", option.itemOverColor);
+                }, function () {
+                    $(this).css("backgroundColor", option.backgroundColor);
+                });
 
             if (isVertical) {
                 $graceNav.css("width", option.itemWidth)
@@ -65,11 +69,17 @@
                 $graceNav.css("height", option.itemHeight)
                     .find("ul ul").css("left", option.itemWidth);
             }
+
+            if(option.itemFadeIn) {
+                $graceNav.find("li").hover(function () {
+                   $(this).children("ul").css("opacity", 0).animate({opacity: 1}, option.animationDuration);
+                }, function () {});
+            }
         }
 
-        patcher.patch($.fn.graceNav, this);
+        grace.patcher.patch($.fn.graceNav, this);
 
         return  this.each(initEach);
     };
 
-})(window, jQuery);
+})(window);

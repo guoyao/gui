@@ -17,32 +17,29 @@
  * limitations under the License.
  * ======================================================================== */
 
-(function (window, $) {
+(function (window) {
     "use strict";
 
     var document = window.document,
         console = window.console,
-        browserInfo = {
-            isIE: $.browser.msie,
-            version: Number($.browser.version),
-            documentMode: Number(document.documentMode)
-        };
+        $ = window.jQuery,
+        grace = window.grace;
 
     $.fn.graceNav.iePatch = function ($$graceNav) {
-        if (browserInfo.version <= 6) { // lte IE 6
+        if (grace.browserInfo.version <= 6) { // lte IE 6
             $$graceNav.find("li").hover(function () {
-                $(this).find("> ul").css("display", "block");
+                $(this).children("ul").css("display", "block");
             }, function () {
-                $(this).find("> ul").css("display", "none");
+                $(this).children("ul").css("display", "none");
             });
             $$graceNav.each(function () {
                 var $graceNav = $(this);
                 var isVertical = $graceNav.hasClass("grace-nav-vertical");
                 if (!isVertical) {
-                    $graceNav.find("> li").css("float", "left");
+                    $graceNav.children("li").css("float", "left");
                 }
             });
         }
     };
 
-})(window, jQuery);
+})(window);

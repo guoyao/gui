@@ -44,4 +44,38 @@
         window.console = console;
     }
 
+    var $ = window.jQuery;
+
+    var grace = (function () {
+        var browserInfo = {
+            isIE: $.browser.msie,
+            version: (function () {
+                var version = Number($.browser.version);
+                if (!!document.documentMode) {
+                    return Math.min(version, Number(document.documentMode));
+                }
+                return version;
+            })()
+        };
+
+        var patcher = {
+            patch: function (plugin, $$elements) {
+                if (browserInfo.isIE && $.isFunction(plugin.iePatch)) {
+                    plugin.iePatch($$elements);
+                }
+            }
+        };
+
+        return {
+            browserInfo: browserInfo,
+            patcher: patcher
+        }
+    })();
+
+    if(!!window.grace) {
+        $.extend(window.grace, grace);
+    } else {
+        window.grace = grace;
+    }
+
 })(window);
