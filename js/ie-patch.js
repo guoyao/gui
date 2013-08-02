@@ -25,6 +25,10 @@
         $ = window.jQuery,
         grace = window.grace;
 
+    //
+    // Navs
+    // --------------------------------------------------
+
     $.fn.graceNav.iePatch = function ($$graceNav) {
         if (grace.browserInfo.version <= 6) { // lte IE 6
             $$graceNav.find("li").hover(function () {
@@ -39,6 +43,16 @@
                     $graceNav.children("li").css("float", "left");
                 }
             });
+        }
+    };
+
+    //
+    // Tabs
+    // --------------------------------------------------
+
+    $.fn.graceTab.iePatch = function ($$graceTab) {
+        if (grace.browserInfo.version <= 6) { // lte IE 6
+
         }
     };
 

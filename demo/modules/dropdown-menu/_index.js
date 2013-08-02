@@ -10,6 +10,7 @@
         border: "1px solid #d1d1d1",
         itemWidth: "130px",
         itemHeight: "35px",
-        itemOverColor: "#d5d5d5"
+        itemOverColor: "#d5d5d5",
+        animationDuration: 500
     });
 })(jQuery);
