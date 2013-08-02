@@ -1,5 +1,5 @@
 /* ========================================================================
- * Graceful-web-ui: nav-ie-patch.js v0.0.1
+ * Graceful-web-ui: nav-ie-patch.js v0.1.0alpha
  * http://www.grace.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu

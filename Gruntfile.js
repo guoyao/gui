@@ -1,5 +1,5 @@
 /**
- * User: guoyao
+ * Author: guoyao
  * Time: 07-31-2013 18:03
  * Blog: http://www.guoyao.me
  */
