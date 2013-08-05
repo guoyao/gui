@@ -70,10 +70,11 @@
                     .find("ul ul").css("left", option.itemWidth);
             }
 
-            if(option.itemFadeIn) {
+            if (option.itemFadeIn) {
                 $graceNav.find("li").hover(function () {
-                   $(this).children("ul").css("opacity", 0).animate({opacity: 1}, option.animationDuration);
-                }, function () {});
+                    $(this).children("ul").css("opacity", 0).animate({opacity: 1}, option.animationDuration);
+                }, function () {
+                });
             }
         }
 

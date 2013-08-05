@@ -48,31 +48,39 @@
 
     var grace = (function () {
         var browserInfo = {
-            isIE: $.browser.msie,
-            version: (function () {
-                var version = Number($.browser.version);
-                if (!!document.documentMode) {
-                    return Math.min(version, Number(document.documentMode));
+                isIE: $.browser.msie,
+                version: (function () {
+                    var version = Number($.browser.version);
+                    if (!!document.documentMode) {
+                        return Math.min(version, Number(document.documentMode));
+                    }
+                    return version;
+                })()
+            },
+            patcher = {
+                patch: function (plugin, $$elements) {
+                    if (browserInfo.isIE && $.isFunction(plugin.iePatch)) {
+                        plugin.iePatch($$elements);
+                    }
                 }
-                return version;
-            })()
-        };
+            };
 
-        var patcher = {
-            patch: function (plugin, $$elements) {
-                if (browserInfo.isIE && $.isFunction(plugin.iePatch)) {
-                    plugin.iePatch($$elements);
-                }
+        function showHide($element, show, speed, callback) {
+            if (show) {
+                $element.slideDown(speed, callback);
+            } else {
+                $element.hide(speed, callback);
             }
-        };
+        }
 
         return {
             browserInfo: browserInfo,
-            patcher: patcher
+            patcher: patcher,
+            showHide: showHide
         }
     })();
 
-    if(!!window.grace) {
+    if (!!window.grace) {
         $.extend(window.grace, grace);
     } else {
         window.grace = grace;

@@ -6,17 +6,16 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  background-color: @background-color;
+  background-color: @nav-theme-color;
   a {
     display: block;
     text-align: center;
     line-height: @nav-item-height;
     height: @nav-item-height;
     width: @nav-item-width;
-    white-space: nowrap;
-    overflow: hidden;
+    .text-overflow;
     &:hover {
-      background-color: @nav-item-over-color;
+      background-color: @nav-item-hover-color;
     }
   }
   li {
@@ -34,7 +33,7 @@
     margin: 0;
     padding: 0;
     list-style-type: none;
-    background-color: @background-color;
+    background-color: @nav-theme-color;
     ul {
       top: 0;
       left: @nav-item-width;

@@ -8,6 +8,7 @@
 @navigator-width: 200px;
 @default-padding: 10px;
 
+@import "../../less/variables.less";
 @import "../../less/mixins.less";
 
 html, body {
@@ -36,11 +37,11 @@ a {
   height: 100%;
   text-align: left;
   float: left;
-  .bordered;
+  border: @border-weight @border-type @border-color;
   div {
     margin: 5px;
     padding: @default-padding / 2;
-    .border-radius;
+    .border-radius(@border-radius-small);
     &.selected {
       background-color: #eeeeee;
     }
@@ -56,7 +57,7 @@ a {
   text-align: left;
   margin-left: @navigator-width + @default-padding;
   _margin-left: @navigator-width + @default-padding - 4; // bug: ie 6, 7, 8
-  .bordered;
+  border: @border-weight @border-type @border-color;
 }
 
 .module-container {

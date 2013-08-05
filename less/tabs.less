@@ -3,24 +3,44 @@
 // --------------------------------------------------
 
 .grace-tab {
-  ul.tabs {
+  .tabs {
     margin: 0;
     padding: 0;
     list-style-type: none;
-    border-bottom: 1px solid @border-color;
+    border-bottom: @border-weight @border-type @border-color;
+    .clearfix();
     li {
-      display: inline-block;
-      padding: 10px;
-      margin-bottom: 0;
-      &.selected {
-        .bordered;
-        border-bottom: 0;
-        .border-radius;
-        padding-bottom: -100px;
+      float: left;
+      margin-bottom: -1px;
+      a {
+        display: block;
+        padding: @padding-base-vertical @padding-base-horizontal;
+        margin-right: 2px;
+        border: 1px solid transparent;
+        .border-top-radius(@border-radius-base);
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          background-color: @hover-color;
+        }
+        &:hover {
+          border-color: @border-color;
+        }
       }
-      &:hover {
-        background-color: @over-color;
+      // Active state, and it's :hover to override normal :hover
+      &.active > a {
+        &,
+        &:hover,
+        &:focus {
+          background-color: @tab-theme-color;
+          border: @border-weight @border-type @border-color;
+          border-bottom-color: transparent;
+          cursor: default;
+        }
       }
     }
+  }
+  .tab-content {
+    display: none;
   }
 }

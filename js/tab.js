@@ -26,6 +26,65 @@
         grace = window.grace;
 
     $.fn.graceTab = function (options) {
+
+        var defaults = {
+
+        };
+        options = $.extend({}, defaults, options);
+
+        function showHideTabContent($tabItem, show) {
+            var linkItem = $tabItem.children("a");
+            if (linkItem && linkItem.length > 0) {
+                var contentId = linkItem[0].getAttribute("href");
+                if (/:\/\//.test(contentId)) {
+                    contentId = contentId.substring(contentId.lastIndexOf("#"), contentId.length);
+                    console.debug(contentId);
+                }
+                grace.showHide($(contentId), show);
+            }
+        }
+
+        function initEach() {
+            var $activeTabItem,
+                $graceTab = $(this),
+                $$tabItems = $graceTab.children(".tabs").children("li");
+
+            $$tabItems.each(function (index) {
+                var $tabItem = $(this);
+                if (index == 0) {
+                    $activeTabItem = $tabItem;
+                }
+                if ($tabItem.hasClass("active")) {
+                    if ($activeTabItem) {
+                        $activeTabItem.removeClass("active");
+                    }
+                    $activeTabItem = $tabItem;
+                }
+            });
+
+            if (!$activeTabItem) {
+                return;
+            }
+
+            $activeTabItem.addClass("active");
+
+            showHideTabContent($activeTabItem, true);
+
+            $$tabItems.children("a").click(function () {
+                if ($activeTabItem) {
+                    $activeTabItem.removeClass("active");
+                    showHideTabContent($activeTabItem, false);
+                }
+                $activeTabItem = $(this).parent();
+                $activeTabItem.addClass("active");
+                showHideTabContent($activeTabItem, true);
+                return false;
+            });
+
+        }
+
         grace.patcher.patch($.fn.graceTab, this);
+
+        return  this.each(initEach);
     };
 })(window);

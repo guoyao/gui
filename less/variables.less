@@ -5,9 +5,12 @@
 // Global
 // -------------------------
 
-@theme-color:                                            @gray-lighter;
-@over-color:                                              darken(@theme-color, 10%);
+@theme-color:                                            #fff;
+@hover-color:                                              darken(@theme-color, 6.5%); // #eee
 @border-color:                                            #d1d1d1;
+@border-type:                                             solid;
+@border-weight:                                          1px;
+
 
 // Grays
 // -------------------------
@@ -18,10 +21,67 @@
 @gray-light:                                               lighten(#000, 60%);   // #999
 @gray-lighter:                                            lighten(#000, 93.5%); // #eee
 
+
+// Scaffolding
+// -------------------------
+
+@body-background-color:               #fff;
+@text-color:                                @gray-dark;
+
+// Links
+// -------------------------
+
+@link-color:              #428bca;
+@link-hover-color:      darken(@link-color, 15%); // #2a6496
+
+// Typography
+// -------------------------
+
+@font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-serif:       Georgia, "Times New Roman", Times, serif;
+@font-family-monospace:   Monaco, Menlo, Consolas, "Courier New", monospace;
+@font-family-base:        @font-family-sans-serif;
+
+@font-size-base:          14px;
+@font-size-large:         ceil(@font-size-base * 1.25); // ~18px
+@font-size-small:         ceil(@font-size-base * 0.85); // ~12px
+
+@line-height-base:        1.428571429; // 20/14
+@line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
+
+// Components
+// -------------------------
+// Based on 14px font-size and 1.428 line-height (~20px to start)
+
+@padding-base-vertical:           8px;
+@padding-base-horizontal:        12px;
+
+@padding-large-vertical:         14px;
+@padding-large-horizontal:       16px;
+
+@padding-small-vertical:         5px;
+@padding-small-horizontal:       10px;
+
+@border-radius-base:             4px;
+@border-radius-large:            6px;
+@border-radius-small:            3px;
+
 // Navs
 // -------------------------
 
-@background-color:                                      @theme-color;
+@nav-theme-color:                                       @gray-lighter;
 @nav-item-width:                                        120px;
 @nav-item-height:                                       30px;
-@nav-item-over-color:                                  @over-color;
+@nav-item-hover-color:                                darken(@nav-theme-color, 10%); // #d5d5d5
+
+// Tabs
+// -------------------------
+
+@tab-theme-color:                                 @theme-color;
+@tab-item-hover-color:                           @hover-color;
+
+// Miscellaneous
+// -------------------------
+
+// Hr border color
+@hr-border:                                   @gray-lighter;
