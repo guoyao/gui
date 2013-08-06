@@ -25,6 +25,23 @@
         $ = window.jQuery,
         grace = window.grace;
 
+    function setMaxHeight($$elements, childSelector, modifiedValue) {
+        $$elements.each(function () {
+            var $element = $(this),
+                maxHeight = 0;
+            $element.children(childSelector).each(function () {
+                var height = $(this).height();
+                if (height > maxHeight) {
+                    maxHeight = height;
+                }
+            });
+            if ($.isNumeric(modifiedValue)) {
+                maxHeight += modifiedValue;
+            }
+            $element.height(maxHeight);
+        });
+    }
+
     //
     // Navs
     // --------------------------------------------------
@@ -37,8 +54,8 @@
                 $(this).children("ul").css("display", "none");
             });
             $$graceNav.each(function () {
-                var $graceNav = $(this);
-                var isVertical = $graceNav.hasClass("grace-nav-vertical");
+                var $graceNav = $(this),
+                    isVertical = $graceNav.hasClass("grace-nav-vertical");
                 if (!isVertical) {
                     $graceNav.children("li").css("float", "left");
                 }
@@ -51,8 +68,8 @@
     // --------------------------------------------------
 
     $.fn.graceTab.iePatch = function ($$graceTab) {
-        if (grace.browserInfo.version <= 6) { // lte IE 6
-
+        if (grace.browserInfo.version <= 7) { // lte IE 7
+            setMaxHeight($$graceTab.children(".tabs"), "li", -1);
         }
     };
 

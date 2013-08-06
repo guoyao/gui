@@ -17,5 +17,26 @@
 // ---------------------------------------------------
 
 .grace-tab {
-
+  .tabs {
+    li {
+      _position: relative; // hack for ie6, if you want to set margin to negative value, you should set position to relative
+      a {
+        // hack for ie6, because ie6 doesn't support transparent border
+//        _border-color:tomato;
+//        _filter:chroma(color=tomato);
+        _border: 0;
+        &:hover {
+          _border: @border-weight @border-type @border-color;
+          _border-bottom: 0;
+        }
+      }
+      &.active a {
+        &,
+        &:hover,
+        &:focus {
+          _border-bottom: 0;
+        }
+      }
+    }
+  }
 }

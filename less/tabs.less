@@ -16,19 +16,17 @@
         display: block;
         padding: @padding-base-vertical @padding-base-horizontal;
         margin-right: 2px;
-        border: 1px solid transparent;
+        border: @border-weight @border-type transparent;
         .border-top-radius(@border-radius-base);
         &:hover,
         &:focus {
           text-decoration: none;
-          background-color: @hover-color;
-        }
-        &:hover {
+          background-color: @tab-item-hover-color;
           border-color: @border-color;
         }
       }
       // Active state, and it's :hover to override normal :hover
-      &.active > a {
+      &.active a {
         &,
         &:hover,
         &:focus {
@@ -42,5 +40,15 @@
   }
   .tab-content {
     display: none;
+    padding: @padding-base-vertical @padding-base-horizontal;
+  }
+}
+
+.grace-tab-bordered {
+  border: @border-weight @border-type @border-color;
+  .tabs {
+    padding-top: @padding-base-vertical;
+    padding-left: @padding-base-horizontal;
+    background-color: @tab-header-background-color;
   }
 }

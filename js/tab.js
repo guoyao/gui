@@ -27,10 +27,10 @@
 
     $.fn.graceTab = function (options) {
 
-        var defaults = {
-
-        };
-        options = $.extend({}, defaults, options);
+//        var defaults = {
+//
+//        };
+//        options = $.extend({}, defaults, options);
 
         function showHideTabContent($tabItem, show) {
             var linkItem = $tabItem.children("a");
@@ -38,7 +38,6 @@
                 var contentId = linkItem[0].getAttribute("href");
                 if (/:\/\//.test(contentId)) {
                     contentId = contentId.substring(contentId.lastIndexOf("#"), contentId.length);
-                    console.debug(contentId);
                 }
                 grace.showHide($(contentId), show);
             }
