@@ -65,7 +65,7 @@ Run `grunt` to compile the CSS and JavaScript into `/dist`. **Requires recess an
 #### Only compile CSS and JavaScript - `grunt dist`
 `grunt dist` creates the `/dist` directory with compiled files. **Requires recess and uglify-js.**
 
-#### Only compile CSS and JavaScript - `grunt server`
+#### Run local server for demo - `grunt server`
 `grunt server` will start a local server for demo
 
 ### Troubleshooting dependencies
