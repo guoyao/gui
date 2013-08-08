@@ -65,7 +65,7 @@ Run `grunt` to compile the CSS and JavaScript into `/dist`. **Requires recess an
 #### Only compile CSS and JavaScript - `grunt dist`
 `grunt dist` creates the `/dist` directory with compiled files. **Requires recess and uglify-js.**
 
-#### Only compile CSS and JavaScript - `grunt server`
+#### Run local server for demo - `grunt server`
 `grunt server` will start a local server for demo
 
 ### Troubleshooting dependencies
@@ -116,6 +116,18 @@ For more information on SemVer, please visit [http://semver.org/](http://semver.
 + [https://twitter.com/wuguoyao](https://twitter.com/wuguoyao)
 + [http://github.com/guoyao](http://github.com/guoyao)
 + [http://guoyao.me](http://guoyao.me)
+
+
+
+## Major Contributors
+
+**Alfredzh**
+
++ [http://github.com/alfredzh](http://github.com/alfredzh)
+
+**Redstarter**
+
++ [http://github.com/redstarter](http://github.com/redstarter)
 
 
 
