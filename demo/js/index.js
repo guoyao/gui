@@ -12,7 +12,8 @@
 
     var modules = [
         new Module("Dropdown Menu", "dropdown-menu"),
-        new Module("Tab Navigator", "tab-navigator")
+        new Module("Tab Navigator", "tab-navigator"),
+		new Module("Collapse Menu","collapse-menu")
     ];
 
     function Module(name, artifact) {
