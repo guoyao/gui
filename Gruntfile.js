@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 stripBanners: false
             },
             grace: {
-                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/ie-patch.js'],
+                src: ['js/helper.js', 'js/nav.js', 'js/tab.js','js/collapse.js', 'js/ie-patch.js'],
                 dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
             }
         },
