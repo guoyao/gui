@@ -1,5 +1,5 @@
 /**
- * User: guoyao
+ * Author: guoyao
  * Time: 07-24-2013 18:10
  * Blog: http://www.guoyao.me
  */
@@ -11,7 +11,7 @@ html, body {
   text-align: center;
   font-family: arial;
   font-size: 12px;
-  padding: @padding-base-vertical 0;
+  padding: @padding-base-vertical @padding-base-horizontal;
 }
 
 a {
@@ -40,8 +40,13 @@ a {
 
 #shell {
   min-height: 600px;
+  _height: 600px;
   text-align: left;
   border: @border-weight @border-type @border-color;
+}
+
+.centered {
+  .centered();
 }
 
 .module-container {

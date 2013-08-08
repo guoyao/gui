@@ -102,6 +102,39 @@
   box-sizing: @boxmodel;
 }
 
+// Grid System
+// --------------------------------------------------
+
+// Centered grid element
+.grid-fixed() {
+  width: @grid-total-width;
+  .centered();
+  .clearfix();
+}
+
+// Creates a wrapper for a series of columns
+.make-row() {
+  // Then clear the floated columns
+  .clearfix();
+}
+
+// Generate the columns
+.make-column(@column) {
+  float: left;
+  // Prevent columns from collapsing when empty
+  min-height: 1px;
+  _display: inline;
+  margin-left: @grid-gutter-width / 2;
+  margin-right: @grid-gutter-width / 2;
+  //  width: (@grid-total-width / @grid-columns - @grid-gutter-width) * @column + (@column - 1) * @grid-gutter-width;
+  width: @column / @grid-columns * @grid-total-width - @grid-gutter-width;
+}
+
+// Generate the column offsets
+.make-column-offset(@column) {
+  margin-left: @grid-total-width / @grid-columns * @column + @grid-gutter-width / 2;
+}
+
 // OTHERS
 // --------------------------------------------------
 
@@ -111,4 +144,9 @@
   // IE8 filter
   @opacity-ie: (@opacity * 100);
   filter: ~"alpha(opacity=@{opacity-ie})";
+}
+
+.centered() {
+  margin-left: auto;
+  margin-right: auto;
 }
