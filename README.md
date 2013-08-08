@@ -119,6 +119,18 @@ For more information on SemVer, please visit [http://semver.org/](http://semver.
 
 
 
+## Major Contributors
+
+**Alfredzh**
+
++ [http://github.com/alfredzh](http://github.com/alfredzh)
+
+**Redstarter**
+
++ [http://github.com/redstarter](http://github.com/redstarter)
+
+
+
 ## Copyright and license
 
 Copyright 2013 Guoyao Wu under [the Apache 2.0 license](LICENSE).
