@@ -13,6 +13,7 @@
 			bgcolor: 'rgba(0,0,0,0.7)',
 			bgWrapperClass:'grace-popup-window',
 			contentWrapperClass:'grace-popup-content',
+			contentNodeClass:'grace-popup-content-node',
 			closeBtnWrapperClass:'grace-popup-closebtn',
 			selector:'.',
 			contentNodes:{
@@ -42,7 +43,7 @@
 			var $gracePopupWindow = $(options.selector + options.bgWrapperClass);
 
 			if($gracePopupWindow.length < 1){
-				$('<div class="' + options.bgWrapperClass + '" style="display:none;"><div class="' + options.contentWrapperClass + '"><b class="' + options.closeBtnWrapperClass + '"></b></div></div>').appendTo($('body'));
+				$('<div class="' + options.bgWrapperClass + '" style="display:none;"><div class="' + options.contentWrapperClass + '"><b class="' + options.closeBtnWrapperClass + '"></b><div class="' + options.contentNodeClass + '"></div></div></div>').appendTo($('body'));
 
 				var $gracePopupWindow = $(options.selector + options.bgWrapperClass),
 					$gracePopupContent = $(options.selector + options.contentWrapperClass),
@@ -62,8 +63,7 @@
 											   background:'white',
 											   'margin':'5% auto 0',
 											   position:'relative'
-											})
-								  .append(options.contentNodes.text);
+											});
 				$gracePopupCloseBtn.css({width:options.closeBtn.width,
 												height:options.closeBtn.height,
 												display:'block',
@@ -81,11 +81,13 @@
 			
 			var $gracePopupWindow = $(options.selector + options.bgWrapperClass),
 				$gracePopupContent = $(options.selector + options.contentWrapperClass),
-				$gracePopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
+				$gracePopupCloseBtn = $(options.selector + options.closeBtnWrapperClass),
+				$gracePopupContentNode = $(options.selector + options.contentNodeClass);
 
 			$gracePopupBtn.click(function(){
 				//var dataurl = $gracePopupBtn.attr('data-url');
 				$gracePopupWindow.fadeIn(options.animationDuration);
+				$gracePopupContentNode.html(options.contentNodes.text);
 				//console.log(dataurl);
 			});
 			$gracePopupCloseBtn.click(function(){
