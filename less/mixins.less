@@ -105,6 +105,9 @@
 // Grid System
 // --------------------------------------------------
 
+@grid-content-width:  @grid-total-width - @grid-gutter-width;
+@grid-column-width: @grid-total-width / @grid-columns - @grid-gutter-width;
+
 // Centered grid element
 .grid-fixed() {
   width: @grid-total-width;
@@ -126,13 +129,33 @@
   _display: inline;
   margin-left: @grid-gutter-width / 2;
   margin-right: @grid-gutter-width / 2;
-  //  width: (@grid-total-width / @grid-columns - @grid-gutter-width) * @column + (@column - 1) * @grid-gutter-width;
-  width: @column / @grid-columns * @grid-total-width - @grid-gutter-width;
+  width: @grid-column-width * @column + (@column - 1) * @grid-gutter-width;
 }
 
 // Generate the column offsets
 .make-column-offset(@column) {
   margin-left: @grid-total-width / @grid-columns * @column + @grid-gutter-width / 2;
+}
+
+// Creates a wrapper for a series of columns
+.make-row-fluid() {
+  // Then clear the floated columns
+  .clearfix();
+  width: 100%;
+}
+
+// Generate the columns
+.make-column-fluid(@column) {
+  display: block;
+  _display: inline;
+  margin-right: 0;
+  margin-left: percentage(@grid-gutter-width / @grid-content-width);
+  width: percentage((@grid-column-width * @column + (@column - 1) * @grid-gutter-width) / @grid-content-width);
+}
+
+// Generate the column offsets
+.make-column-fluid-offset(@column) {
+  margin-left: percentage((@grid-column-width * @column + (@column + 1) * @grid-gutter-width) / @grid-content-width);
 }
 
 // OTHERS

@@ -67,45 +67,163 @@
 }
 
 .offset11 {
-  .make-column(11);
+  .make-column-offset(11);
 }
 
 .offset10 {
-  .make-column(10);
+  .make-column-offset(10);
 }
 
 .offset9 {
-  .make-column(9);
+  .make-column-offset(9);
 }
 
 .offset8 {
-  .make-column(8);
+  .make-column-offset(8);
 }
 
 .offset7 {
-  .make-column(7);
+  .make-column-offset(7);
 }
 
 .offset6 {
-  .make-column(6);
+  .make-column-offset(6);
 }
 
 .offset5 {
-  .make-column(5);
+  .make-column-offset(5);
 }
 
 .offset4 {
-  .make-column(4);
+  .make-column-offset(4);
 }
 
 .offset3 {
-  .make-column(3);
+  .make-column-offset(3);
 }
 
 .offset2 {
-  .make-column(2);
+  .make-column-offset(2);
 }
 
 .offset1 {
-  .make-column(1);
+  .make-column-offset(1);
+}
+
+//
+// fluid grid system
+// --------------------------------------------------
+
+.row-fluid {
+  .make-row-fluid();
+}
+
+.row-fluid [class*="span"]:first-child {
+  margin-left: 0;
+}
+
+.row-fluid .span12 {
+  .make-column-fluid(12);
+  width: 100%;
+  margin-left: 0;
+}
+
+.row-fluid .span11 {
+  .make-column-fluid(11);
+}
+
+.row-fluid .span10 {
+  .make-column-fluid(10);
+}
+
+.row-fluid .span9 {
+  .make-column-fluid(9);
+}
+
+.row-fluid .span8 {
+  .make-column-fluid(8);
+}
+
+.row-fluid .span7 {
+  .make-column-fluid(7);
+}
+
+.row-fluid .span6 {
+  .make-column-fluid(6);
+}
+
+.row-fluid .span5 {
+  .make-column-fluid(5);
+}
+
+.row-fluid .span4 {
+  .make-column-fluid(4);
+}
+
+.row-fluid .span3 {
+  .make-column-fluid(3);
+}
+
+.row-fluid .span2 {
+  .make-column-fluid(2);
+}
+
+.row-fluid .span1 {
+  .make-column-fluid(1);
+}
+
+.row-fluid .offset12 {
+  .make-column-fluid-offset(12);
+}
+
+.row-fluid .offset11 {
+  .make-column-fluid-offset(11);
+}
+
+.row-fluid .offset10 {
+  .make-column-fluid-offset(10);
+}
+
+.row-fluid .offset9 {
+  .make-column-fluid-offset(9);
+}
+
+.row-fluid .offset8 {
+  .make-column-fluid-offset(8);
+}
+
+.row-fluid .offset7 {
+  .make-column-fluid-offset(7);
+}
+
+.row-fluid .offset6 {
+  .make-column-fluid-offset(6);
+}
+
+.row-fluid .offset5 {
+  .make-column-fluid-offset(5);
+}
+
+.row-fluid .offset4 {
+  .make-column-fluid-offset(4);
+}
+
+.row-fluid .offset3 {
+  .make-column-fluid-offset(3);
+}
+
+.row-fluid .offset2 {
+  .make-column-fluid-offset(2);
+}
+
+.row-fluid .offset1 {
+  .make-column-fluid-offset(1);
+}
+
+//
+// patch fluid grid system for ie
+// --------------------------------------------------
+
+.row-fluid .span-first {
+  _margin-left: 0;
 }
