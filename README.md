@@ -23,7 +23,7 @@ To get started, check out [http://grace.guoyao.me](http://grace.guoyao.me)!
 
 Two quick start options are available:
 
-* [Download the latest devlopment version](https://github.com/guoyao/graceful-web-ui/archive/master.zip).
+* [Download the latest devlopment version](https://github.com/guoyao/graceful-web-ui/archive/dev.zip).
 * Clone the repo: `git clone git://github.com/guoyao/graceful-web-ui.git`.
 
 Read the [Getting Started page](http://grace.guoyao.me/) for information on the framework contents, templates and examples, and more.

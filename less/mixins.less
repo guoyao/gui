@@ -105,11 +105,8 @@
 // Grid System
 // --------------------------------------------------
 
-@grid-content-width:  @grid-total-width - @grid-gutter-width;
-@grid-column-width: @grid-total-width / @grid-columns - @grid-gutter-width;
-
 // Centered grid element
-.grid-fixed() {
+.grid-fixed(@grid-total-width: @grid-total-width) {
   width: @grid-total-width;
   .centered();
   .clearfix();
@@ -122,7 +119,8 @@
 }
 
 // Generate the columns
-.make-column(@column) {
+.make-column(@column, @grid-total-width: @grid-total-width, @grid-columns: @grid-columns, @grid-gutter-width: @grid-gutter-width) {
+  @grid-column-width: @grid-total-width / @grid-columns - @grid-gutter-width;
   float: left;
   // Prevent columns from collapsing when empty
   min-height: 1px;
@@ -133,7 +131,7 @@
 }
 
 // Generate the column offsets
-.make-column-offset(@column) {
+.make-column-offset(@column, @grid-total-width: @grid-total-width, @grid-columns: @grid-columns, @grid-gutter-width: @grid-gutter-width) {
   margin-left: @grid-total-width / @grid-columns * @column + @grid-gutter-width / 2;
 }
 
@@ -146,6 +144,8 @@
 
 // Generate the columns
 .make-column-fluid(@column) {
+  @grid-content-width:  @grid-total-width - @grid-gutter-width;
+  @grid-column-width: @grid-total-width / @grid-columns - @grid-gutter-width;
   display: block;
   _display: inline;
   margin-right: 0;
@@ -155,6 +155,8 @@
 
 // Generate the column offsets
 .make-column-fluid-offset(@column) {
+  @grid-content-width:  @grid-total-width - @grid-gutter-width;
+  @grid-column-width: @grid-total-width / @grid-columns - @grid-gutter-width;
   margin-left: percentage((@grid-column-width * @column + (@column + 1) * @grid-gutter-width) / @grid-content-width);
 }
 
