@@ -1,0 +1,12 @@
+.bordered-column {
+    border: 1px solid #d1d1d1;
+    background-color: #eeeeee;
+    height: 26px;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+a.bordered-column:hover {
+    background-color: #e5e5e5;
+}
