@@ -10,6 +10,7 @@
 
 		var defaults = {
 			switchBtnClass:'.tab-btn',
+			switchBtnToggleClass:'tab-btn-closed',
 			switchTabClass:'.tab-content',
 			animationDuration: 500
 		};
@@ -33,8 +34,10 @@
 					var curHeight = $(this).siblings(options.switchTabClass).height();
 					if(curHeight <= 0 || tabContent.is(":hidden")){
 						tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
+						$(this).removeClass(options.switchBtnToggleClass);
 					}else{
 						tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
+						$(this).addClass(options.switchBtnToggleClass);
 					}
 				});
 			});
