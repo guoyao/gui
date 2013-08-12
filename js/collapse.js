@@ -9,6 +9,8 @@
 	$.fn.graceCollapse = function (options) {
 
 		var defaults = {
+			switchBtnClass:'.tab-btn',
+			switchTabClass:'.tab-content',
 			animationDuration: 500
 		};
 
@@ -17,8 +19,8 @@
 		function initEach() {
 			var $graceCollapse = $(this);
 			
-			$graceCollapse.find(".tab-btn").each(function(){
-				var tabContent = $(this).siblings(".tab-content");
+			$graceCollapse.find(options.switchBtnClass).each(function(){
+				var tabContent = $(this).siblings(options.switchTabClass);
 				var orgHeight;
 				if(!tabContent.is(":visible")){
 					tabContent.show();
@@ -28,11 +30,11 @@
 					orgHeight = tabContent.height();
 				}
 				$(this).click(function(){
-					var curHeight = $(this).siblings(".tab-content").height();
+					var curHeight = $(this).siblings(options.switchTabClass).height();
 					if(curHeight <= 0 || tabContent.is(":hidden")){
-						tabContent.css({display:"block", height:0,opacity:0}).animate({height: orgHeight,opacity: 1},options.animationDuration);
+						tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
 					}else{
-						tabContent.animate({height:0,opacity: 0},options.animationDuration);
+						tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
 					}
 				});
 			});
