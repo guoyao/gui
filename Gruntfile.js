@@ -83,6 +83,28 @@ module.exports = function (grunt) {
                     keepalive: true
                 }
             }
+        },
+
+        jshint: {
+            options: {
+                jshintrc: 'js/.jshintrc'
+            },
+            gruntfile: {
+                src: 'Gruntfile.js'
+            },
+            src: {
+                src: ['js/*.js']
+            },
+            test: {
+                src: ['js/tests/unit/*.js']
+            }
+        },
+
+        qunit: {
+            options: {
+                inject: 'js/tests/unit/phantom.js'
+            },
+            files: ['js/tests/*.html']
         }
     });
 
@@ -92,6 +114,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+
+    // Test task.
+    grunt.registerTask('test', ['jshint', 'qunit']);
 
     // JS distribution task.
     grunt.registerTask('dist-js', ['concat', 'uglify']);
@@ -109,6 +136,6 @@ module.exports = function (grunt) {
     grunt.registerTask('server', ['dist', 'dist-demo', 'connect']);
 
     // Default task(s).
-    grunt.registerTask('default', ['dist', 'dist-demo']);
+    grunt.registerTask('default', ['test', 'dist', 'dist-demo']);
 
 };

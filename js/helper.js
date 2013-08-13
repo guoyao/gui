@@ -59,7 +59,7 @@
             },
             patcher = {
                 patch: function (plugin, $$elements) {
-                    if (browserInfo.isIE && $.isFunction(plugin.iePatch)) {
+                    if (browserInfo.isIE && !!plugin && $.isFunction(plugin.iePatch)) {
                         plugin.iePatch($$elements);
                     }
                 }

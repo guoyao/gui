@@ -50,7 +50,7 @@
 
             $$tabItems.each(function (index) {
                 var $tabItem = $(this);
-                if (index == 0) {
+                if (index === 0) {
                     $activeTabItem = $tabItem;
                 }
                 if ($tabItem.hasClass("active")) {
