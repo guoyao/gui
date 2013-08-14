@@ -65,8 +65,14 @@ Run `grunt` to compile the CSS and JavaScript into `/dist`. **Requires recess an
 #### Only compile CSS and JavaScript - `grunt dist`
 `grunt dist` creates the `/dist` directory with compiled files. **Requires recess and uglify-js.**
 
-#### Run local server for demo - `grunt server`
-`grunt server` will start a local server for demo
+#### Tests - `grunt test`
+Runs jshint and qunit tests headlessly in [phantomjs](http://code.google.com/p/phantomjs/) (used for ci). **Requires phantomjs.**
+
+#### Watch - `grunt watch`
+This is a convenience method for watching just Less files and automatically building them whenever you save.
+
+#### Run local server for demo - `grunt s`
+`grunt s` will start a local server for demo
 
 ### Troubleshooting dependencies
 
