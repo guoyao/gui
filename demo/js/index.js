@@ -1,8 +1,8 @@
 /**
- * User: guoyao
- * Time: 07-25-2013 13:33
- * Blog: http://www.guoyao.me
- */
+* User: guoyao
+* Time: 07-25-2013 13:33
+* Blog: http://www.guoyao.me
+*/
 
 (function (document, $) {
     var Env = {
@@ -15,8 +15,9 @@
         new Module("Tab Navigator", "tab-navigator"),
 		new Module("Collapse Menu", "collapse-menu"),
         new Module("Grid System", "grid-system"),
-		new Module("popup Window","popup-window"),
-		new Module("slider","slider")
+        new Module("Popup Window", "popup-window"),
+		new Module("Slider","slider")
+        new Module("Panel Navigator", "panel-navigator")
     ];
 
     function Module(name, artifact) {
@@ -33,7 +34,7 @@
     };
 
     var loadDemo = function (artifact) {
-//        $('<link rel="stylesheet" href="' + getDemoResourceUrl(artifact, "_index.css") + '" artifact="' + artifact + '"/>').appendTo($("head")[0]);
+        //        $('<link rel="stylesheet" href="' + getDemoResourceUrl(artifact, "_index.css") + '" artifact="' + artifact + '"/>').appendTo($("head")[0]);
         // for lte IE 6, dynamic loaded css bug
         $('<link rel="stylesheet" artifact="' + artifact + '"/>').appendTo($("head")[0]).attr("href", getDemoResourceUrl(artifact, "_index.css"));
         $("#shell").load(getDemoResourceUrl(artifact, "_index.html"), function () {
@@ -42,9 +43,9 @@
     };
 
     /**
-     * unload css and js
-     * @param artifact string
-     */
+    * unload css and js
+    * @param artifact string
+    */
     var unloadDemo = function (artifact) {
         $("link").each(function () {
             if ($(this).attr("artifact") == artifact) {

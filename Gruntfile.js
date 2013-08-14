@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 stripBanners: false
             },
             grace: {
-                src: ['js/helper.js', 'js/nav.js', 'js/tab.js','js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/ie-patch.js'],
+                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', ,'js/slider.js' , 'js/panel.js', 'js/ie-patch.js'],
                 dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
             }
         },
@@ -83,6 +83,28 @@ module.exports = function (grunt) {
                     keepalive: true
                 }
             }
+        },
+
+        jshint: {
+            options: {
+                jshintrc: 'js/.jshintrc'
+            },
+            gruntfile: {
+                src: 'Gruntfile.js'
+            },
+            src: {
+                src: ['js/*.js']
+            },
+            test: {
+                src: ['js/tests/unit/*.js']
+            }
+        },
+
+        qunit: {
+            options: {
+                inject: 'js/tests/unit/phantom.js'
+            },
+            files: ['js/tests/*.html']
         }
     });
 
@@ -92,6 +114,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+
+    // Test task.
+    grunt.registerTask('test', ['jshint', 'qunit']);
 
     // JS distribution task.
     grunt.registerTask('dist-js', ['concat', 'uglify']);
@@ -106,7 +133,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js']);
 
     // start local server for demo
-    grunt.registerTask('server', ['dist', 'dist-demo', 'connect']);
+    grunt.registerTask('s', ['dist', 'dist-demo', 'connect']);
 
     // Default task(s).
     grunt.registerTask('default', ['dist', 'dist-demo']);

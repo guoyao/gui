@@ -20,37 +20,50 @@
 (function (window) {
     "use strict";
 
-    var document = window.document,
-        console = window.console,
+    var console = window.console,
         $ = window.jQuery,
-        grace = window.grace;
+        grace = window.grace,
+        old = $.fn.graceTab;
 
-    $.fn.graceTab = function (options) {
+    var GraceTab = function (element) {
+        this.$element = $(element);
+    };
 
-//        var defaults = {
-//
-//        };
-//        options = $.extend({}, defaults, options);
+    $.extend(GraceTab.prototype, {
+        show: function () {
+            var $li = this.$element.closest(".grace-tab > .tabs > li");
+            if ($li.hasClass('active')) {
+                return;
+            }
+            $li.trigger("click");
+        }
+    });
+
+    $.fn.graceTab = function (option) {
+
+        var isMethodCall = grace.plugin.isPluginMethodCall(option);
 
         function showHideTabContent($tabItem, show) {
-            var linkItem = $tabItem.children("a");
-            if (linkItem && linkItem.length > 0) {
-                var contentId = linkItem[0].getAttribute("href");
-                if (/:\/\//.test(contentId)) {
-                    contentId = contentId.substring(contentId.lastIndexOf("#"), contentId.length);
+            var selector = $tabItem.data("target");
+            if (!selector) {
+                var linkItem = $tabItem.children("a");
+                if (linkItem && linkItem.length > 0) {
+                    selector = linkItem[0].getAttribute("href");
+                    selector = selector && selector.replace(/.*(?=#[^\s]*$)/, ""); //strip for ie6, 7
                 }
-                grace.showHide($(contentId), show);
+            }
+            if(selector) {
+                grace.showHide($(selector), show);
             }
         }
 
-        function initEach() {
-            var $activeTabItem,
-                $graceTab = $(this),
+        function initEach($graceTab) {
+            var $activeTabItem = null,
                 $$tabItems = $graceTab.children(".tabs").children("li");
 
             $$tabItems.each(function (index) {
                 var $tabItem = $(this);
-                if (index == 0) {
+                if (index === 0) {
                     $activeTabItem = $tabItem;
                 }
                 if ($tabItem.hasClass("active")) {
@@ -69,21 +82,45 @@
 
             showHideTabContent($activeTabItem, true);
 
-            $$tabItems.children("a").click(function () {
-                if ($activeTabItem) {
-                    $activeTabItem.removeClass("active");
-                    showHideTabContent($activeTabItem, false);
+            $$tabItems.click(function () {
+                var $this = $(this);
+                if (!$this.hasClass("active")) {
+                    if ($activeTabItem) {
+                        $activeTabItem.removeClass("active");
+                        showHideTabContent($activeTabItem, false);
+                    }
+                    $activeTabItem = $this;
+                    $activeTabItem.addClass("active");
+                    showHideTabContent($activeTabItem, true);
                 }
-                $activeTabItem = $(this).parent();
-                $activeTabItem.addClass("active");
-                showHideTabContent($activeTabItem, true);
                 return false;
             });
 
         }
 
-        grace.patcher.patch($.fn.graceTab, this);
+        this.each(function () {
+            var $graceTab = $(this);
+            var data = $graceTab.data('grace.tab');
+            if (!data) {
+                $graceTab.data('grace.tab', (data = new GraceTab(this)))
+            }
+            if (isMethodCall) {
+                data[option]();
+            } else {
+                initEach($graceTab);
+            }
+        });
 
-        return  this.each(initEach);
+        return grace.plugin.patch($.fn.graceTab, this, option);
+    };
+
+    $.fn.graceTab.Constructor = GraceTab;
+
+    // NO CONFLICT
+    // ===============
+
+    $.fn.graceTab.noConflict = function () {
+        $.fn.graceTab = old;
+        return this;
     };
 })(window);

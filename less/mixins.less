@@ -116,6 +116,9 @@
 .make-row() {
   // Then clear the floated columns
   .clearfix();
+  .hidden {
+    visibility: hidden;
+  }
 }
 
 // Generate the columns
@@ -140,6 +143,9 @@
   // Then clear the floated columns
   .clearfix();
   width: 100%;
+  .hidden {
+    visibility: hidden;
+  }
 }
 
 // Generate the columns
@@ -151,6 +157,7 @@
   margin-right: 0;
   margin-left: percentage(@grid-gutter-width / @grid-content-width);
   width: percentage((@grid-column-width * @column + (@column - 1) * @grid-gutter-width) / @grid-content-width);
+  *width: percentage((@grid-column-width * @column + (@column - 1) * @grid-gutter-width) / @grid-content-width - 0.00065);
 }
 
 // Generate the column offsets
