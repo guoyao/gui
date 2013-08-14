@@ -18,12 +18,12 @@
         function initEach() {
             var $gracePanelsa = $(this);
             $gracePanelsa.find(".panelsa-btn").each(function () {
-                if (jQuery(this).attr('class').indexOf("opened") != -1) {
-                    jQuery(this).prepend('<div>' + options.title + '</div>');
-                    jQuery(this).addClass('panelsa-a-opened');
+                if ($(this).attr('class').indexOf("opened") != -1) {
+                    $(this).prepend('<div>' + options.title + '</div>');
+                    $(this).addClass('panelsa-a-opened');
                 } else {
-                    jQuery(this).prepend('<div>' + options.title + '</div>');
-                    jQuery(this).addClass('panelsa-a-closed');
+                    $(this).prepend('<div>' + options.title + '</div>');
+                    $(this).addClass('panelsa-a-closed');
                 }
 
                 var tabContent = $(this).siblings(".panelsa-content");
@@ -37,13 +37,13 @@
                     orgHeight = tabContent.height();
                 }
                 $(this).click(function () {
-                    if (jQuery(this).attr('class').indexOf("opened") != -1) {
-                        jQuery(this).removeClass('panelsa-a-opened');
-                        jQuery(this).addClass('panelsa-a-closed');
+                    if ($(this).attr('class').indexOf("opened") != -1) {
+                        $(this).removeClass('panelsa-a-opened');
+                        $(this).addClass('panelsa-a-closed');
                     }
                     else {
-                        jQuery(this).removeClass('panelsa-a-closed');
-                        jQuery(this).addClass('panelsa-a-opened');
+                        $(this).removeClass('panelsa-a-closed');
+                        $(this).addClass('panelsa-a-opened');
                     }
                     var curHeight = $(this).siblings(".panelsa-content").height();
                     if (curHeight <= 0 || tabContent.is(":hidden")) {
@@ -54,7 +54,6 @@
                 });
             });
         }
-        grace.patcher.patch($.fn.gracePanelsa, this);
         return this.each(initEach);
     };
 
