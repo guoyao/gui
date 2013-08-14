@@ -105,6 +105,21 @@ module.exports = function (grunt) {
                 inject: 'js/tests/unit/phantom.js'
             },
             files: ['js/tests/*.html']
+        },
+
+        watch: {
+            src: {
+                files: '<%= jshint.src.src %>',
+                tasks: ['jshint:src', 'qunit']
+            },
+            test: {
+                files: '<%= jshint.test.src %>',
+                tasks: ['jshint:test', 'qunit']
+            },
+            recess: {
+                files: 'less/*.less',
+                tasks: ['recess', 'copy:demo']
+            }
         }
     });
 
@@ -116,6 +131,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Test task.
     grunt.registerTask('test', ['jshint', 'qunit']);
