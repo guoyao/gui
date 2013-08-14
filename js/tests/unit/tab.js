@@ -30,7 +30,7 @@ $(function () {
                 + '<ul class="tabs">'
                     + '<li id="firstTab"><a href="#tab1">Graceful Tab 1</a></li>'
                     + '<li id="secondTab"><a href="#tab2">Graceful Tab 2</a></li>'
-                    + '<li id="thirdTab" data-target="#tab3"><a href="#">Graceful Tab 3</a></li>'
+                    + '<li id="thirdTab" data-target="#tab3"><a href="#tab2">Graceful Tab 3</a></li>'
                 + '</ul>'
                 + '<div id="tab1" class="tab-content">'
                     + 'JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by wrapping the expression with back-ticks:'
@@ -54,6 +54,14 @@ $(function () {
 
         ok(!$graceTab.find("#firstTab").hasClass("active"), "active tab changed");
         equal($graceTab.find('.active').attr('id'), "secondTab", "second tab is active");
+        equal($($graceTab.find(".active a").attr("href")).css("display"), "block", "should display related element");
+
+        /**
+         * test data-target attribute
+         */
+        $graceTab.find("#thirdTab a").graceTab("show");
+        equal($($graceTab.find(".active a").attr("href")).css("display"), "none", "data-target attribute should be prior");
+        equal($($graceTab.find(".active").data("target")).css("display"), "block", "data-target attribute should be prior");
     });
 
 });
