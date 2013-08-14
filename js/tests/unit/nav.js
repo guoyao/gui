@@ -6,6 +6,8 @@
 
 $(function () {
 
+    var $ = window.jQuery;
+
     module("navs");
 
     test("should provide no conflict", function () {
