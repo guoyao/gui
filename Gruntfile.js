@@ -133,9 +133,9 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js']);
 
     // start local server for demo
-    grunt.registerTask('server', ['dist', 'dist-demo', 'connect']);
+    grunt.registerTask('s', ['dist', 'dist-demo', 'connect']);
 
     // Default task(s).
-    grunt.registerTask('default', ['test', 'dist', 'dist-demo']);
+    grunt.registerTask('default', ['dist', 'dist-demo']);
 
 };

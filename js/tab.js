@@ -58,7 +58,7 @@
         }
 
         function initEach($graceTab) {
-            var $activeTabItem = undefined,
+            var $activeTabItem = null,
                 $$tabItems = $graceTab.children(".tabs").children("li");
 
             $$tabItems.each(function (index) {
