@@ -49,34 +49,34 @@
 					$gracePopupContent = $(options.selector + options.contentWrapperClass),
 					$gracePopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
 
-				$gracePopupWindow.css({background:options.bgcolor,
-											  width:'100%',
-											  height:1000,
-											  'z-index':9999,
-											  position:'absolute',
-											  top:0,
-											  left:0
-											});
+				$gracePopupWindow.css({'background':options.bgcolor,
+									   'width':'100%',
+									   'height':1000,
+									   'z-index':9999,
+									   'position':'absolute',
+									   'top':0,
+									   'left':0
+									});
 				$gracePopupContent.css({'min-width':500,
-											   'max-width':1000,
-											   'min-height':500,
-											   background:'white',
-											   'margin':'5% auto 0',
-											   position:'relative'
-											});
-				$gracePopupCloseBtn.css({width:options.closeBtn.width,
-												height:options.closeBtn.height,
-												display:'block',
-												position:options.closeBtn.position,
-												top:options.closeBtn.top,
-												right:options.closeBtn.right,
-												background:options.closeBtn.background,
-												color:options.closeBtn.fontColor,
-												'font-size':options.closeBtn.fontSize,
-												'line-height':options.closeBtn.lineHeight,
-												cursor:options.closeBtn.cursor
-											})
-										  .text(options.closeBtn.value);
+										'max-width':1000,
+										'min-height':500,
+										'background':'white',
+										'margin':'5% auto 0',
+										'position':'relative'
+									});
+				$gracePopupCloseBtn.css({'width':options.closeBtn.width,
+										 'height':options.closeBtn.height,
+										 'display':'block',
+										 'position':options.closeBtn.position,
+										 'top':options.closeBtn.top,
+										 'right':options.closeBtn.right,
+										 'background':options.closeBtn.background,
+										 'color':options.closeBtn.fontColor,
+										 'font-size':options.closeBtn.fontSize,
+										 'line-height':options.closeBtn.lineHeight,
+										 'cursor':options.closeBtn.cursor
+										})
+									.text(options.closeBtn.value);
 			}
 			
 			var $gracePopupWindow = $(options.selector + options.bgWrapperClass),
@@ -88,7 +88,6 @@
 				//var dataurl = $gracePopupBtn.attr('data-url');
 				$gracePopupWindow.fadeIn(options.animationDuration);
 				$gracePopupContentNode.html(options.contentNodes.text);
-				//console.log(dataurl);
 			});
 			$gracePopupCloseBtn.click(function(){
 				$gracePopupWindow.fadeOut();
