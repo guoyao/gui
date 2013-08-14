@@ -46,31 +46,41 @@
     // Navs
     // --------------------------------------------------
 
-    $.fn.graceNav.iePatch = function ($$graceNav) {
-        if (grace.browserInfo.version <= 6) { // lte IE 6
-            $$graceNav.find("li").hover(function () {
-                $(this).children("ul").css("display", "block");
-            }, function () {
-                $(this).children("ul").css("display", "none");
-            });
-            $$graceNav.each(function () {
-                var $graceNav = $(this),
-                    isVertical = $graceNav.hasClass("grace-nav-vertical");
-                if (!isVertical) {
-                    $graceNav.children("li").css("float", "left");
+    if(!!$.fn.graceNav) {
+        $.fn.graceNav.iePatch = function ($$graceNav, option) {
+            if (grace.plugin.isPluginInitialize(option)) {
+                if (grace.browserInfo.version <= 6) { // lte IE 6
+                    $$graceNav.find("li").hover(function () {
+                        $(this).children("ul").css("display", "block");
+                    }, function () {
+                        $(this).children("ul").css("display", "none");
+                    });
+                    $$graceNav.each(function () {
+                        var $graceNav = $(this),
+                            isVertical = $graceNav.hasClass("grace-nav-vertical");
+                        if (!isVertical) {
+                            $graceNav.children("li").css("float", "left");
+                        }
+                    });
                 }
-            });
-        }
-    };
+            }
+            return $$graceNav;
+        };
+    }
 
     //
     // Tabs
     // --------------------------------------------------
 
-    $.fn.graceTab.iePatch = function ($$graceTab) {
-        if (grace.browserInfo.version <= 7) { // lte IE 7
-            setMaxHeight($$graceTab.children(".tabs"), "li", -1);
-        }
-    };
+    if(!!$.fn.graceTab) {
+        $.fn.graceTab.iePatch = function ($$graceTab, option) {
+            if (grace.plugin.isPluginInitialize(option)) {
+                if (grace.browserInfo.version <= 7) { // lte IE 7
+                    setMaxHeight($$graceTab.children(".tabs"), "li", -1);
+                }
+            }
+            return $$graceTab;
+        };
+    }
 
 })(window);
