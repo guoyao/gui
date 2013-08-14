@@ -57,11 +57,18 @@
                     return version;
                 })()
             },
-            patcher = {
-                patch: function (plugin, $$elements) {
+            plugin = {
+                patch: function (plugin, $$elements, option) {
                     if (browserInfo.isIE && !!plugin && $.isFunction(plugin.iePatch)) {
-                        plugin.iePatch($$elements);
+                        plugin.iePatch($$elements, option);
                     }
+                    return $$elements;
+                },
+                isPluginMethodCall: function (option) {
+                    return typeof option === "string";
+                },
+                isPluginInitialize: function (option) {
+                    return option === undefined || option === null || typeof option === "object";
                 }
             };
 
@@ -75,7 +82,7 @@
 
         return {
             browserInfo: browserInfo,
-            patcher: patcher,
+            plugin: plugin,
             showHide: showHide
         }
     })();

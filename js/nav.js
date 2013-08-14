@@ -20,67 +20,92 @@
 (function (window) {
     "use strict";
 
-    var document = window.document,
-        console = window.console,
+    var console = window.console,
         $ = window.jQuery,
-        grace = window.grace;
+        grace = window.grace,
+        old = $.fn.graceNav;
 
-    $.fn.graceNav = function (options) {
+    var GraceNav = function (element) {
+        this.$element = $(element);
+    };
+
+//    $.extend(GraceNav.prototype, {});
+
+    $.fn.graceNav = function (option) {
 
         var defaults = {
-            backgroundColor: "#eeeeee",
-            border: "",
-            itemWidth: "120px",
-            itemHeight: "30px",
-            itemOverColor: "#d5d5d5",
-            itemFadeIn: true,
-            animationDuration: 500
-        };
+                backgroundColor: "#eeeeee",
+                border: "",
+                itemWidth: "120px",
+                itemHeight: "30px",
+                itemOverColor: "#d5d5d5",
+                itemFadeIn: true,
+                animationDuration: 500
+            },
+            isMethodCall = grace.plugin.isPluginMethodCall(option);
 
-        options = $.extend({}, defaults, options);
-
-        function initEach() {
-            var $graceNav = $(this),
-                isVertical = $graceNav.hasClass("grace-nav-vertical"),
-                option = $.extend({}, options, $graceNav.data());
+        function initEach($graceNav) {
+            var isVertical = $graceNav.hasClass("grace-nav-vertical"),
+                options = $.extend({}, defaults, option, $graceNav.data("option"));
 
             $graceNav.css({
-                backgroundColor: option.backgroundColor,
-                border: option.border
+                backgroundColor: options.backgroundColor,
+                border: options.border
             }).find("ul").css({
-                    backgroundColor: option.backgroundColor,
-                    border: option.border
+                    backgroundColor: options.backgroundColor,
+                    border: options.border
                 });
 
             $graceNav.find("a").css({
-                width: option.itemWidth,
-                height: option.itemHeight,
-                lineHeight: option.itemHeight
+                width: options.itemWidth,
+                height: options.itemHeight,
+                lineHeight: options.itemHeight
             }).hover(function () {
-                    $(this).css("backgroundColor", option.itemOverColor);
+                    $(this).css("backgroundColor", options.itemOverColor);
                 }, function () {
-                    $(this).css("backgroundColor", option.backgroundColor);
+                    $(this).css("backgroundColor", options.backgroundColor);
                 });
 
             if (isVertical) {
-                $graceNav.css("width", option.itemWidth)
-                    .find("ul").css("left", option.itemWidth);
+                $graceNav.css("width", options.itemWidth)
+                    .find("ul").css("left", options.itemWidth);
             } else {
-                $graceNav.css("height", option.itemHeight)
-                    .find("ul ul").css("left", option.itemWidth);
+                $graceNav.css("height", options.itemHeight)
+                    .find("ul ul").css("left", options.itemWidth);
             }
 
-            if (option.itemFadeIn) {
+            if (options.itemFadeIn) {
                 $graceNav.find("li").hover(function () {
-                    $(this).children("ul").css("opacity", 0).animate({opacity: 1}, option.animationDuration);
+                    $(this).children("ul").css("opacity", 0).animate({opacity: 1}, options.animationDuration);
                 }, function () {
                 });
             }
         }
 
-        grace.patcher.patch($.fn.graceNav, this);
+        this.each(function () {
+            var $graceNav = $(this);
+            var data = $graceNav.data('grace.nav');
+            if (!data) {
+                $graceNav.data('grace.nav', (data = new GraceNav(this)))
+            }
+            if (isMethodCall) {
+                data[option]();
+            } else {
+                initEach($graceNav);
+            }
+        });
 
-        return  this.each(initEach);
+        return grace.plugin.patch($.fn.graceNav, this, option);
+    };
+
+    $.fn.graceNav.Constructor = GraceNav;
+
+    // NO CONFLICT
+    // ===============
+
+    $.fn.graceNav.noConflict = function () {
+        $.fn.graceNav = old;
+        return this;
     };
 
 })(window);
