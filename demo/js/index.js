@@ -15,7 +15,7 @@
         new Module("Tab Navigator", "tab-navigator"),
 		new Module("Collapse Menu", "collapse-menu"),
         new Module("Grid System", "grid-system"),
-		new Module("Popup Window","popup-window")
+		new Module("Popup Window", "popup-window")
     ];
 
     function Module(name, artifact) {
