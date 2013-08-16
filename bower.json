@@ -1,0 +1,17 @@
+{
+    "name": "graceful-web-ui",
+    "version": "0.1.0alpha",
+    "ignore": [
+        "**/.jshintrc",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "~1.8.3"
+    },
+    "devDependencies": {
+        "qunit": "~1.12.0"
+    }
+}
