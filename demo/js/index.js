@@ -89,6 +89,8 @@
         });
 
         patch();
+
+        $("#top-nav").graceNav();
     };
 
     $(document).ready(init);

@@ -5,7 +5,7 @@
  */
 
 (function ($) {
-    $(".grace-nav").graceNav({
+    $(".module-container .grace-nav").graceNav({
         backgroundColor: "#eeeeee",
         border: "1px solid #d1d1d1",
         itemWidth: "130px",
