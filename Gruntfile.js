@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 stripBanners: false
             },
             grace: {
-                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js',  'js/panel.js', 'js/ie-patch.js'],
+                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/panel.js', 'js/ie-patch.js'],
                 dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
             }
         },
@@ -68,11 +68,14 @@ module.exports = function (grunt) {
 
         copy: {
             demo: {
-                files: {
-                    'demo/js/lib/jquery.min.js': 'lib/jquery/jquery.min.js',
-                    'demo/css/lib/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
-                    'demo/js/lib/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
-                }
+                files: [
+                    {
+                        'demo/js/lib/jquery.min.js': 'lib/jquery/jquery.min.js',
+                        'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
+                        'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                    },
+                    {expand: true, src: ['assets/**'], dest: 'demo'}
+                ]
             },
             test: {
                 files: {
@@ -80,6 +83,11 @@ module.exports = function (grunt) {
                     'js/tests/vendor/lib/qunit.js': 'lib/qunit/qunit//qunit.js',
                     'js/tests/vendor/lib/qunit.css': 'lib/qunit/qunit/qunit.css'
                 }
+            },
+            dist_assets: {
+                files: [
+                    {expand: true, src: ['assets/graceful-web-ui/**'], dest: 'dist'}
+                ]
             }
         },
 
@@ -159,11 +167,14 @@ module.exports = function (grunt) {
     // CSS distribution task.
     grunt.registerTask('dist-css', ['recess']);
 
+    // Assets distribution task.
+    grunt.registerTask('dist-assets', ['copy:dist_assets']);
+
     // demo distribution task.
     grunt.registerTask('dist-demo', ['bower', 'copy:demo']);
 
     // Full distribution task.
-    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js']);
+    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js', 'dist-assets']);
 
     // start local server for demo
     grunt.registerTask('s', ['dist', 'dist-demo', 'connect']);
