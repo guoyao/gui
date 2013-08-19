@@ -1,41 +1,92 @@
 <div class="module-container">
-    <div class="grace-tab">
-        <ul class="tabs">
-            <li><a href="#tab1">Graceful Tab 1</a></li>
-            <li><a href="#tab2">Graceful Tab 2</a></li>
-            <li data-target="#tab3"><a href="#">Graceful Tab 3</a></li>
-        </ul>
-        <div id="tab1" class="tab-content">
-            JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by wrapping the expression with back-ticks:
-        </div>
-        <div id="tab2" class="tab-content">
-            You can import both CSS and LESS files. Only LESS files import statements are processed, CSS file import statements are kept as they are. If you want to import a CSS file, and don’t want LESS to process it, just use the .css extension:
-        </div>
-        <div id="tab3" class="tab-content">
-            Content of imported LESS file is copied into importing style sheet and compiled together with it. Importing and imported files share all mixins, namespaces, variables and other structures.
-
-            In addition, if the import statement has media queries specified in it, imported content is enclosed in the @Media declaration.
-        </div>
+  <h3>Default Tab Component:</h3>
+  <div class="grace-tab">
+    <ul class="tabs">
+      <li><a href="#tab1">Graceful Tab 1</a></li>
+      <li><a href="#tab2">Graceful Tab 2</a></li>
+      <li data-target="#tab3"><a href="#">Graceful Tab 3</a></li>
+    </ul>
+    <div id="tab1" class="tab-content">
+      JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature
+      as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of
+      a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow
+      expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by
+      wrapping the expression with back-ticks:
     </div>
-
-    <div class="grace-tab grace-tab-bordered" style="margin-top: 50px;">
-        <ul class="tabs">
-            <li><a href="#tab11">Graceful Tab 1</a></li>
-            <li class="active"><a href="#tab22">Graceful Tab 2</a></li>
-            <li><a href="#tab33">Graceful Tab 3</a></li>
-        </ul>
-        <div id="tab11" class="tab-content">
-            Are some elements in your style sheet proportional to other elements? Operations let you add, subtract, divide and multiply property values and colors, giving you the power to create complex relationships between properties. Operations should only be performed within parentheses in order to ensure compatibility with CSS. Functions map one-to-one with JavaScript code, allowing you to manipulate values however you want.
-        </div>
-        <div id="tab22" class="tab-content">
-            It is possible to output rules in your CSS which allow tools to locate the source of the rule.
-
-            Either specify the option dumpLineNumbers as above or add !dumpLineNumbers:mediaQuery to the url.
-
-            You can use the “comments” option with FireLESS and the “mediaQuery” option with FireBug/Chrome dev tools (it is identical to the SCSS media query debugging format).
-        </div>
-        <div id="tab33" class="tab-content">
-            As an extension to CSS, LESS is not only backwards compatible with CSS, but the extra features it adds use existing CSS syntax. This makes learning LESS a breeze, and if in doubt, lets you fall back to CSS.
-        </div>
+    <div id="tab2" class="tab-content">
+      You can import both CSS and LESS files. Only LESS files import statements are processed, CSS file import
+      statements are kept as they are. If you want to import a CSS file, and don’t want LESS to process it, just use the
+      .css extension:
     </div>
+    <div id="tab3" class="tab-content">
+      Content of imported LESS file is copied into importing style sheet and compiled together with it. Importing and
+      imported files share all mixins, namespaces, variables and other structures.
+
+      In addition, if the import statement has media queries specified in it, imported content is enclosed in the @Media
+      declaration.
+    </div>
+  </div>
+
+  <pre class="prettyprint linenums">
+&lt;div class="grace-tab"&gt;
+ &lt;ul class="tabs"&gt;
+  &lt;li&gt;&lt;a href="#tab1"&gt;Graceful Tab 1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#tab2"&gt;Graceful Tab 2&lt;/a&gt;&lt;/li&gt;
+  &lt;li data-target="#tab3"&gt;&lt;a href="#"&gt;Graceful Tab 3&lt;/a&gt;&lt;/li&gt;
+ &lt;/ul&gt;
+ &lt;div id="tab1" class="tab-content"&gt;
+  ...
+ &lt;/div&gt;
+ &lt;div id="tab2" class="tab-content"&gt;
+  ...
+ &lt;/div&gt;
+ &lt;div id="tab3" class="tab-content"&gt;
+  ...
+ &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+  <h3>Bordered Tab Component:</h3>
+  <div class="grace-tab grace-tab-bordered">
+    <ul class="tabs">
+      <li><a href="#tab11">Graceful Tab 1</a></li>
+      <li class="active"><a href="#tab22">Graceful Tab 2</a></li>
+      <li><a href="#tab33">Graceful Tab 3</a></li>
+    </ul>
+    <div id="tab11" class="tab-content">
+      Are some elements in your style sheet proportional to other elements? Operations let you add, subtract, divide and
+      multiply property values and colors, giving you the power to create complex relationships between properties.
+      Operations should only be performed within parentheses in order to ensure compatibility with CSS. Functions map
+      one-to-one with JavaScript code, allowing you to manipulate values however you want.
+    </div>
+    <div id="tab22" class="tab-content">
+      It is possible to output rules in your CSS which allow tools to locate the source of the rule.
+
+      Either specify the option dumpLineNumbers as above or add !dumpLineNumbers:mediaQuery to the url.
+
+      You can use the “comments” option with FireLESS and the “mediaQuery” option with FireBug/Chrome dev tools (it is
+      identical to the SCSS media query debugging format).
+    </div>
+    <div id="tab33" class="tab-content">
+      As an extension to CSS, LESS is not only backwards compatible with CSS, but the extra features it adds use
+      existing CSS syntax. This makes learning LESS a breeze, and if in doubt, lets you fall back to CSS.
+    </div>
+  </div>
+
+  <pre class="prettyprint linenums">
+&lt;div class="grace-tab grace-tab-bordered"&gt;
+ &lt;ul class="tabs"&gt;
+  &lt;li&gt;&lt;a href="#tab11"&gt;Graceful Tab 1&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="active"&gt;&lt;a href="#tab22"&gt;Graceful Tab 2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#tab33"&gt;Graceful Tab 3&lt;/a&gt;&lt;/li&gt;
+ &lt;/ul&gt;
+ &lt;div id="tab11" class="tab-content"&gt;
+  ...
+ &lt;/div&gt;
+ &lt;div id="tab22" class="tab-content"&gt;
+  ...
+ &lt;/div&gt;
+ &lt;div id="tab33" class="tab-content"&gt;
+  ...
+ &lt;/div&gt;
+&lt;/div&gt;</pre>
 </div>

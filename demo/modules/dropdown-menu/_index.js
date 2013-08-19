@@ -13,4 +13,6 @@
         itemOverColor: "#d5d5d5",
         animationDuration: 500
     });
+
+    prettyPrint();
 })(jQuery);

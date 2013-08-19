@@ -80,10 +80,24 @@
             }
         }
 
+        function htmlEncode(str) {
+            var div = document.createElement("div");
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function htmlDecode(str) {
+            var div = document.createElement("div");
+            div.innerHTML = str;
+            return div.innerHTML;
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
-            showHide: showHide
+            showHide: showHide,
+            htmlEncode: htmlEncode,
+            htmlDecode: htmlDecode
         }
     })();
 
