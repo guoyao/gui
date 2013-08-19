@@ -22,6 +22,8 @@
             new Module("Panel Navigator", "panel-navigator")
         ];
 
+    $("#top-nav .grace-nav").graceNav();
+
     function Module(name, artifact) {
         this.name = name;
         this.artifact = artifact;
@@ -89,8 +91,6 @@
         });
 
         patch();
-
-        $("#top-nav").graceNav();
     };
 
     $(document).ready(init);

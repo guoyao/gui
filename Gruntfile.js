@@ -42,7 +42,8 @@ module.exports = function (grunt) {
             grace: {
                 files: {
                     'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/grace.less'],
-                    'demo/css/index.css': ['demo/less/index.less']
+                    'demo/css/index.css': ['demo/less/index.less'],
+                    'demo/css/lib/prettify.css': ['demo/less/prettify.less']
                 }
             },
             min: {
@@ -70,18 +71,19 @@ module.exports = function (grunt) {
             demo: {
                 files: [
                     {
-                        'demo/js/lib/jquery.min.js': 'lib/jquery/jquery.min.js',
                         'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
-                        'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                        'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js',
+                        'demo/js/lib/jquery.min.js': 'bower_components/jquery/jquery.min.js',
+                        'demo/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js'
                     },
                     {expand: true, src: ['assets/**'], dest: 'demo'}
                 ]
             },
             test: {
                 files: {
-                    'js/tests/vendor/lib/jquery.js': 'lib/jquery/jquery.js',
-                    'js/tests/vendor/lib/qunit.js': 'lib/qunit/qunit//qunit.js',
-                    'js/tests/vendor/lib/qunit.css': 'lib/qunit/qunit/qunit.css'
+                    'js/tests/vendor/lib/jquery.js': 'bower_components/jquery/jquery.js',
+                    'js/tests/vendor/lib/qunit.js': 'bower_components/qunit/qunit//qunit.js',
+                    'js/tests/vendor/lib/qunit.css': 'bower_components/qunit/qunit/qunit.css'
                 }
             },
             dist_assets: {
@@ -141,7 +143,8 @@ module.exports = function (grunt) {
         bower: {
             install: {
                 options: {
-                    cleanBowerDir: true
+                    copy: false,
+                    cleanTargetDir: true
                 }
             }
         }
@@ -161,25 +164,25 @@ module.exports = function (grunt) {
     // Test task.
     grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit']);
 
-    // JS distribution task.
-    grunt.registerTask('dist-js', ['concat', 'uglify']);
-
     // CSS distribution task.
     grunt.registerTask('dist-css', ['recess']);
+
+    // JS distribution task.
+    grunt.registerTask('dist-js', ['concat', 'uglify']);
 
     // Assets distribution task.
     grunt.registerTask('dist-assets', ['copy:dist_assets']);
 
-    // demo distribution task.
-    grunt.registerTask('dist-demo', ['bower', 'copy:demo']);
-
     // Full distribution task.
     grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js', 'dist-assets']);
 
-    // start local server for demo
-    grunt.registerTask('s', ['dist', 'dist-demo', 'connect']);
+    // Demo distribution task.
+    grunt.registerTask('dist-demo', ['dist', 'bower', 'copy:demo']);
+
+    // Start local server for demo
+    grunt.registerTask('s', ['dist-demo', 'connect']);
 
     // Default task(s).
-    grunt.registerTask('default', ['dist', 'dist-demo']);
+    grunt.registerTask('default', ['dist-demo']);
 
 };

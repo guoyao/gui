@@ -19,16 +19,27 @@ a {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   z-index: 100;
+  width: 100%;
+  background-color: #000000;
+  a {
+    text-decoration: none;
+    color: @gray-light;
+    &:hover, &:focus {
+      color: #ffffff;
+    }
+    &.active {
+      color: #ffffff;
+    }
+  }
 }
 
-#header {
+#project-description {
   color:  #ffffff;
   text-align: center;
   background-color: #2C143F;
-  width: 100%;
   margin-top: 40px;
+  _margin-top: 0;
   margin-bottom: 15px;
   padding-top: @padding-base-vertical;
   a {
@@ -44,6 +55,7 @@ a {
   div {
     margin-top: @padding-large-vertical;
     padding: 10px 0 5px 0;
+    *padding-bottom: 10px;
     background-color: @gray-lightest;
     border-top: @border-weight @border-type #050132;
     border-bottom: @border-weight @border-type @border-color;

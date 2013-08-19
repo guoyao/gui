@@ -20,7 +20,7 @@ target
 bin
 node_modules
 demo/css
-demo/js/grace*
-demo/assets/grace*
+demo/js/graceful-web-ui*
+demo/assets/graceful-web-ui
 lib
 bower_components
