@@ -20,5 +20,7 @@ target
 bin
 node_modules
 demo/css
+demo/js/grace*
+demo/assets/grace*
 lib
 bower_components
