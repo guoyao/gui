@@ -7,13 +7,6 @@
 @import "../../less/variables.less";
 @import "../../less/mixins.less";
 
-html, body {
-  text-align: center;
-  font-family: arial;
-  font-size: 12px;
-  padding: @padding-base-vertical 0;
-}
-
 a {
   text-decoration: none;
   &:focus, &:active {
@@ -21,21 +14,69 @@ a {
   }
 }
 
-#navigator {
-  overflow: auto;
-  text-align: left;
-  word-wrap: break-word;
-  border: @border-weight @border-type @border-color;
+#top-nav
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+#header {
+  color:  #ffffff;
+  text-align: center;
+  background-color: #2C143F;
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 15px;
+  padding-top: @padding-base-vertical;
+  a {
+    margin-right: @padding-large-horizontal;
+    color: #dfdfdf;
+    &:hover {
+      color: #ffffff;
+    }
+  }
+  span {
+    color: @gray-light;
+  }
   div {
-    margin: 5px;
-    padding: @padding-base-vertical / 2 @padding-base-horizontal / 2;
-    .border-radius(@border-radius-base);
-    &.selected {
+    margin-top: @padding-large-vertical;
+    padding: 10px 0 5px 0;
+    background-color: @gray-lightest;
+    border-top: @border-weight @border-type #050132;
+    border-bottom: @border-weight @border-type @border-color;
+  }
+}
+
+#navigator {
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: @border-weight @border-type @border-color;
+    .border-radius(@border-radius-large);
+    background-color: #f9f9f9;
+  }
+  a {
+    display: block;
+    padding: @padding-base-vertical @padding-base-horizontal;
+    border-bottom: @border-weight @border-type @border-color;
+    &:hover {
+      background-color: @gray-lightest;
+    }
+    &.active {
       background-color: @gray-lighter;
     }
-    a {
-      display: block;
-      padding: @padding-base-vertical / 2 @padding-base-horizontal / 2;
+  }
+  li {
+    &:first-child a {
+      .border-top-radius(@border-radius-large);
+    }
+    &:last-child a {
+      border-bottom: 0;
+      .border-bottom-radius(@border-radius-large)
     }
   }
 }
@@ -46,6 +87,7 @@ a {
   text-align: left;
   word-wrap: break-word;
   border: @border-weight @border-type @border-color;
+  .border-radius(@border-radius-large);
 }
 
 .centered {
@@ -54,4 +96,8 @@ a {
 
 .module-container {
   padding: @padding-base-vertical @padding-base-horizontal;
+}
+
+.text-centered {
+  text-align: center;
 }

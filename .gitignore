@@ -19,5 +19,6 @@ target
 .settings
 bin
 node_modules
-demo/js/grace*.js
 demo/css
+lib
+bower_components

@@ -69,8 +69,16 @@ module.exports = function (grunt) {
         copy: {
             demo: {
                 files: {
-                    'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
-                    'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                    'demo/js/lib/jquery.min.js': 'lib/jquery/jquery.min.js',
+                    'demo/css/lib/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
+                    'demo/js/lib/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                }
+            },
+            test: {
+                files: {
+                    'js/tests/vendor/lib/jquery.js': 'lib/jquery/jquery.js',
+                    'js/tests/vendor/lib/qunit.js': 'lib/qunit/qunit//qunit.js',
+                    'js/tests/vendor/lib/qunit.css': 'lib/qunit/qunit/qunit.css'
                 }
             }
         },
@@ -105,6 +113,29 @@ module.exports = function (grunt) {
                 inject: 'js/tests/unit/phantom.js'
             },
             files: ['js/tests/*.html']
+        },
+
+        watch: {
+            src: {
+                files: '<%= jshint.src.src %>',
+                tasks: ['jshint:src', 'qunit']
+            },
+            test: {
+                files: '<%= jshint.test.src %>',
+                tasks: ['jshint:test', 'qunit']
+            },
+            recess: {
+                files: 'less/*.less',
+                tasks: ['recess', 'copy:demo']
+            }
+        },
+
+        bower: {
+            install: {
+                options: {
+                    cleanBowerDir: true
+                }
+            }
         }
     });
 
@@ -116,9 +147,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-bower-task');
 
     // Test task.
-    grunt.registerTask('test', ['jshint', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit']);
 
     // JS distribution task.
     grunt.registerTask('dist-js', ['concat', 'uglify']);
@@ -127,7 +160,7 @@ module.exports = function (grunt) {
     grunt.registerTask('dist-css', ['recess']);
 
     // demo distribution task.
-    grunt.registerTask('dist-demo', ['copy:demo']);
+    grunt.registerTask('dist-demo', ['bower', 'copy:demo']);
 
     // Full distribution task.
     grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js']);
