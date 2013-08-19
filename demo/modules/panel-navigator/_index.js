@@ -1,3 +1,3 @@
 (function ($) {
-    $(".grace-panelsa").gracePanelsa({title:"dds22222"});
+    $(".grace-panelsa").gracePanel({title: "dds22222"});
 })(jQuery);
