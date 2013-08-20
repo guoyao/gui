@@ -4,11 +4,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
-    <title>A Graceful And Cross Browser Web UI Framework</title>
+    <title>Graceful Web UI Framework</title>
     <link rel="stylesheet" type="text/css" href="css/graceful-web-ui.min.css"/>
-  <link rel="stylesheet" type="text/css" href="css/lib/prettify.css">
-  <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="css/lib/prettify.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
 </head>
 <body>
 
@@ -17,10 +18,9 @@
         <div class="row-medium">
             <div class="span12-medium">
                 <ul class="grace-nav" data-option='{"itemHeight":"40px","backgroundColor":"#000000", "itemOverColor":"#000000"}'>
-                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="/" class="active">Home</a></li>
                     <li><a href="#">Get started</a></li>
-                    <li><a href="#">Scaffolding</a></li>
-                    <li><a href="#">Base CSS</a></li>
+                    <li><a href="css.html">CSS</a></li>
                     <li><a href="#">Components</a></li>
                     <li><a href="#">JavaScript</a></li>
                     <li><a href="#">Customize</a></li>
@@ -58,7 +58,24 @@
 
 <script type="text/javascript" src="js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="js/graceful-web-ui.min.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript">
+  (function (window) {
+    var demo = window.demo,
+            Module = demo.Module;
+
+    new demo.Initializer([
+      new Module("Dropdown Menu", "dropdown-menu"),
+      new Module("Tab Navigator", "tab-navigator"),
+      new Module("Collapse Menu", "collapse-menu"),
+      new Module("Popup Window", "popup-window"),
+      new Module("Panel Navigator", "panel-navigator")
+    ], {
+      modulesDirectory: "modules/components"
+    }).init();
+
+  })(window);
+</script>
 <script type="text/javascript" src="js/lib/prettify.js"></script>
 </body>
 </html>
