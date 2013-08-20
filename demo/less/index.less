@@ -8,7 +8,9 @@
 @import "../../less/mixins.less";
 
 a {
-  text-decoration: none;
+  &:hover, &:focus {
+    text-decoration: none;
+  }
   &:focus, &:active {
     outline: none;
   }
@@ -23,12 +25,8 @@ a {
   width: 100%;
   background-color: #000000;
   a {
-    text-decoration: none;
     color: @gray-light;
-    &:hover, &:focus {
-      color: #ffffff;
-    }
-    &.active {
+    &:hover, &:focus, &.active {
       color: #ffffff;
     }
   }
@@ -45,7 +43,7 @@ a {
   a {
     margin-right: @padding-large-horizontal;
     color: #dfdfdf;
-    &:hover {
+    &:hover, &:focus {
       color: #ffffff;
     }
   }
@@ -75,8 +73,8 @@ a {
     display: block;
     padding: @padding-base-vertical @padding-base-horizontal;
     border-bottom: @border-weight @border-type @border-color;
-    &:hover {
-      background-color: @gray-lightest;
+    &:hover, &:focus {
+      background-color: lighten(@gray-lighter, 2%);
     }
     &.active {
       background-color: @gray-lighter;
