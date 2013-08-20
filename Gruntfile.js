@@ -41,7 +41,7 @@ module.exports = function (grunt) {
             },
             grace: {
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/grace.less'],
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/graceful-web-ui.less'],
                     'demo/css/index.css': ['demo/less/index.less'],
                     'demo/css/lib/prettify.css': ['demo/less/prettify.less']
                 }
@@ -51,7 +51,7 @@ module.exports = function (grunt) {
                     compress: true
                 },
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/grace.less']
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/graceful-web-ui.less']
                 }
             }
         },
