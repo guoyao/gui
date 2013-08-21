@@ -6,6 +6,9 @@
 
 (function ($) {
     $(".grace-tab").graceTab();
+
+    prettyPrint();
+
     var timeoutId = setTimeout(function () {
         clearTimeout(timeoutId);
         $("[data-target=#tab3]").graceTab("show");

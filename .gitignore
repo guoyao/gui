@@ -19,5 +19,8 @@ target
 .settings
 bin
 node_modules
-demo/js/grace*.js
 demo/css
+demo/js/graceful-web-ui*
+demo/assets/graceful-web-ui
+lib
+bower_components

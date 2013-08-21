@@ -1,3 +1,17 @@
+/*!
+ * Bootstrap v3.0.0
+ *
+ * Copyright 2013 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+
+/*!
+ * We imported some codes of bootstrap, and added added our own's
+ */
+
 //
 // Variables
 // --------------------------------------------------
@@ -22,6 +36,14 @@
 @gray-lighter:                                            lighten(#000, 93.5%); // #eee
 @gray-lightest:                                           lighten(#000, 96%); // #f5f5f5
 
+// Brand colors
+// -------------------------
+
+@brand-primary:         #428bca;
+@brand-success:         #5cb85c;
+@brand-warning:         #f0ad4e;
+@brand-danger:          #d9534f;
+@brand-info:            #5bc0de;
 
 // Scaffolding
 // -------------------------
@@ -49,6 +71,27 @@
 
 @line-height-base:        1.428571429; // 20/14
 @line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
+
+@headings-font-family:    @font-family-base;
+@headings-font-weight:    500;
+@headings-line-height:    1.1;
+
+// Grid system
+// --------------------------------------------------
+
+// total width of grid system with fixed width
+@grid-total-width:                                  960px;
+// Number of columns in the grid system
+@grid-columns:                                      12;
+// Padding, to be divided by two and applied to the left and right of all columns
+@grid-gutter-width:                                10px;
+
+// total width of grid system with fixed width
+@grid-medium-total-width:                                  1200px;
+// Number of columns in the grid system
+@grid-medium-columns:                                       12;
+// Padding, to be divided by two and applied to the left and right of all columns
+@grid-medium-gutter-width:                                 10px;
 
 // Components
 // -------------------------
@@ -82,30 +125,6 @@
 @tab-item-hover-color:                           @hover-color;
 @tab-header-background-color:                @gray-lightest;
 
-
-// Grid system
-// --------------------------------------------------
-
-// total width of grid system with fixed width
-@grid-total-width:                                  960px;
-// Number of columns in the grid system
-@grid-columns:                                      12;
-// Padding, to be divided by two and applied to the left and right of all columns
-@grid-gutter-width:                                10px;
-
-// total width of grid system with fixed width
-@grid-medium-total-width:                                  1200px;
-// Number of columns in the grid system
-@grid-medium-columns:                                       12;
-// Padding, to be divided by two and applied to the left and right of all columns
-@grid-medium-gutter-width:                                 10px;
-
-// Miscellaneous
-// -------------------------
-
-// Hr border color
-@hr-border:                                   @gray-lighter;
-
 //collapse
 // -------------------------
 
@@ -113,3 +132,46 @@
 @collapse-btn-hover-color:                       @gray;
 @collapse-btn-background-color:                  @gray-lightest;
 @collapse-btn-border-color:                      @border-color;
+
+// Form states and alerts
+// -------------------------
+
+@state-warning-text:             #c09853;
+@state-warning-bg:               #fcf8e3;
+@state-warning-border:           darken(spin(@state-warning-bg, -10), 3%);
+
+@state-danger-text:              #b94a48;
+@state-danger-bg:                #f2dede;
+@state-danger-border:            darken(spin(@state-danger-bg, -10), 3%);
+
+@state-success-text:             #468847;
+@state-success-bg:               #dff0d8;
+@state-success-border:           darken(spin(@state-success-bg, -10), 5%);
+
+@state-info-text:                #3a87ad;
+@state-info-bg:                  #d9edf7;
+@state-info-border:              darken(spin(@state-info-bg, -10), 7%);
+
+// Type
+// ------------------------
+@text-muted:                  @gray-light;
+@abbr-border-color:           @gray-light;
+@headings-small-color:        @gray-light;
+@blockquote-small-color:      @gray-light;
+@blockquote-border-color:     @gray-lighter;
+@page-header-border-color:    @gray-lighter;
+
+// Code
+// ------------------------
+@code-color:                  #c7254e;
+@code-bg:                     #f9f2f4;
+
+@pre-bg:                      #f5f5f5;
+@pre-color:                   @gray-dark;
+@pre-border-color:            #ccc;
+
+// Miscellaneous
+// -------------------------
+
+// Hr border color
+@hr-border:                                   @gray-lighter;

@@ -41,8 +41,9 @@ module.exports = function (grunt) {
             },
             grace: {
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/grace.less'],
-                    'demo/css/index.css': ['demo/less/index.less']
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/graceful-web-ui.less'],
+                    'demo/css/index.css': ['demo/less/index.less'],
+                    'demo/css/lib/prettify.css': ['demo/less/prettify.less']
                 }
             },
             min: {
@@ -50,7 +51,7 @@ module.exports = function (grunt) {
                     compress: true
                 },
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/grace.less']
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/graceful-web-ui.less']
                 }
             }
         },
@@ -68,10 +69,27 @@ module.exports = function (grunt) {
 
         copy: {
             demo: {
+                files: [
+                    {
+                        'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
+                        'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js',
+                        'demo/js/lib/jquery.min.js': 'bower_components/jquery/jquery.min.js',
+                        'demo/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js'
+                    },
+                    {expand: true, src: ['assets/**'], dest: 'demo'}
+                ]
+            },
+            test: {
                 files: {
-                    'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
-                    'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                    'js/tests/vendor/lib/jquery.js': 'bower_components/jquery/jquery.js',
+                    'js/tests/vendor/lib/qunit.js': 'bower_components/qunit/qunit//qunit.js',
+                    'js/tests/vendor/lib/qunit.css': 'bower_components/qunit/qunit/qunit.css'
                 }
+            },
+            dist_assets: {
+                files: [
+                    {expand: true, src: ['assets/graceful-web-ui/**'], dest: 'dist'}
+                ]
             }
         },
 
@@ -105,6 +123,30 @@ module.exports = function (grunt) {
                 inject: 'js/tests/unit/phantom.js'
             },
             files: ['js/tests/*.html']
+        },
+
+        watch: {
+            src: {
+                files: '<%= jshint.src.src %>',
+                tasks: ['jshint:src', 'qunit']
+            },
+            test: {
+                files: '<%= jshint.test.src %>',
+                tasks: ['jshint:test', 'qunit']
+            },
+            recess: {
+                files: 'less/*.less',
+                tasks: ['recess', 'copy:demo']
+            }
+        },
+
+        bower: {
+            install: {
+                options: {
+                    copy: false,
+                    cleanTargetDir: true
+                }
+            }
         }
     });
 
@@ -116,26 +158,31 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-bower-task');
 
     // Test task.
-    grunt.registerTask('test', ['jshint', 'qunit']);
-
-    // JS distribution task.
-    grunt.registerTask('dist-js', ['concat', 'uglify']);
+    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit']);
 
     // CSS distribution task.
     grunt.registerTask('dist-css', ['recess']);
 
-    // demo distribution task.
-    grunt.registerTask('dist-demo', ['copy:demo']);
+    // JS distribution task.
+    grunt.registerTask('dist-js', ['concat', 'uglify']);
+
+    // Assets distribution task.
+    grunt.registerTask('dist-assets', ['copy:dist_assets']);
 
     // Full distribution task.
-    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js']);
+    grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js', 'dist-assets']);
 
-    // start local server for demo
-    grunt.registerTask('s', ['dist', 'dist-demo', 'connect']);
+    // Demo distribution task.
+    grunt.registerTask('dist-demo', ['dist', 'bower', 'copy:demo']);
+
+    // Start local server for demo
+    grunt.registerTask('s', ['dist-demo', 'connect']);
 
     // Default task(s).
-    grunt.registerTask('default', ['dist', 'dist-demo']);
+    grunt.registerTask('default', ['dist-demo']);
 
 };

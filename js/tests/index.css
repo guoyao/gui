@@ -1,0 +1,9 @@
+/** make link element background transparent */
+
+#qunit-header a {
+    background-color: transparent !important;
+}
+
+li.pass a {
+    background-color: transparent !important;
+}
