@@ -92,7 +92,7 @@
 								"margin-left": -($(this.defaults.indicatorTextClass).find('span').eq(i).width() / 2) + $(this.defaults.btnWrapperClass).find(this.defaults.btnClass).outerWidth() / 4});
 					}
 					if (parseInt($(this.defaults.indicatorTextClass).find("span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $(this.defaults.rangeBarClass).outerWidth()) {
-						for (i = 0; i < this.defaults.data.indicatordata.length; i++) {
+						for (var i = 0; i < this.defaults.data.indicatordata.length; i++) {
 							if (i % 2 === 0) {
 								$(this.defaults.indicatorTextClass).find("span")
 									.eq(i)
@@ -158,20 +158,20 @@
 				var btnLeft = [];
 				if (this.curTarget.className === this._sliceSelectorSymbol(this.defaults.rangeBarClass)) {
 					if (this._calculateMoveDirection() === 1 && this._checkRangeBarMoveRange()) {
-						for (i = 0; i < this.index.length; i++) {
+						for (var i = 0; i < this.index.length; i++) {
 							this.index[i] += this.defaults.step;
 							$(this.defaults.btnWrapperClass).find(this.defaults.btnClass).eq(i).css({"left": (this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 						}
 						this.orgX = this.curX;
 					} else if (this._calculateMoveDirection() === -1 && this._checkRangeBarMoveRange()) {
-						for (i = 0; i < this.index.length; i++) {
+						for (var i = 0; i < this.index.length; i++) {
 							this.index[i] -= this.defaults.step;
 							$(this.defaults.btnWrapperClass).find(this.defaults.btnClass).eq(i).css({"left": (this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 						}
 						this.orgX = this.curX;
 					}
 				}
-				for (i = 0; i < $(this.defaults.btnWrapperClass).find(this.defaults.btnClass).length; i++) {
+				for (var i = 0; i < $(this.defaults.btnWrapperClass).find(this.defaults.btnClass).length; i++) {
 					btnLeft.push(parseInt($(this.defaults.btnWrapperClass).find(this.defaults.btnClass).eq(i).css("left"), 10));
 				}
 				var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
@@ -180,7 +180,7 @@
 			},
 			_checkRangeBarMoveRange: function () {
 				if (this._calculateMoveDirection() === 1) {
-					for (i = 0; i < this.index.length; i++) {
+					for (var i = 0; i < this.index.length; i++) {
 						if (this.index[i] + 1 > this.defaults.data.indicatordata.length - 1) {
 							return false;
 						}
@@ -188,7 +188,7 @@
 					return true;
 				}
 				if (this._calculateMoveDirection() === -1) {
-					for (i = 0; i < this.index.length; i++) {
+					for (var i = 0; i < this.index.length; i++) {
 						if (this.index[i] - 1 < 0) {
 							return false;
 						}
