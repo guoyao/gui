@@ -1,3 +1,8 @@
+/**
+ * Author: alfredzh
+ * Time: 08-13-2013 10:38
+ */
+
 (function (window) {
 	"use strict";
 
