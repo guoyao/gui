@@ -92,10 +92,10 @@
 								"margin-left": -($(this.defaults.indicatorTextClass).find('span').eq(i).width() / 2) + $(this.defaults.btnWrapperClass).find(this.defaults.btnClass).outerWidth() / 4});
 					}
 					if (parseInt($(this.defaults.indicatorTextClass).find("span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $(this.defaults.rangeBarClass).outerWidth()) {
-						for (var i = 0; i < this.defaults.data.indicatordata.length; i++) {
-							if (i % 2 === 0) {
+						for (var j = 0; j < this.defaults.data.indicatordata.length; j++) {
+							if (j % 2 === 0) {
 								$(this.defaults.indicatorTextClass).find("span")
-									.eq(i)
+									.eq(j)
 									.css("top", $(this.defaults.indicatorTextClass).find("span").height());
 							}
 						}
@@ -164,15 +164,15 @@
 						}
 						this.orgX = this.curX;
 					} else if (this._calculateMoveDirection() === -1 && this._checkRangeBarMoveRange()) {
-						for (var i = 0; i < this.index.length; i++) {
-							this.index[i] -= this.defaults.step;
-							$(this.defaults.btnWrapperClass).find(this.defaults.btnClass).eq(i).css({"left": (this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
+						for (var j = 0; j < this.index.length; j++) {
+							this.index[j] -= this.defaults.step;
+							$(this.defaults.btnWrapperClass).find(this.defaults.btnClass).eq(j).css({"left": (this.index[j] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 						}
 						this.orgX = this.curX;
 					}
 				}
-				for (var i = 0; i < $(this.defaults.btnWrapperClass).find(this.defaults.btnClass).length; i++) {
-					btnLeft.push(parseInt($(this.defaults.btnWrapperClass).find(this.defaults.btnClass).eq(i).css("left"), 10));
+				for (var k = 0; k < $(this.defaults.btnWrapperClass).find(this.defaults.btnClass).length; k++) {
+					btnLeft.push(parseInt($(this.defaults.btnWrapperClass).find(this.defaults.btnClass).eq(k).css("left"), 10));
 				}
 				var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
 				$(this.defaults.btnWrapperClass).find(this.defaults.rangeBarClass)
@@ -188,8 +188,8 @@
 					return true;
 				}
 				if (this._calculateMoveDirection() === -1) {
-					for (var i = 0; i < this.index.length; i++) {
-						if (this.index[i] - 1 < 0) {
+					for (var j = 0; j < this.index.length; j++) {
+						if (this.index[j] - 1 < 0) {
 							return false;
 						}
 					}
