@@ -79,7 +79,8 @@
 					'color': options.closeBtn.fontColor,
 					'font-size': options.closeBtn.fontSize,
 					'line-height': options.closeBtn.lineHeight,
-					'cursor': options.closeBtn.cursor
+					'cursor': options.closeBtn.cursor,
+					'text-align':'center'
 				})
 					.text(options.closeBtn.value);
 			}
