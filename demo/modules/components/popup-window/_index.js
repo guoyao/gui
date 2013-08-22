@@ -1,3 +1,4 @@
 (function ($) {
-    $(".grace-popup").gracePopup();
+    $(".grace-popup-btn").gracePopup();
+	prettyPrint();
 })(jQuery);

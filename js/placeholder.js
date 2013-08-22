@@ -11,7 +11,7 @@
 		//define object
 		var placeholder = {
 			defaults: {
-				labelText: ['Please enter Text'],
+				labelText: [],
 				labelMargin: '',
 				labelTextAlign: 'left',
 				labelOffset: {'top': 0, 'left': 0},
@@ -20,6 +20,7 @@
 				inputType: 'input'
 			},
 			_init: function (obj) {
+				$.extend(this.defaults, option);
 				this._setInitialVarible(obj);
 				this._addPlaceHolderElem();
 				this._EventHandler();
@@ -85,10 +86,12 @@
 					e.preventDefault();
 				});
 				this.obj.delegate(this.defaults.inputType, 'focus', function () {
-					$(this).parent().find('label').eq($(this).index('input:text')).stop(true, true).fadeOut(defaults.animateSpeed);
+					$(this).parent().find('label').eq($(this).index(defaults.inputType)).stop(true, true).fadeOut(defaults.animateSpeed);
 				});
 				this.obj.delegate(this.defaults.inputType, 'blur', function () {
-					$(this).parent().find('label').eq($(this).index('input:text')).stop(true, true).fadeIn(defaults.animateSpeed);
+					if($(this).val() === ''){
+						$(this).parent().find('label').eq($(this).index(defaults.inputType)).stop(true, true).fadeIn(defaults.animateSpeed);
+					}
 				});
 			},
 			_destroy: function () {
@@ -99,7 +102,7 @@
 			}
 		}
 
-		$.extend(placeholder.defaults, option);
+		//$.extend({},placeholder.defaults, option);
 
 		placeholder._init(this);
 

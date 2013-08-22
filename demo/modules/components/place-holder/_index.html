@@ -1,41 +1,21 @@
-	<style type="text/css">
-        /* css reset start*/
-        body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre, 
-        form,fieldset,input,textarea,p,blockquote,th,td {padding:0;margin:0;} 
-        table {border-collapse:collapse;border-spacing:0;} 
-        fieldset,img {border:0;}
-        body {font:12px/1.5 Microsoft Yahei,"宋体",tahoma, arial, simsun;}
-        a, a:link, a:visited {text-decoration:none;outline:none;cursor:pointer;}
-        address,caption,cite,code,dfn,em,strong,th,var {font-weight:normal;font-style:normal;} 
-        ol,ul {list-style:none;} 
-        caption,th {text-align:left;} 
-        h1,h2,h3,h4,h5,h6 {font-weight:normal;font-size:100%;} 
-        q:before,q:after {content:'';} 
-        abbr,acronym {border:0;}
-        input {outline:none;}
-        i {font-style:normal;}
-        textarea {font:12px/1.5 Microsoft Yahei,"宋体",tahoma, arial, simsun;}
-        /* css reset end*/
-
-		/* for test */
-		.btn {position:absolute;top:0;display: block;background: #ffd800;border:1px solid #808080;border-radius: 20px;z-index: 20;}
-		/* for test */
-			
-        .range-selector {width: 1000px;height: 35px;margin: 10px auto 0;}
-		.range-selector-btn {width: 900px;height: 15px;background: #eee;border-radius: 10px;border: 1px solid #999;position: relative;}
-		.range-selector-btn .btn-1 {width: 30px;height: 30px;margin-left:-15px;position: absolute;left:0;background: #ffd800;border:1px solid #808080;border-radius: 20px;cursor: pointer;z-index: 10;}
-		.range-selector-btn .btn-2 {width: 30px;height: 30px;margin-left:-15px;position: absolute;background: #ffd800;border:1px solid #808080;border-radius: 20px;cursor: pointer;z-index: 10;}
-		.range-selector-indicator {width:900px;position: relative;top: 15px;}
-		.range-selector-indicator span {position: absolute;top: 0;}
-		.range-selector-bar {height:15px;background: #6df1ff;position: absolute;top: 0;}
-			
-		.place-holder {width:1000px;margin:0 auto;margin-top:50px;position: relative;padding: 10px 0;}
-		input {margin: 10px;}
-		label {z-index: 5;}
-	</style>
-<div class="place-holder">
-	<input type="text" id="place-holder-demo-input" class="place-holder-input"/>
-	<input type="text" id="l2" class="place-holder-input"/>
-	<input type="text" id="l3" class="place-holder-input"/>
-	<input type="text" id="l4" class="place-holder-input"/>
+<div class="module-container">
+	<h4>Input Place Holder Component:</h4>
+    <div class="grace-placeholder">
+        <input type="text" id="place-holder-demo-input_1"/>
+        <input type="text" id="place-holder-demo-input_2"/>
+    </div>
+    <h5 class="code-label">Html Code:</h5>
+    <pre class="prettyprint linenums">
+&lt;div class="grace-placeholder"&gt;
+    &lt;input type="text" id="place-holder-demo-input_1"/&gt;
+    &lt;input type="text" id="place-holder-demo-input_2"/&gt;
+&lt;/div&gt;
+	</pre>
+    <h5 class="code-label">Js Code</h5>
+    <pre class="prettyprint">$(".grace-placeholder").gracePlaceholder({
+    labelText:[
+    	'Please Input 1','Please Input 2'
+    ]
+});
+    </pre>
 </div>
