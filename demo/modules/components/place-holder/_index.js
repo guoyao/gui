@@ -6,5 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 (function ($) {
-	$(".grace-placeholder").gracePlaceholder({'labelText':['Please Input']});
+	$(".grace-placeholder").gracePlaceholder({'labelText':['Please Input 1','Please Input 2']});
+	
+	prettyPrint();
 })(jQuery);

@@ -86,11 +86,11 @@
 					e.preventDefault();
 				});
 				this.obj.delegate(this.defaults.inputType, 'focus', function () {
-					$(this).parent().find('label').eq($(this).index(this.inputType)).stop(true, true).fadeOut(defaults.animateSpeed);
+					$(this).parent().find('label').eq($(this).index(defaults.inputType)).stop(true, true).fadeOut(defaults.animateSpeed);
 				});
 				this.obj.delegate(this.defaults.inputType, 'blur', function () {
-					if($(this).val() == ''){
-						$(this).parent().find('label').eq($(this).index(this.inputType)).stop(true, true).fadeIn(defaults.animateSpeed);
+					if($(this).val() === ''){
+						$(this).parent().find('label').eq($(this).index(defaults.inputType)).stop(true, true).fadeIn(defaults.animateSpeed);
 					}
 				});
 			},
