@@ -18,16 +18,17 @@
 					height: 30
 				},
 				rangeBar: true,
-				rangeBarClass: '.range-selector-bar',
-				btnWrapperClass: '.range-selector-btn',
-				indicatorTextClass: '.range-selector-indicator',
+				rangeBarClass: '.slider-range-button',
+				btnWrapperClass: '.slider-btn-wrapper',
+				indicatorTextClass: '.slider-range-indicator',
 				indicatorText: true,
 				data: {
-					indicatordata: ['09/01', '09/03', '09/04', '09/05', '09/06', '09/07', '09/01', '09/03', '09/04', '09/06', '09/07', '09/01', '09/03']
+					indicatordata: []
 				},
 				remote: {}//'type':'POST','url':'','data':'','dataType':'JSON'
 			},
 			_init: function (obj) {
+				$.extend(this.defaults, option);
 				this._initVaribles(obj);
 				this._initNodeWrapper();
 				this._initFetchData();
@@ -209,7 +210,7 @@
 			}
 		}
 
-		$.extend(slider.defaults, option);
+		//$.extend({},slider.defaults, option);
 
 		slider._init(this);
 
@@ -222,158 +223,3 @@
 	};
 
 })(window);
-
-
-/*$(function(){
- //fetch dataDemo via ajax just for test
- var dataDemo = {date:['09/01','09/03','09/04','09/05','09/06','09/07','09/01','09/03','09/04','09/06','09/07','09/01','09/03']};
-
- var slider = {
- init:function(){
- this._initBtns();
- this._calculateMoveDistance();
- this._eventCapture();
- this._renderRangeBar();
- this._addIndicatorText();
- },
- options:{
- step:1,
- btns:[0,'max'],
- btnSize:{
- width:30,
- height:30
- },
- rangeBar:true,
- rangeBarClass:'range-selector-bar',
- btnWrapper:'range-selector-btn',
- indicatorText:true
- },
- curTarget:{},
- index:[],
- _initBtns:function(){
- for(i = 0 ; i < this.options.btns.length ; i++){
- this.index[i] = (this.options.btns[i] === 'max') ? dataDemo.date.length-1 : this.options.btns[i];
- $('<a class="btn"></a>').appendTo('.range-selector-btn').css({"left" : this.index[i] / (dataDemo.date.length - 1) * 100 + "%" , "width" : this.options.btnSize.width , "height" : this.options.btnSize.height, "margin-left" : - (this.options.btnSize.width / 4), "margin-top" : - (this.options.btnSize.height / 4)});
- }
- },
- _addIndicatorText:function(){
- if(this.options.indicatorText){
- for(i = 0;i < dataDemo.date.length;i++){
- $('<span>' + dataDemo.date[i] + '</span>').appendTo($('.range-selector-indicator')).css({"left":i / (dataDemo.date.length - 1) * 100 +"%", "margin-left" : - (this.options.btnSize.width / 4)});
- }
- if(parseInt($('.range-selector-indicator').find("span").outerWidth()) * dataDemo.date.length > $(".range-selector-bar").outerWidth()){
- for(i = 0;i < dataDemo.date.length;i++){
- if(i % 2 === 0){
- $('.range-selector-indicator').find("span").eq(i).css("top",$('.range-selector-indicator').find("span").height());
- }
- }
- }
- }
- },
- _eventCapture:function(){
- $('.range-selector-btn').mousedown(function(e){
- e.preventDefault();
- slider._saveTarget(e);
- });
- $(document).mousemove(function(e){
- slider._refreshPosition(e);
- });
- $(document).mouseup(function(e){
- slider._destroyTarget();
- });
- },
- _checkMoveStep:function(){
- return Math.abs(this.curX - this.orgX) > this.moveDistance * this.options.step * 0.8
- },
- _calculateMoveDirection:function(){
- if( this._checkMoveStep() ){
- if(this.curX  - this.orgX > 0){
- return 1;
- }else if(this.curX  - this.orgX < 0){
- return -1;
- }
- }
- },
- _calculateMoveDistance:function(){
- this.moveDistance = (parseInt($('.range-selector-btn').width()) ) / (dataDemo.date.length -1);
- this.moveDistance = Math.round(this.moveDistance);
- },
- _refreshPosition:function(e){
- this.curX = e.pageX;
- if(this.curTarget.className === 'btn'){
- if(this._calculateMoveDirection() === 1 && this.index[$(this.curTarget).index()] < dataDemo.date.length -1){
- this.index[$(this.curTarget).index()] += 1 * this.options.step;
- $(this.curTarget).css({"left":(this.index[$(this.curTarget).index()] / (dataDemo.date.length - 1) * 100 + "%")});
- this.orgX = $(this.curTarget).offset().left + parseInt($(this.curTarget).width(),10) / 2;
- }else if(this._calculateMoveDirection(e) === -1 && this.index[$(this.curTarget).index()] > 0){
- this.index[$(this.curTarget).index()] -= 1 * this.options.step;
- $(this.curTarget).css({"left":(this.index[$(this.curTarget).index()] / (dataDemo.date.length - 1) * 100 + "%")});
- this.orgX = $(this.curTarget).offset().left + parseInt($(this.curTarget).width(),10) / 2;
- }
- }
- this._refreshRangeBarPosition(e);
- },
- _renderRangeBar:function(){
- if(this.options.rangeBar){
- if($('.range-selector-btn').find("." + this.options.rangeBarClass).length <= 0){
- $("<a class='" + this.options.rangeBarClass + "'></a>").appendTo('.range-selector-btn');
- }
- this._refreshRangeBarPosition();
- }
- },
- _refreshRangeBarPosition:function(e){
- if(this.curTarget.className === this.options.rangeBarClass){
- if(this._calculateMoveDirection() === 1 && this._checkRangeBarMoveRange()){
- for(i = 0; i < this.index.length; i++){
- this.index[i] += 1 * this.options.step;
- $('.range-selector-btn').find('.btn').eq(i).css({"left":(this.index[i] / (dataDemo.date.length - 1) * 100 + "%")});
- }
- this.orgX = this.curX;
- }else if(this._calculateMoveDirection() === -1 && this._checkRangeBarMoveRange()){
- for(i = 0; i < this.index.length; i++){
- this.index[i] -= 1 * this.options.step;
- $('.range-selector-btn').find('.btn').eq(i).css({"left":(this.index[i] / (dataDemo.date.length - 1) * 100 + "%")});
- }
- this.orgX = this.curX;
- }
- }
- var btnLeft = []
- for(i = 0; i < $('.range-selector-btn').find('.btn').length; i++){
- btnLeft.push(parseInt($('.range-selector-btn').find('.btn').eq(i).css("left")));
- }
- var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
- $('.range-selector-btn').find("." + this.options.rangeBarClass).css({'width':rangeBar,'left':btnLeft[0] - btnLeft[1] > 0 ? btnLeft[1] + this.options.btnSize.width / 4 : btnLeft[0] + this.options.btnSize.width / 4});
- },
- _checkRangeBarMoveRange:function(){
- if(this._calculateMoveDirection() === 1){
- for(i = 0; i < this.index.length; i++){
- if(this.index[i] + 1 > dataDemo.date.length - 1){
- return false;
- }
- }
- return true;
- }else if(this._calculateMoveDirection() === -1){
- for(i = 0; i < this.index.length; i++){
- if(this.index[i] - 1 < 0){
- return false;
- }
- }
- return true;
- }
- },
- _saveTarget:function(e){
- this.curTarget = e.target;
- this.orgX = e.pageX;
- this.curOffset = parseInt(e.target.style.left);
- },
- _checkTarget:function(e){
- return this.curTarget === e.target;
- },
- _destroyTarget:function(){
- this.curTarget = "";
- }
- }
- //init program
- slider.init();
- });
- */
