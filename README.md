@@ -1,4 +1,6 @@
-# [Graceful Web UI](http://grace.guoyao.me) [![Build Status](https://api.travis-ci.org/guoyao/graceful-web-ui.png)](http://travis-ci.org/guoyao/graceful-web-ui)
+# [Graceful Web UI](http://grace.guoyao.me)
+[![Build Status](https://api.travis-ci.org/guoyao/graceful-web-ui.png)](http://travis-ci.org/guoyao/graceful-web-ui)
+[![Dependency Status](https://gemnasium.com/guoyao/graceful-web-ui.png)](https://gemnasium.com/guoyao/graceful-web-ui)
 
 supported browser: ie6+ firefox4+ safari chrome and so on.
 
