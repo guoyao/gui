@@ -7,28 +7,27 @@
 		old = $.fn.graceSlider;
 
 	$.fn.graceSlider = function (option) {
-
-		var slider = {
-			defaults: {
-				step: 1,
-				btnClass: '.btn',
-				btns: [0, 'max'],
-				btnSize: {
-					width: 30,
-					height: 30
-				},
-				rangeBar: true,
-				rangeBarClass: '.slider-range-button',
-				btnWrapperClass: '.slider-btn-wrapper',
-				indicatorTextClass: '.slider-range-indicator',
-				indicatorText: true,
-				data: {
-					indicatordata: []
-				},
-				remote: {}//'type':'POST','url':'','data':'','dataType':'JSON'
+		$.fn.graceSlider.defaults = {
+			step: 1,
+			btnClass: '.btn',
+			btns: [0, 'max'],
+			btnSize: {
+				width: 30,
+				height: 30
 			},
+			rangeBar: true,
+			rangeBarClass: '.slider-range-button',
+			btnWrapperClass: '.slider-btn-wrapper',
+			indicatorTextClass: '.slider-range-indicator',
+			indicatorText: true,
+			data: {
+				indicatordata: []
+			},
+			remote: {}//'type':'POST','url':'','data':'','dataType':'JSON'
+		}
+		var module = {
 			_init: function (obj) {
-				$.extend(this.defaults, option);
+				this.defaults = $.extend({}, $.fn.graceSlider.defaults, option);
 				this._initVaribles(obj);
 				this._initNodeWrapper();
 				this._initFetchData();
@@ -44,9 +43,11 @@
 						url: this.defaults.remote.url,
 						data: this.defaults.remote.data,
 						dataType: this.defaults.remote.dataType
-					}).done(function () {
+					})
+						.done(function () {
 							this._initFunctions();
-						}).fail(function () {
+						})
+						.fail(function () {
 							alert('failed');
 						})
 				} else if (this.defaults.data.indicatordata !== undefined) {
@@ -136,11 +137,11 @@
 				this.curX = e.pageX;
 				if (this.curTarget.className === 'btn') {
 					if (this._calculateMoveDirection() === 1 && this.index[$(this.curTarget).index()] < this.defaults.data.indicatordata.length - 1) {
-						this.index[$(this.curTarget).index()] += 1 * this.defaults.step;
+						this.index[$(this.curTarget).index()] +=  this.defaults.step;
 						$(this.curTarget).css({"left": (this.index[$(this.curTarget).index()] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 						this.orgX = $(this.curTarget).offset().left + parseInt($(this.curTarget).width(), 10) / 2;
 					} else if (this._calculateMoveDirection(e) === -1 && this.index[$(this.curTarget).index()] > 0) {
-						this.index[$(this.curTarget).index()] -= 1 * this.defaults.step;
+						this.index[$(this.curTarget).index()] -=  this.defaults.step;
 						$(this.curTarget).css({"left": (this.index[$(this.curTarget).index()] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 						this.orgX = $(this.curTarget).offset().left + parseInt($(this.curTarget).width(), 10) / 2;
 					}
@@ -210,9 +211,11 @@
 			}
 		}
 
-		//$.extend({},slider.defaults, option);
+		$.fn.graceSlider.debug = function () {
+			return module;
+		}
 
-		slider._init(this);
+		module._init(this);
 
 		return this;
 	}
