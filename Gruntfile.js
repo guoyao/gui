@@ -143,15 +143,27 @@ module.exports = function (grunt) {
         },
 
         qunit: {
-            options: {
-                inject: 'js/tests/unit/phantom.js',
-                coverage: {
-                    src: ['js/*.js'],
-                    instrumentedFiles: "temp/",
-                    lcovReport: "report/"
-                }
+            phantom: {
+                options: {
+                    inject: 'js/tests/unit/phantom.js',
+                    coverage: {
+                        src: ['js/*.js'],
+                        instrumentedFiles: "temp/",
+                        lcovReport: "report/"
+                    }
+                },
+                src: ['js/tests/*.html']
             },
-            files: ['js/tests/*.html']
+            coverage: {
+                options: {
+                    coverage: {
+                        src: ['js/*.js'],
+                        instrumentedFiles: "temp/",
+                        lcovReport: "report/"
+                    }
+                },
+                src: ['js/tests/*.html']
+            }
         },
 
         shell: {
@@ -175,12 +187,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Test task.
-    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit', 'shell:coverall']);
 
     // generate coverage report after tests
-    grunt.event.on('qunit.done', function () {
-        grunt.task.run('shell:coverall');
-    });
+//    grunt.event.on('qunit.done', function () {
+//        grunt.task.run('shell:coverall');
+//    });
 
     // CSS distribution task.
     grunt.registerTask('dist-css', ['recess']);
