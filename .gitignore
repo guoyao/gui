@@ -24,3 +24,6 @@ demo/js/graceful-web-ui*
 demo/assets/graceful-web-ui
 lib
 bower_components
+temp
+tmp
+report

@@ -175,7 +175,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Test task.
-    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit', 'shell:coverall']);
+    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit']);
+
+    // generate coverage report after tests
+    grunt.event.on('qunit.done', function () {
+        grunt.task.run('shell:coverall');
+    });
 
     // CSS distribution task.
     grunt.registerTask('dist-css', ['recess']);
