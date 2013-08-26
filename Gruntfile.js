@@ -103,28 +103,6 @@ module.exports = function (grunt) {
             }
         },
 
-        jshint: {
-            options: {
-                jshintrc: 'js/.jshintrc'
-            },
-            gruntfile: {
-                src: 'Gruntfile.js'
-            },
-            src: {
-                src: ['js/*.js']
-            },
-            test: {
-                src: ['js/tests/unit/*.js']
-            }
-        },
-
-        qunit: {
-            options: {
-                inject: 'js/tests/unit/phantom.js'
-            },
-            files: ['js/tests/*.html']
-        },
-
         watch: {
             src: {
                 files: '<%= jshint.src.src %>',
@@ -147,6 +125,39 @@ module.exports = function (grunt) {
                     cleanTargetDir: true
                 }
             }
+        },
+
+        jshint: {
+            options: {
+                jshintrc: 'js/.jshintrc'
+            },
+            gruntfile: {
+                src: 'Gruntfile.js'
+            },
+            src: {
+                src: ['js/*.js']
+            },
+            test: {
+                src: ['js/tests/unit/*.js']
+            }
+        },
+
+        qunit: {
+            options: {
+                inject: 'js/tests/unit/phantom.js',
+                coverage: {
+                    src: ['js/*.js'],
+                    instrumentedFiles: "temp/",
+                    lcovReport: "report/"
+                }
+            },
+            files: ['js/tests/*.html']
+        },
+
+        shell: {
+            coverall: {
+                command: 'node_modules/coveralls/bin/coveralls.js <report/lcov.info'
+            }
         }
     });
 
@@ -156,13 +167,15 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-qunit-istanbul');
+    grunt.loadNpmTasks('grunt-shell');
 
     // Test task.
-    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit', 'shell:coverall']);
 
     // CSS distribution task.
     grunt.registerTask('dist-css', ['recess']);
