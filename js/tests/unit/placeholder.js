@@ -18,17 +18,17 @@ $(function () {
 		ok($(document.body).gracePlaceholder()[0] == document.body, 'document.body returned');
 	});
 
-	test("should return element", function () {
-		var preloadHTML = $('<div class="place-holder">' +
-			'<input type="text" id="place-holder-demo-input" class="place-holder-input"/>' +
-			'<input type="text" id="l2" class="place-holder-input"/>' +
-			'<input type="text" id="l3" class="place-holder-input"/>' +
-			'<input type="text" id="l4" class="place-holder-input"/>' +
-			'<input type="image" id="l7" class="place-holder-input"/>' +
-			'</div>');
-		preloadHTML.appendTo("#qunit-fixture");
-
-		ok($(document.body).gracePlaceholder[0] == document.body, 'document.body returned');
-	});
+//	test("should return element", function () {
+//		var preloadHTML = $('<div class="place-holder">' +
+//			'<input type="text" id="place-holder-demo-input" class="place-holder-input"/>' +
+//			'<input type="text" id="l2" class="place-holder-input"/>' +
+//			'<input type="text" id="l3" class="place-holder-input"/>' +
+//			'<input type="text" id="l4" class="place-holder-input"/>' +
+//			'<input type="image" id="l7" class="place-holder-input"/>' +
+//			'</div>');
+//		preloadHTML.appendTo("#qunit-fixture");
+//
+//		ok($(document.body).gracePlaceholder[0] == document.body, 'document.body returned');
+//	});
 
 });
