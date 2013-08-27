@@ -61,14 +61,10 @@
   </div>
 </div>
 
-<script type="text/javascript" src="js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="js/graceful-web-ui.min.js"></script>
-<script type="text/javascript" src="js/base.js"></script>
+<script type="text/javascript" src="js/lib/require.js" data-main="js/main"></script>
 <script type="text/javascript">
-  (function (window) {
-    var demo = window.demo,
-            Module = demo.Module;
-
+  require(["demo"], function (demo) {
+    var Module = demo.Module;
     new demo.Initializer([
       new Module("Normalize", "normalize"),
       new Module("Grid System", "grid-system"),
@@ -76,9 +72,7 @@
     ], {
       modulesDirectory: "modules/css"
     }).init();
-
-  })(window);
+  });
 </script>
-<script type="text/javascript" src="js/lib/prettify.js"></script>
 </body>
 </html>

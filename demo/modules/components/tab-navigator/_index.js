@@ -4,13 +4,13 @@
  * Blog: http://www.guoyao.me
  */
 
-(function ($) {
+require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
     $(".grace-tab").graceTab();
-
-    prettyPrint();
 
     var timeoutId = setTimeout(function () {
         clearTimeout(timeoutId);
         $("[data-target=#tab3]").graceTab("show");
     }, 2000);
-})(jQuery);
+
+    prettify.prettyPrint();
+});

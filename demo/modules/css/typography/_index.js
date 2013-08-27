@@ -4,6 +4,6 @@
  * Blog: http://www.guoyao.me
  */
 
-(function () {
-    prettyPrint();
-})();
+require(["prettify"], function (prettify) {
+    prettify.prettyPrint();
+});

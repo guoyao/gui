@@ -5,8 +5,8 @@
  * Time: 下午2:25
  * To change this template use File | Settings | File Templates.
  */
-(function ($) {
-	$(".grace-placeholder").gracePlaceholder({'labelText':['Please Input 1','Please Input 2']});
-	
-	prettyPrint();
-})(jQuery);
+
+require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
+    $(".grace-placeholder").gracePlaceholder({'labelText':['Please Input 1','Please Input 2']});
+    prettify.prettyPrint();
+});

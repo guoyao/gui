@@ -4,7 +4,7 @@
  * Blog: http://www.guoyao.me
  */
 
-(function ($) {
+require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
     $(".module-container .grace-nav").graceNav({
         backgroundColor: "#eeeeee",
         border: "1px solid #d1d1d1",
@@ -14,5 +14,5 @@
         animationDuration: 500
     });
 
-    prettyPrint();
-})(jQuery);
+    prettify.prettyPrint();
+});

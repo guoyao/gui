@@ -74,7 +74,8 @@ module.exports = function (grunt) {
                         'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
                         'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js',
                         'demo/js/lib/jquery.min.js': 'bower_components/jquery/jquery.min.js',
-                        'demo/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js'
+                        'demo/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js',
+                        'demo/js/lib/require.js': 'bower_components/requirejs/require.js'
                     },
                     {expand: true, src: ['assets/**'], dest: 'demo'}
                 ]
