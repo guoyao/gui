@@ -19,9 +19,11 @@ target
 .settings
 bin
 node_modules
-demo/css
-demo/js/graceful-web-ui*
-demo/assets/graceful-web-ui
+demo_template/build*
+demo_template/css
+demo_template/js/graceful-web-ui*
+demo_template/assets/graceful-web-ui
+demo
 lib
 bower_components
 temp

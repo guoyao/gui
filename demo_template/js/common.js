@@ -1,16 +1,18 @@
 /**
  * Author: guoyao
- * Time: 08-27-2013 16:05
+ * Time: 08-28-2013 12:28
  * Blog: http://www.guoyao.me
  */
 
+/**
+ * The build will inline common dependencies into this file.
+ * For any third party dependencies, like jQuery, place them in the lib folder.
+ * Configure loading modules from the lib directory.
+ */
 requirejs.config({
-    baseUrl: "js",
+    baseUrl: "js/lib",
     paths: {
-        "jquery": "lib/jquery.min",
-        "graceful-web-ui": "graceful-web-ui.min",
-        "demo": "demo",
-        "prettify": "lib/prettify"
+        app: "../app"
     },
     shim: {
         "graceful-web-ui": {
@@ -19,7 +21,7 @@ requirejs.config({
     }
 });
 
-require(["jquery", "graceful-web-ui"], function ($) {
+require(["jquery", "prettify", "graceful-web-ui"], function ($) {
     var grace = window.grace;
     $("#top-nav .grace-nav").graceNav();
     if (grace.browserInfo.isIE && grace.browserInfo.version <= 6) {
