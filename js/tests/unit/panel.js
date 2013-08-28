@@ -11,22 +11,22 @@ $(function () {
 
     test("should the titlename", function () {
 
-        // equal( $(document.body).gracePanelsa()[0], "dds22222",$(this).attr("class"));
+        // equal( $(document.body).guiPanelsa()[0], "dds22222",$(this).attr("class"));
         ok(true, "test title ok");
     });
 
     test("should be defined on jquery object", function () {
-        ok($(document.body).gracePanel, 'gracePanelsa method is defined');
+        ok($(document.body).guiPanel, 'guiPanelsa method is defined');
     });
 
     test("should return element", function () {
-        ok($(document.body).gracePanel()[0] == document.body, 'document.body returned');
+        ok($(document.body).guiPanel()[0] == document.body, 'document.body returned');
     });
 
 
     test("should activate element by tab id", function () {
         var panelHTML =
-            '<div class="grace-panelsa">'
+            '<div class="gui-panelsa">'
                 + '<div class="panelsa-btn"></div>'
                 + '<div class="panelsa-content">'
                 + 'JavaScript expressions can be evaluated as values inside .less files. We recommend'
@@ -34,12 +34,12 @@ $(function () {
                 + '</div>';
 
         $(panelHTML).appendTo("#qunit-fixture");
-        var $gracePanel = $("#qunit-fixture").find(".grace-panelsa");
+        var $guiPanel = $("#qunit-fixture").find(".gui-panelsa");
 
-        $gracePanel.gracePanel({title: "header content"});
+        $guiPanel.guiPanel({title: "header content"});
 
-        var $headerDiv = $gracePanel.find(".panelsa-btn");
-        var $contentDiv = $gracePanel.find(".panelsa-content");
+        var $headerDiv = $guiPanel.find(".panelsa-btn");
+        var $contentDiv = $guiPanel.find(".panelsa-content");
 
         ok($headerDiv.children().length == 1, "this div has add the title");
 
@@ -51,13 +51,13 @@ $(function () {
         equal($headerDiv.attr("class"), "panelsa-btn panelsa-a-closed", "show div" + $headerDiv.attr("class"));
 
 
-        $gracePanel.gracePanel("hidden");
+        $guiPanel.guiPanel("hidden");
 
        equal($headerDiv.attr("class"), "panelsa-btn panelsa-a-opened", "hidden div" + $headerDiv.attr("class"));
 
        ok($contentDiv.is(":visible"), " div is hidden " + $contentDiv.is(":visible"));
 
-       // $gracePanel.gracePanel("show");
+       // $guiPanel.guiPanel("show");
 
        // equal($headerDiv.attr("class"), "panelsa-btn panelsa-a-closed", "show div" + $headerDiv.attr("class"));
 

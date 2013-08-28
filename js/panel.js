@@ -19,14 +19,14 @@
 
     var console = window.console,
         $ = window.jQuery,
-        grace = window.grace,
-        old = $.fn.gracePanel;
+        gui = window.gui,
+        old = $.fn.guiPanel;
 
-    var GracePanel = function (element) {
+    var GuiPanel = function (element) {
         this.$element = $(element);
     };
 
-    $.extend(GracePanel.prototype, {
+    $.extend(GuiPanel.prototype, {
         show: function () {
             var $headerdiv = this.$element.find("> .panelsa-btn");
             if ($headerdiv.hasClass('panelsa-a-closed')) {
@@ -44,18 +44,18 @@
         }
     });
 
-    $.fn.gracePanel = function (option) {
+    $.fn.guiPanel = function (option) {
 
         var defaults = {
                 animationDuration: 500,
                 title: "test Title"
             },
-            isMethodCall = grace.plugin.isPluginMethodCall(option);
+            isMethodCall = gui.plugin.isPluginMethodCall(option);
 
-        function initEach($gracePnl) {
-            var options = $.extend({}, defaults, option, $gracePnl.data("option"));
+        function initEach($guiPnl) {
+            var options = $.extend({}, defaults, option, $guiPnl.data("option"));
 
-            $gracePnl.find(".panelsa-btn").each(function () {
+            $guiPnl.find(".panelsa-btn").each(function () {
                 var $this=$(this);
                 if ($this.attr('class').indexOf("opened") != -1) {
                     $this.prepend('<div>' + options.title + '</div>');
@@ -96,28 +96,28 @@
         }
 
         this.each(function () {
-            var $gracePnl = $(this);
-            var data = $gracePnl.data('grace.pnl');
+            var $guiPnl = $(this);
+            var data = $guiPnl.data('gui.pnl');
             if (!data) {
-                $gracePnl.data('grace.pnl', (data = new GracePanel(this)))
+                $guiPnl.data('gui.pnl', (data = new GuiPanel(this)))
             }
             if (isMethodCall) {
                 data[option]();
             } else {
-                initEach($gracePnl);
+                initEach($guiPnl);
             }
         });
 
-        return grace.plugin.patch($.fn.gracePanel, this, option);
+        return gui.plugin.patch($.fn.guiPanel, this, option);
     };
 
-    $.fn.gracePanel.Constructor = GracePanel;
+    $.fn.guiPanel.Constructor = GuiPanel;
 
     // NO CONFLICT
     // ===============
 
-    $.fn.gracePanel.noConflict = function () {
-        $.fn.gracePanel = old;
+    $.fn.guiPanel.noConflict = function () {
+        $.fn.guiPanel = old;
         return this;
     };
 

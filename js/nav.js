@@ -1,6 +1,6 @@
 /* ========================================================================
- * Graceful-web-ui: nav.js v0.1.0alpha
- * http://www.grace.guoyao.me/
+ * GUI: nav.js v0.1.0alpha
+ * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
  *
@@ -22,16 +22,16 @@
 
     var console = window.console,
         $ = window.jQuery,
-        grace = window.grace,
-        old = $.fn.graceNav;
+        gui = window.gui,
+        old = $.fn.guiNav;
 
-    var GraceNav = function (element) {
+    var GuiNav = function (element) {
         this.$element = $(element);
     };
 
-//    $.extend(GraceNav.prototype, {});
+//    $.extend(GuiNav.prototype, {});
 
-    $.fn.graceNav = function (option) {
+    $.fn.guiNav = function (option) {
 
         var defaults = {
                 backgroundColor: "#eeeeee",
@@ -42,13 +42,13 @@
                 itemFadeIn: true,
                 animationDuration: 500
             },
-            isMethodCall = grace.plugin.isPluginMethodCall(option);
+            isMethodCall = gui.plugin.isPluginMethodCall(option);
 
-        function initEach($graceNav) {
-            var isVertical = $graceNav.hasClass("grace-nav-vertical"),
-                options = $.extend({}, defaults, option, $graceNav.data("option"));
+        function initEach($guiNav) {
+            var isVertical = $guiNav.hasClass("gui-nav-vertical"),
+                options = $.extend({}, defaults, option, $guiNav.data("option"));
 
-            $graceNav.css({
+            $guiNav.css({
                 backgroundColor: options.backgroundColor,
                 border: options.border
             }).find("ul").css({
@@ -56,7 +56,7 @@
                     border: options.border
                 });
 
-            $graceNav.find("a").css({
+            $guiNav.find("a").css({
                 width: options.itemWidth,
                 height: options.itemHeight,
                 lineHeight: options.itemHeight
@@ -67,15 +67,15 @@
                 });
 
             if (isVertical) {
-                $graceNav.css("width", options.itemWidth)
+                $guiNav.css("width", options.itemWidth)
                     .find("ul").css("left", options.itemWidth);
             } else {
-                $graceNav.css("height", options.itemHeight)
+                $guiNav.css("height", options.itemHeight)
                     .find("ul ul").css("left", options.itemWidth);
             }
 
             if (options.itemFadeIn) {
-                $graceNav.find("li").hover(function () {
+                $guiNav.find("li").hover(function () {
                     $(this).children("ul").css("opacity", 0).animate({opacity: 1}, options.animationDuration);
                 }, function () {
                 });
@@ -83,28 +83,28 @@
         }
 
         this.each(function () {
-            var $graceNav = $(this);
-            var data = $graceNav.data('grace.nav');
+            var $guiNav = $(this);
+            var data = $guiNav.data('gui.nav');
             if (!data) {
-                $graceNav.data('grace.nav', (data = new GraceNav(this)))
+                $guiNav.data('gui.nav', (data = new GuiNav(this)))
             }
             if (isMethodCall) {
                 data[option]();
             } else {
-                initEach($graceNav);
+                initEach($guiNav);
             }
         });
 
-        return grace.plugin.patch($.fn.graceNav, this, option);
+        return gui.plugin.patch($.fn.guiNav, this, option);
     };
 
-    $.fn.graceNav.Constructor = GraceNav;
+    $.fn.guiNav.Constructor = GuiNav;
 
     // NO CONFLICT
     // ===============
 
-    $.fn.graceNav.noConflict = function () {
-        $.fn.graceNav = old;
+    $.fn.guiNav.noConflict = function () {
+        $.fn.guiNav = old;
         return this;
     };
 

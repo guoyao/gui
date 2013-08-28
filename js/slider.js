@@ -3,8 +3,8 @@
 
 	var console = window.console,
 		$ = window.jQuery,
-		grace = window.grace,
-		old = $.fn.graceSlider;
+		gui = window.gui,
+		old = $.fn.guiSlider;
 
 	var module = {
 		_init: function (obj, option) {
@@ -14,7 +14,7 @@
 			this._initFetchData();
 		},
 		_mergeOptions: function (option) {
-			this.defaults = $.extend({}, $.fn.graceSlider.defaults, option);
+			this.defaults = $.extend({}, $.fn.guiSlider.defaults, option);
 		},
 		//_sliceSelectorSymbol: function (name) {
 			//var reg = /[.#]*/;
@@ -233,14 +233,14 @@
 		}
 	}
 
-	$.fn.graceSlider = function (option) {
+	$.fn.guiSlider = function (option) {
 
 		module._init(this, option);
 
 		return this;
 	}
 
-	$.fn.graceSlider.defaults = {
+	$.fn.guiSlider.defaults = {
 		step: 1,
 		btnClass: 'btn',
 		btns: [0, 'max'],
@@ -259,12 +259,12 @@
 		remote: {}//'type':'POST','url':'','data':'','dataType':'JSON'
 	}
 
-	$.fn.graceSlider.noConflict = function () {
-		$.fn.graceSlider = old;
+	$.fn.guiSlider.noConflict = function () {
+		$.fn.guiSlider = old;
 		return this;
 	};
 
 	//for debug
-	$.fn.graceSlider.debug = module;
+	$.fn.guiSlider.debug = module;
 
 })(window);

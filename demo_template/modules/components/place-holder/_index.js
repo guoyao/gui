@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
-    $(".grace-placeholder").gracePlaceholder({'labelText':['Please Input 1','Please Input 2']});
+require(["jquery", "prettify", "gui"], function ($, prettify) {
+    $(".gui-placeholder").guiPlaceholder({'labelText':['Please Input 1','Please Input 2']});
     prettify.prettyPrint();
 });

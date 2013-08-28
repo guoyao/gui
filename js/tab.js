@@ -1,6 +1,6 @@
 /* ========================================================================
- * Graceful-web-ui: tab.js v0.1.0alpha
- * http://www.grace.guoyao.me/
+ * GUI: tab.js v0.1.0alpha
+ * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
  *
@@ -22,16 +22,16 @@
 
     var console = window.console,
         $ = window.jQuery,
-        grace = window.grace,
-        old = $.fn.graceTab;
+        gui = window.gui,
+        old = $.fn.guiTab;
 
-    var GraceTab = function (element) {
+    var GuiTab = function (element) {
         this.$element = $(element);
     };
 
-    $.extend(GraceTab.prototype, {
+    $.extend(GuiTab.prototype, {
         show: function () {
-            var $li = this.$element.closest(".grace-tab > .tabs > li");
+            var $li = this.$element.closest(".gui-tab > .tabs > li");
             if ($li.hasClass('active')) {
                 return;
             }
@@ -39,9 +39,9 @@
         }
     });
 
-    $.fn.graceTab = function (option) {
+    $.fn.guiTab = function (option) {
 
-        var isMethodCall = grace.plugin.isPluginMethodCall(option);
+        var isMethodCall = gui.plugin.isPluginMethodCall(option);
 
         function showHideTabContent($tabItem, show) {
             var selector = $tabItem.data("target");
@@ -53,13 +53,13 @@
                 }
             }
             if(selector) {
-                grace.showHide($(selector), show);
+                gui.showHide($(selector), show);
             }
         }
 
-        function initEach($graceTab) {
+        function initEach($guiTab) {
             var $activeTabItem = null,
-                $$tabItems = $graceTab.children(".tabs").children("li");
+                $$tabItems = $guiTab.children(".tabs").children("li");
 
             $$tabItems.each(function (index) {
                 var $tabItem = $(this);
@@ -99,28 +99,28 @@
         }
 
         this.each(function () {
-            var $graceTab = $(this);
-            var data = $graceTab.data('grace.tab');
+            var $guiTab = $(this);
+            var data = $guiTab.data('gui.tab');
             if (!data) {
-                $graceTab.data('grace.tab', (data = new GraceTab(this)))
+                $guiTab.data('gui.tab', (data = new GuiTab(this)))
             }
             if (isMethodCall) {
                 data[option]();
             } else {
-                initEach($graceTab);
+                initEach($guiTab);
             }
         });
 
-        return grace.plugin.patch($.fn.graceTab, this, option);
+        return gui.plugin.patch($.fn.guiTab, this, option);
     };
 
-    $.fn.graceTab.Constructor = GraceTab;
+    $.fn.guiTab.Constructor = GuiTab;
 
     // NO CONFLICT
     // ===============
 
-    $.fn.graceTab.noConflict = function () {
-        $.fn.graceTab = old;
+    $.fn.guiTab.noConflict = function () {
+        $.fn.guiTab = old;
         return this;
     };
 })(window);

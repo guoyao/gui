@@ -4,17 +4,17 @@
 	var document = window.document,
 		console = window.console,
 		$ = window.jQuery,
-		grace = window.grace;
+		gui = window.gui;
 
-	$.fn.gracePopup = function (options) {
+	$.fn.guiPopup = function (options) {
 
 		var defaults = {
 			animationDuration: 500,
 			bgcolor: 'rgba(0,0,0,0.7)',
-			bgWrapperClass: 'grace-popup-window',
-			contentWrapperClass: 'grace-popup-content',
-			contentNodeClass: 'grace-popup-content-node',
-			closeBtnWrapperClass: 'grace-popup-closebtn',
+			bgWrapperClass: 'gui-popup-window',
+			contentWrapperClass: 'gui-popup-content',
+			contentNodeClass: 'gui-popup-content-node',
+			closeBtnWrapperClass: 'gui-popup-closebtn',
 			selector: '.',
 			contentNodes: {
 				text: 'JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by wrapping the expression with back-ticks:'
@@ -38,11 +38,11 @@
 		options = $.extend({}, defaults, options);
 
 		function initEach() {
-			var $gracePopupBtn = $(this);
+			var $guiPopupBtn = $(this);
 
-			var $gracePopupWindow = $(options.selector + options.bgWrapperClass);
+			var $guiPopupWindow = $(options.selector + options.bgWrapperClass);
 
-			if ($gracePopupWindow.length < 1) {
+			if ($guiPopupWindow.length < 1) {
 				$('<div class="' + options.bgWrapperClass + '" style="display:none;">' +
 					'<div class="' + options.contentWrapperClass + '">' +
 					'<b class="' + options.closeBtnWrapperClass + '"></b>' +
@@ -50,11 +50,11 @@
 					'</div>' +
 					'</div>').appendTo($('body'));
 
-				$gracePopupWindow = $(options.selector + options.bgWrapperClass);
-				var $gracePopupContent = $(options.selector + options.contentWrapperClass),
-					$gracePopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
+				$guiPopupWindow = $(options.selector + options.bgWrapperClass);
+				var $guiPopupContent = $(options.selector + options.contentWrapperClass),
+					$guiPopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
 
-				$gracePopupWindow.css({'background': options.bgcolor,
+				$guiPopupWindow.css({'background': options.bgcolor,
 					'width': '100%',
 					'height': 1000,
 					'z-index': 9999,
@@ -62,14 +62,14 @@
 					'top': 0,
 					'left': 0
 				});
-				$gracePopupContent.css({'min-width': 500,
+				$guiPopupContent.css({'min-width': 500,
 					'max-width': 1000,
 					'min-height': 500,
 					'background': 'white',
 					'margin': '5% auto 0',
 					'position': 'relative'
 				});
-				$gracePopupCloseBtn.css({'width': options.closeBtn.width,
+				$guiPopupCloseBtn.css({'width': options.closeBtn.width,
 					'height': options.closeBtn.height,
 					'display': 'block',
 					'position': options.closeBtn.position,
@@ -85,18 +85,18 @@
 					.text(options.closeBtn.value);
 			}
 
-			$gracePopupWindow = $(options.selector + options.bgWrapperClass);
-			//$gracePopupContent = $(options.selector + options.contentWrapperClass),
-			var $regetGracePopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
-			var $gracePopupContentNode = $(options.selector + options.contentNodeClass);
+			$guiPopupWindow = $(options.selector + options.bgWrapperClass);
+			//$guiPopupContent = $(options.selector + options.contentWrapperClass),
+			var $regetGuiPopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
+			var $guiPopupContentNode = $(options.selector + options.contentNodeClass);
 
-			$gracePopupBtn.click(function () {
-				//var dataurl = $gracePopupBtn.attr('data-url');
-				$gracePopupWindow.fadeIn(options.animationDuration);
-				$gracePopupContentNode.html(options.contentNodes.text);
+			$guiPopupBtn.click(function () {
+				//var dataurl = $guiPopupBtn.attr('data-url');
+				$guiPopupWindow.fadeIn(options.animationDuration);
+				$guiPopupContentNode.html(options.contentNodes.text);
 			});
-			$regetGracePopupCloseBtn.click(function () {
-				$gracePopupWindow.fadeOut();
+			$regetGuiPopupCloseBtn.click(function () {
+				$guiPopupWindow.fadeOut();
 			});
 		}
 

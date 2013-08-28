@@ -11,22 +11,22 @@ $(function () {
     module("tabs");
 
     test("should provide no conflict", function () {
-        var graceTab = $.fn.graceTab.noConflict();
-        ok(!$.fn.graceTab, 'graceTab was set back to undefined (org value)');
-        $.fn.graceTab = graceTab;
+        var guiTab = $.fn.guiTab.noConflict();
+        ok(!$.fn.guiTab, 'guiTab was set back to undefined (org value)');
+        $.fn.guiTab = guiTab;
     });
 
     test("should be defined on jquery object", function () {
-        ok($(document.body).graceTab, 'graceTab method is defined');
+        ok($(document.body).guiTab, 'guiTab method is defined');
     });
 
     test("should return element", function () {
-        ok($(document.body).graceTab()[0] == document.body, 'document.body returned');
+        ok($(document.body).guiTab()[0] == document.body, 'document.body returned');
     });
 
     test("should activate element by tab id", function () {
         var tabsHTML =
-            '<div class="grace-tab">'
+            '<div class="gui-tab">'
                 + '<ul class="tabs">'
                     + '<li id="firstTab"><a href="#tab1">Graceful Tab 1</a></li>'
                     + '<li id="secondTab"><a href="#tab2">Graceful Tab 2</a></li>'
@@ -45,23 +45,23 @@ $(function () {
             + '</div>';
 
         $(tabsHTML).appendTo("#qunit-fixture");
-        var $graceTab = $("#qunit-fixture").find(".grace-tab");
-        $graceTab.graceTab();
+        var $guiTab = $("#qunit-fixture").find(".gui-tab");
+        $guiTab.guiTab();
 
-        equal($graceTab.find(".active").attr("id"), "firstTab", "first tab is active");
+        equal($guiTab.find(".active").attr("id"), "firstTab", "first tab is active");
 
-        $graceTab.find("#secondTab").graceTab("show");
+        $guiTab.find("#secondTab").guiTab("show");
 
-        ok(!$graceTab.find("#firstTab").hasClass("active"), "active tab changed");
-        equal($graceTab.find('.active').attr('id'), "secondTab", "second tab is active");
-        equal($($graceTab.find(".active a").attr("href")).css("display"), "block", "should display related element");
+        ok(!$guiTab.find("#firstTab").hasClass("active"), "active tab changed");
+        equal($guiTab.find('.active').attr('id'), "secondTab", "second tab is active");
+        equal($($guiTab.find(".active a").attr("href")).css("display"), "block", "should display related element");
 
         /**
          * test data-target attribute
          */
-        $graceTab.find("#thirdTab a").graceTab("show");
-        equal($($graceTab.find(".active a").attr("href")).css("display"), "none", "data-target attribute should be prior");
-        equal($($graceTab.find(".active").data("target")).css("display"), "block", "data-target attribute should be prior");
+        $guiTab.find("#thirdTab a").guiTab("show");
+        equal($($guiTab.find(".active a").attr("href")).css("display"), "none", "data-target attribute should be prior");
+        equal($($guiTab.find(".active").data("target")).css("display"), "block", "data-target attribute should be prior");
     });
 
 });

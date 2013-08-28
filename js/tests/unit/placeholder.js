@@ -5,17 +5,17 @@ $(function () {
 	module("placeholder");
 
 	test("should provide no conflict", function () {
-		var gracePlaceholder = $.fn.gracePlaceholder.noConflict();
-		ok(!$.fn.gracePlaceholder, 'gracePlaceholder was set back to undefined (org value)');
-		$.fn.gracePlaceholder = gracePlaceholder;
+		var guiPlaceholder = $.fn.guiPlaceholder.noConflict();
+		ok(!$.fn.guiPlaceholder, 'guiPlaceholder was set back to undefined (org value)');
+		$.fn.guiPlaceholder = guiPlaceholder;
 	});
 
 	test("should be defined on jquery object", function () {
-		ok($(document.body).gracePlaceholder, 'graceTab method is defined');
+		ok($(document.body).guiPlaceholder, 'guiTab method is defined');
 	});
 
 	test("should return element", function () {
-		ok($(document.body).gracePlaceholder()[0] == document.body, 'document.body returned');
+		ok($(document.body).guiPlaceholder()[0] == document.body, 'document.body returned');
 	});
 
 //	test("should return element", function () {
@@ -28,7 +28,7 @@ $(function () {
 //			'</div>');
 //		preloadHTML.appendTo("#qunit-fixture");
 //
-//		ok($(document.body).gracePlaceholder[0] == document.body, 'document.body returned');
+//		ok($(document.body).guiPlaceholder[0] == document.body, 'document.body returned');
 //	});
 
 });

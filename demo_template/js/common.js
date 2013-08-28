@@ -15,16 +15,16 @@ requirejs.config({
         app: "../app"
     },
     shim: {
-        "graceful-web-ui": {
+        "gui": {
             deps: ["jquery"]
         }
     }
 });
 
-require(["jquery", "prettify", "graceful-web-ui"], function ($) {
-    var grace = window.grace;
-    $("#top-nav .grace-nav").graceNav();
-    if (grace.browserInfo.isIE && grace.browserInfo.version <= 6) {
+require(["jquery", "prettify", "gui"], function ($) {
+    var gui = window.gui;
+    $("#top-nav .gui-nav").guiNav();
+    if (gui.browserInfo.isIE && gui.browserInfo.version <= 6) {
         $("#navigator").find("li:last-child a").css("border-bottom", 0);
     }
 });

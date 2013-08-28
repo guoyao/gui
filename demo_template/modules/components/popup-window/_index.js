@@ -1,4 +1,4 @@
-require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
-    $(".grace-popup-btn").gracePopup();
+require(["jquery", "prettify", "gui"], function ($, prettify) {
+    $(".gui-popup-btn").guiPopup();
     prettify.prettyPrint();
 });
