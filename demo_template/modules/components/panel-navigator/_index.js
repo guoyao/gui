@@ -1,4 +1,4 @@
-require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
-    $(".grace-panelsa").gracePanel({title: "dds22222"});
+require(["jquery", "prettify", "gui"], function ($, prettify) {
+    $(".gui-panelsa").guiPanel({title: "dds22222"});
     prettify.prettyPrint();
 });

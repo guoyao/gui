@@ -11,17 +11,17 @@ $(function () {
     module("navs");
 
     test("should provide no conflict", function () {
-        var graceNav = $.fn.graceNav.noConflict();
-        ok(!$.fn.graceNav, 'graceNav was set back to undefined (org value)');
-        $.fn.graceNav = graceNav;
+        var guiNav = $.fn.guiNav.noConflict();
+        ok(!$.fn.guiNav, 'guiNav was set back to undefined (org value)');
+        $.fn.guiNav = guiNav;
     });
 
     test("should be defined on jquery object", function () {
-        ok($(document.body).graceNav, 'graceNav method is defined');
+        ok($(document.body).guiNav, 'guiNav method is defined');
     });
 
     test("should return element", function () {
-        ok($(document.body).graceNav()[0] == document.body, 'document.body returned');
+        ok($(document.body).guiNav()[0] == document.body, 'document.body returned');
     });
 
 });

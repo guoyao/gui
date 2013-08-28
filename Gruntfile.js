@@ -18,7 +18,7 @@ module.exports = function (grunt) {
             '* <%= _.pluck(pkg.licenses, "url").join(", ") %>\n' +
             '*/\n',
 
-        jqueryCheck: 'if (!jQuery) { throw new Error(\"Graceful-web-ui requires jQuery\") }\n\n',
+        jqueryCheck: 'if (!jQuery) { throw new Error(\"GUI requires jQuery\") }\n\n',
 
         clean: {
             dist: ['dist']
@@ -29,7 +29,7 @@ module.exports = function (grunt) {
                 banner: '<%= banner %><%= jqueryCheck %>',
                 stripBanners: false
             },
-            grace: {
+            gui: {
                 src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/panel.js', 'js/ie-patch.js'],
                 dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
             }
@@ -39,9 +39,9 @@ module.exports = function (grunt) {
             options: {
                 compile: true
             },
-            grace: {
+            gui: {
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/graceful-web-ui.less'],
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/gui.less'],
                     'demo_template/css/index.css': ['demo_template/less/index.less'],
                     'demo_template/css/lib/prettify.css': ['demo_template/less/prettify.less']
                 }
@@ -51,7 +51,7 @@ module.exports = function (grunt) {
                     compress: true
                 },
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/graceful-web-ui.less']
+                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/gui.less']
                 }
             }
         },
@@ -60,9 +60,9 @@ module.exports = function (grunt) {
             options: {
                 banner: '<%= banner %>'
             },
-            grace: {
+            gui: {
                 files: {
-                    'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.grace.dest %>']
+                    'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.gui.dest %>']
                 }
             }
         },
@@ -89,7 +89,7 @@ module.exports = function (grunt) {
             },
             dist_assets: {
                 files: [
-                    {expand: true, src: ['assets/graceful-web-ui/**'], dest: 'dist'}
+                    {expand: true, src: ['assets/gui/**'], dest: 'dist'}
                 ]
             }
         },

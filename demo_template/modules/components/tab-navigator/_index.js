@@ -4,12 +4,12 @@
  * Blog: http://www.guoyao.me
  */
 
-require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
-    $(".grace-tab").graceTab();
+require(["jquery", "prettify", "gui"], function ($, prettify) {
+    $(".gui-tab").guiTab();
 
     var timeoutId = setTimeout(function () {
         clearTimeout(timeoutId);
-        $("[data-target=#tab3]").graceTab("show");
+        $("[data-target=#tab3]").guiTab("show");
     }, 2000);
 
     prettify.prettyPrint();

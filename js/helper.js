@@ -1,6 +1,6 @@
 /* ========================================================================
- * Graceful-web-ui: helper.js v0.1.0alpha
- * http://www.grace.guoyao.me/
+ * GUI: helper.js v0.1.0alpha
+ * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
  *
@@ -46,7 +46,7 @@
 
     var $ = window.jQuery;
 
-    var grace = (function () {
+    var gui = (function () {
         var browserInfo = {
                 isIE: $.browser.msie,
                 version: (function () {
@@ -101,10 +101,10 @@
         }
     })();
 
-    if (!!window.grace) {
-        $.extend(window.grace, grace);
+    if (!!window.gui) {
+        $.extend(window.gui, gui);
     } else {
-        window.grace = grace;
+        window.gui = gui;
     }
 
 })(window);

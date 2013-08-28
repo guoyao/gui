@@ -9,9 +9,9 @@
 	var document = window.document,
 		console = window.console,
 		$ = window.jQuery,
-		grace = window.grace;
+		gui = window.gui;
 
-	$.fn.graceCollapse = function (options) {
+	$.fn.guiCollapse = function (options) {
 
 		var defaults = {
 			switchBtnClass:'.tab-btn',
@@ -23,9 +23,9 @@
 		options = $.extend({}, defaults, options);
 
 		function initEach() {
-			var $graceCollapse = $(this);
+			var $guiCollapse = $(this);
 			
-			$graceCollapse.find(options.switchBtnClass).each(function(){
+			$guiCollapse.find(options.switchBtnClass).each(function(){
 				var tabContent = $(this).siblings(options.switchTabClass);
 				var orgHeight;
 				if(!tabContent.is(":visible")){

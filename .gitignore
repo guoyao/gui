@@ -21,8 +21,8 @@ bin
 node_modules
 demo_template/build*
 demo_template/css
-demo_template/js/graceful-web-ui*
-demo_template/assets/graceful-web-ui
+demo_template/js/gui*
+demo_template/assets/gui
 demo
 lib
 bower_components

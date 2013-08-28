@@ -4,8 +4,8 @@
  * Blog: http://www.guoyao.me
  */
 
-require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
-    $(".module-container .grace-nav").graceNav({
+require(["jquery", "prettify", "gui"], function ($, prettify) {
+    $(".module-container .gui-nav").guiNav({
         backgroundColor: "#eeeeee",
         border: "1px solid #d1d1d1",
         itemWidth: "130px",

@@ -3,8 +3,8 @@
 
 	var console = window.console,
 		$ = window.jQuery,
-		grace = window.grace,
-		old = $.fn.graceDatePicker;
+		gui = window.gui,
+		old = $.fn.guiDatePicker;
 
 	var module = {
 		newDate:[],
@@ -23,7 +23,7 @@
 		},
 		//tested
 		_initOptions:function(option){
-			this.defaults = $.extend({},$.fn.graceDatePicker.defaults,option);
+			this.defaults = $.extend({},$.fn.guiDatePicker.defaults,option);
 			//console.log(this.defaults.mainWrapper)
 		},
 		//tested
@@ -252,37 +252,37 @@
 		}
 	}
 	
-	$.fn.graceDatePicker = function (option) {
+	$.fn.guiDatePicker = function (option) {
 		
 		module._init(this, option);
 
 		return this;
 	}
 
-	$.fn.graceDatePicker.defaults = {
-		mainWrapper : "grace-date-picker",
-		nextYearBtn : "grace-date-ny-btn",
-		prevYearBtn : "grace-date-py-btn",
-		title : "grace-date-title",
-		calender : "grace-date-calender",
-		week : "grace-date-week",
-		dates : "grace-date-dates",
-		header : "grace-date-header",
-		prevMonthBtn : "grace-date-pm-btn",
-		nextMonthBtn : "grace-date-nm-btn",
-		dateInput : "grace-date-input",
+	$.fn.guiDatePicker.defaults = {
+		mainWrapper : "gui-date-picker",
+		nextYearBtn : "gui-date-ny-btn",
+		prevYearBtn : "gui-date-py-btn",
+		title : "gui-date-title",
+		calender : "gui-date-calender",
+		week : "gui-date-week",
+		dates : "gui-date-dates",
+		header : "gui-date-header",
+		prevMonthBtn : "gui-date-pm-btn",
+		nextMonthBtn : "gui-date-nm-btn",
+		dateInput : "gui-date-input",
 		topNode : "body",
 		initNewDate : new Date(),
 		dateSpliter : '-'
 
 	}
 
-	$.fn.graceDatePicker.noConflict = function () {
-		$.fn.graceDatePicker = old;
+	$.fn.guiDatePicker.noConflict = function () {
+		$.fn.guiDatePicker = old;
 		return this;
 	};
 
 	//for debug
-	$.fn.graceDatePicker.debug = module;
+	$.fn.guiDatePicker.debug = module;
 
 })(window);

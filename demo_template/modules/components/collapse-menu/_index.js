@@ -1,4 +1,4 @@
-require(["jquery", "prettify", "graceful-web-ui"], function ($, prettify) {
-    $(".grace-collapse").graceCollapse();
+require(["jquery", "prettify", "gui"], function ($, prettify) {
+    $(".gui-collapse").guiCollapse();
     prettify.prettyPrint();
 });
