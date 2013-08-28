@@ -18,7 +18,7 @@ $(function () {
         ok($(document.body).graceSlider()[0] == document.body, 'document.body returned');
     });
 
-    module("slider [local]");
+    /*module("slider [local]");
 	test("mouse based interaction",function(){
 		expect(4)
 	});
@@ -26,7 +26,7 @@ $(function () {
 	
 	test("test for the test-setup", function () {
         ok($(".grace-slider").length === 1, 'specific dom returned');
-    });
+    });*/
 	//test("append btn wrapper & indicatorWrapper", function () {
 		//var node_1 = $($.fn.graceSlider.defaults.btnWrapperClass);
 		//var node_2 = $($.fn.graceSlider.defaults.indicatorTextClass);
