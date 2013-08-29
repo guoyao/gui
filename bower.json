@@ -1,12 +1,9 @@
 {
     "name": "gui",
-    "version": "0.1.0alpha",
+    "version": "0.1.0",
+    "main": ["./dist/js/gui.js", "./dist/css/gui.css"],
     "ignore": [
-        "**/.jshintrc",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
+        "**/.*"
     ],
     "dependencies": {
         "jquery": "~1.8.3"

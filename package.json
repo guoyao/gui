@@ -1,6 +1,6 @@
 {
     "name": "gui",
-    "version": "0.1.0alpha",
+    "version": "0.1.0",
     "description": "A Graceful And Cross Browser Web UI Framework",
     "author": "Guoyao Wu",
     "homepage": "http://www.gui.guoyao.me/",

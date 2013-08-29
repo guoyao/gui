@@ -1,20 +1,20 @@
 # [GUI](http://gui.guoyao.me)
-[![Build Status](https://api.travis-ci.org/guoyao/gui.png)](http://travis-ci.org/guoyao/gui)
-[![Dependency Status](https://gemnasium.com/guoyao/gui.png)](https://gemnasium.com/guoyao/gui)
-[![Coverage Status](https://coveralls.io/repos/guoyao/gui/badge.png?branch=dev)](https://coveralls.io/r/guoyao/gui?branch=dev)
+[![Build Status](https://api.travis-ci.org/guoyao/graceful-web-ui.png)](http://travis-ci.org/guoyao/graceful-web-ui)
+[![Dependency Status](https://gemnasium.com/guoyao/graceful-web-ui.png)](https://gemnasium.com/guoyao/graceful-web-ui)
+[![Coverage Status](https://coveralls.io/repos/guoyao/graceful-web-ui/badge.png?branch=dev)](https://coveralls.io/r/guoyao/graceful-web-ui?branch=dev)
 
 supported browser: ie6+ firefox4+ safari chrome and so on.
 
 project homepage: [http://www.gui.guoyao.me/](http://www.gui.guoyao.me/)
 
 including source code and demo for
-[*gui*](http://www.gui.guoyao.me/)
+[*GUI*](http://www.gui.guoyao.me/)
 by [guoyao](http://www.guoyao.me/).
 
 
 
 
-# [GUI v0.1.0alpha](http://gui.guoyao.me)
+# [GUI v0.1.0](http://gui.guoyao.me)
 
 GUI is a graceful, cross browser, and powerful front-end framework for faster and easier web development, created and maintained by [Guoyao Wu](http://guoyao.me).
 

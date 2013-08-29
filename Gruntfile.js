@@ -31,7 +31,7 @@ module.exports = function (grunt) {
             },
             gui: {
                 src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/panel.js', 'js/ie-patch.js'],
-                dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
+                dest: 'dist/js/<%= pkg.name %>.js'
             }
         },
 
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
             },
             gui: {
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/gui.less'],
+                    'dist/css/<%= pkg.name %>.css': ['less/gui.less'],
                     'demo_template/css/index.css': ['demo_template/less/index.less'],
                     'demo_template/css/lib/prettify.css': ['demo_template/less/prettify.less']
                 }
@@ -51,7 +51,7 @@ module.exports = function (grunt) {
                     compress: true
                 },
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/gui.less']
+                    'dist/css/<%= pkg.name %>.min.css': ['less/gui.less']
                 }
             }
         },
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
             },
             gui: {
                 files: {
-                    'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.gui.dest %>']
+                    'dist/js/<%= pkg.name %>.min.js': ['<%= concat.gui.dest %>']
                 }
             }
         },
@@ -71,8 +71,8 @@ module.exports = function (grunt) {
             demo_template: {
                 files: [
                     {
-                        'demo_template/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
-                        'demo_template/js/lib/<%= pkg.name %>.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js',
+                        'demo_template/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.min.css',
+                        'demo_template/js/lib/<%= pkg.name %>.js': 'dist/js/<%= pkg.name %>.min.js',
                         'demo_template/js/lib/jquery.js': 'bower_components/jquery/jquery.min.js',
                         'demo_template/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js',
                         'demo_template/js/lib/require.js': 'bower_components/requirejs/require.js'
