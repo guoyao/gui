@@ -20,10 +20,16 @@ $(function (undefined) {
 	/*global set for test*/
     module("DatePicker",{
 		setup:function(){
+			//set test environment
 			moduleDebug = $.fn.graceDatePicker.debug;
 			moduleDebug._initOptions(option);
-			moduleDebug._initNewDate();
+			//moduleDebug._initNewDate();
+			//make calender append to the test area
+			moduleDebug.defaults.topNode = "#qunit-fixture";
 		},teardown:function(){
+			//destroy calender element
+			$('.' + moduleDebug.defaults.mainWrapper).remove();
+			//destroy graceDatePicker module
 			moduleDebug = undefined;
 		}
 	});
@@ -46,41 +52,21 @@ $(function (undefined) {
 	/*specific test for local functions*/
 	test("init calender wrapper",function(){
 		
-		$.fn.graceDatePicker.defaults.topNode = "#qunit-fixture";
-		
-		var TopNode = $.fn.graceDatePicker.defaults.topNode;
-		
 		moduleDebug._appendElem();
-		console.log($.fn.graceDatePicker.defaults.topNode)
-		var appendedHtml = $("#qunit-fixture").html();
-		var defaultsVar = moduleDebug.defaults;
 		
-		var appendElem = '<div class=' + defaultsVar.mainWrapper +'>\
-								<div class='+ defaultsVar.header +'>\
-								<a class='+ defaultsVar.prevYearBtn +'></a>\
-								<a class='+ defaultsVar.nextYearBtn +'></a>\
-								<a class='+ defaultsVar.prevMonthBtn +'></a>\
-								<a class='+ defaultsVar.nextMonthBtn +'></a>\
-								<div class='+ defaultsVar.title +'></div>\
-							</div>\
-							<table class='+ defaultsVar.calender +'>\
-								<thead class='+ defaultsVar.week +'>\
-								</thead>\
-								<tbody class='+ defaultsVar.dates +'>\
-									<tr></tr>\
-								</tbody>\
-							</table>\
-						</div>';
+		var $appendedHtml = $("#qunit-fixture");
 		
-		deepEqual(appendedHtml,appendElem,"should be the same!")
+		equal( $("div", $appendedHtml).length,3,"3 div appended")
+		equal( $("a", $appendedHtml).length,4,"4 a appended")
+		equal( $("table", $appendedHtml).length,1,"1 table appended")
 	});
 	
 	test("the function which set the date object",function(){
-		/*_initNewDate*/
-		//get local date variable
-		var year = moduleDebug.newDate['year'],
-			month = moduleDebug.newDate['month'],
-			date = moduleDebug.newDate['date'];
+		/*_initNewDate */
+////////////////////////////////////////////get local date variable
+		var year = moduleDebug._initNewDate().year,
+			month = moduleDebug._initNewDate().month,
+			date = moduleDebug._initNewDate().date;
 		//get compare date variable	
 		var curyear = testDateObj.getFullYear(),
 			curmonth = testDateObj.getMonth(),
@@ -138,5 +124,22 @@ $(function (undefined) {
 		var totalDateOfWeek = new Date(curyear,curmonth,0).getDate();
 		deepEqual(moduleDebug._calFirstDay(),fristDayOfWeek,"first day of month")
 		deepEqual(moduleDebug._calTotalDate(),totalDateOfWeek,"first day of month")
+	});
+	
+	test("output date value",function(){
+		//will return after set current date and set type to number to the value
+		moduleDebug._setActiveDate(date);
+		var curDate = moduleDebug.newDate['date'];
+		deepEqual(curDate,date,"shold be the same type and value")
+	});
+	
+	test("get input property",function(){
+		//clear calender
+		moduleDebug._clearCalender();
+		
+		var dateWp = $('.' + moduleDebug.defaults.dates);
+		
+		
+		
 	});
 });

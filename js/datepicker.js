@@ -7,31 +7,54 @@
 		old = $.fn.graceDatePicker;
 
 	var module = {
-		newDate:[],
+		//newDate:[],
 		dayInCh : ['日','一','二','三','四','五','六'],
 		orgDay : ['Sun','Mon','Tue','Thu','Fri','Sat'],
 		_init:function(obj,option){
 			this.obj = obj;
 			this._initOptions(option);
+			//this._setNewDate();
 			this._initNewDate();
+			this._getNewDate();
 			this._appendElem();
-			this._setTitle();
-			this._appendEmptyCalenderWp();
-			this._setCalender();
-			this._eventHandler();
-			this._initDatePickerPos();
+			this._iptFocus();
+			//this._setTitle();
+			//this._appendEmptyCalenderWp();
+			//this._setCalender();
+			//this._initDatePickerPos();
+			//this._eventHandler();
 		},
 		//tested
 		_initOptions:function(option){
 			this.defaults = $.extend({},$.fn.graceDatePicker.defaults,option);
-			//console.log(this.defaults.mainWrapper)
 		},
 		//tested
-		_initNewDate : function(){
+		//_initNewDate : function(){
+			//var initNewDate = this.defaults.initNewDate;
+			//this.newDate['year'] = initNewDate.getFullYear();
+			//this.newDate['month'] = initNewDate.getMonth();
+			//this.newDate['date'] = initNewDate.getDate();
+		//},
+		//
+		_initNewDate :function(){
 			var initNewDate = this.defaults.initNewDate;
-			this.newDate['year'] = initNewDate.getFullYear();
-			this.newDate['month'] = initNewDate.getMonth();
-			this.newDate['date'] = initNewDate.getDate();
+			
+			$(this.obj)
+				.data({
+					'year':initNewDate.getFullYear(),
+					'month':initNewDate.getMonth(),
+					'date':initNewDate.getDate()
+					});
+		},
+		_setNewDate : function(type,value){
+			this.obj.data(type,value);
+		},
+		_getNewDate : function(){
+			var date = {};
+				date.year = $(this.obj).data('year');
+				date.month = $(this.obj).data('month');
+				date.date = $(this.obj).data('date');
+			return date;
 		},
 		//
 		_initDatePickerPos : function(){
@@ -46,7 +69,7 @@
 		},
 		//
 		_getInputProp : function(){
-			var inputNode = $('.' + this.defaults.dateInput) | undefined,
+			var inputNode = $(this.obj) || undefined,
 				prop = [];
 			if(inputNode){
 				prop['left'] = inputNode.offset().left,
@@ -72,10 +95,6 @@
 						.appendTo(datesObj);
 
 				}else{
-					//datesObj
-						//.find("tr")
-						//.eq(trIndex)
-						//.append('<td><a>'+ (j + 1) +'</a></td>');
 					$('<td><a>'+ (j + 1) +'</a></td>')
 						.appendTo(datesObj.find("tr").eq(trIndex));
 				}
@@ -88,62 +107,65 @@
 
 			for(var i = 0; i < firstDay; i++){
 				$('<td><span></span></td>')
-					.appendTo(datesObj
-					.find("tr")
-					.eq(0));
+					.appendTo(datesObj.find("tr").eq(0));
 			}
 		},
+		//
 		_clearCalender : function(){
 			var datesObj = $('.' + this.defaults.dates);
 			datesObj.html('<tr></tr>');
 		},
 		//tested
 		_calFirstDay:function(){
-			var curYear = this.newDate['year'],
-				curMonth = this.newDate['month'] + 1,
-				curDate = this.newDate['date'];
+			var curYear = this._getNewDate().year,
+				curMonth = this._getNewDate().month,
+				curDate = this._getNewDate().date;
 
 			return new Date(curYear,curMonth,1).getDay();
 		},
 		//tested
 		_calTotalDate:function(){
-			var curYear = this.newDate['year'],
-				curMonth = this.newDate['month'] + 1,
-				curDate = this.newDate['date'];
+			var curYear = this._getNewDate().year,
+				curMonth = this._getNewDate().month,
+				curDate = this._getNewDate().date;
 
 			return new Date(curYear,curMonth,0).getDate();
 		},
 		//tested
 		_recalYearFactory:function(cal){
+			var curYear = this._getNewDate().year;
 			if(cal === 1){
-				this.newDate['year'] += 1;
+				this._setNewDate('year',curYear + 1);
 			}else if(cal === -1){
-				this.newDate['year'] -= 1;
+				//this.newDate['year'] -= 1;
+				this._setNewDate('year',curYear - 1);
 			}
-			return this.newDate['year'];
 		},
 		//tested
 		_recalMonthFactory:function(cal){
+			var curMonth = this._getNewDate().month;
 			if(cal === 1){
-				if(this.newDate['month'] < 11){
-					this.newDate['month'] += 1;
+				if(curMonth < 11){
+					this._setNewDate('month',curMonth + 1);
+					//this.newDate['month'] += 1;
 				}else{
-					this.newDate['month'] = 0;
+					this._setNewDate('month',1);
+					//this.newDate['month'] = 0;
 				}
 			}else if(cal === -1){
-				if(this.newDate['month'] > 0){
-					this.newDate['month'] -= 1;
+				if(curMonth > 0){
+					this._setNewDate('month',curMonth - 1);
 				}else{
-					this.newDate['month'] = 11;
+					this._setNewDate('month',12);
 				}
 			}
-			return this.newDate['year'];
 		},
 		//tested 
 		_calTitle:function(){
-			var curYear = this.newDate['year'],
-				curMonth = (this.newDate['month'] + 1),
+			var curYear = this._getNewDate().year,
+				curMonth = this._getNewDate().month,
 				titleformat = curYear + '\n' + curMonth + '月';
+
 			return titleformat;
 		},
 		//
@@ -153,23 +175,38 @@
 		},
 		//
 		_rerenderCalender : function(){
+			this._initDatePickerPos();
 			this._clearCalender();
 			this._appendEmptyCalenderWp();
 			this._setCalender();
 			this._setTitle();
 		},
+		//focus to show clender
+		_iptFocus :function(){
+			var mo = this,
+				dateInputObj = $(this.obj);
+
+			dateInputObj.focus(function(e){
+				mo.obj = $(e.target);
+				mo._rerenderCalender();
+				$('.' + mo.defaults.mainWrapper)
+					.stop(true,true)
+					.fadeIn();
+				//mo.obj = $(e.target);
+			});
+		},
 		//
 		_eventHandler:function(){
 			var mo = this,
-				mainWrapper = $('.' + mo.defaults.mainWrapper),
-				prevYearObj = $('.' + this.defaults.prevYearBtn),
-				nextYearObj = $('.' + this.defaults.nextYearBtn),
+				mainWrapper = $('.' + this.defaults.mainWrapper),
+				prevYearObj = mainWrapper.find('.' + this.defaults.prevYearBtn),
+				nextYearObj = mainWrapper.find('.' + this.defaults.nextYearBtn),
 
-				prevMonthObj = $('.' + this.defaults.prevMonthBtn),
-				nextMonthObj = $('.' + this.defaults.nextMonthBtn),
+				prevMonthObj = mainWrapper.find('.' + this.defaults.prevMonthBtn),
+				nextMonthObj = mainWrapper.find('.' + this.defaults.nextMonthBtn),
 
-				dateInputObj = $('.' + this.defaults.dateInput),
-				datesObj = $('.' + this.defaults.dates);
+				//dateInputObj = $(this.obj),
+				datesObj = mainWrapper.find('.' + this.defaults.dates);
 			//prev year
 			prevYearObj.click(function(){
 
@@ -194,46 +231,39 @@
 				mo._recalMonthFactory(1);
 				mo._rerenderCalender();
 			});
-
-			//focus to show clender
-			dateInputObj.focus(function(e){
-
-				mainWrapper
-					.stop(true,true)
-					.fadeIn();
-			});
 			//get calender interactive button
 			datesObj.on('click','a',function(e){
-
-				var getActiveText = e.target.innerText;
+				
+				var getActiveDate = e.target.innerText;
 
 				mainWrapper
 					.stop(true,true)
 					.fadeOut();
 
-				mo._setActiveDate(getActiveText);
-				mo._setInputText();
+				mo._setActiveDate(getActiveDate);
+				mo._setInputVal();
 			});
 		},
-		//
-		_setActiveDate : function(text){
-			this.newDate['date'] = parseInt(text);
+		//tested
+		_setActiveDate : function(num){
+			this._setNewDate('date',parseInt(num));
 		},
 		//
-		_setInputText : function(){
-			var curYear = this.newDate['year'],
-				curMonth = this.newDate['month'] + 1,
-				curDate = this.newDate['date'];
+		_setInputVal : function(){
+			var curYear = this._getNewDate().year,
+				curMonth = this._getNewDate().month,
+				curDate = this._getNewDate().date;
 
 			var spliter = this.defaults.dateSpliter;
 
 			var inputVal = curYear + spliter + curMonth + spliter + curDate;
 
-			$('.' + this.defaults.dateInput).val(inputVal);
+			$(this.obj).val(inputVal);
 		},
-		//
+		//tested
 		_appendElem : function(){
-			$('<div class=' + this.defaults.mainWrapper +'>\
+			if($('.' + this.defaults.mainWrapper).length === 0){
+				$('<div class=' + this.defaults.mainWrapper +'>\
 					<div class='+ this.defaults.header +'>\
 						<a class='+ this.defaults.prevYearBtn +'></a>\
 						<a class='+ this.defaults.nextYearBtn +'></a>\
@@ -248,7 +278,10 @@
 							<tr></tr>\
 						</tbody>\
 					</table>\
-			</div>').appendTo(this.defaults.topNode);
+				</div>').appendTo(this.defaults.topNode);
+
+				this._eventHandler();
+			}
 		}
 	}
 	
@@ -270,7 +303,7 @@
 		header : "grace-date-header",
 		prevMonthBtn : "grace-date-pm-btn",
 		nextMonthBtn : "grace-date-nm-btn",
-		dateInput : "grace-date-input",
+		//dateInput : "grace-date-input",
 		topNode : "body",
 		initNewDate : new Date(),
 		dateSpliter : '-'
