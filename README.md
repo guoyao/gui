@@ -1,5 +1,5 @@
 # [GUI](http://gui.guoyao.me)
-[![Build Status](https://api.travis-ci.org/guoyao/graceful-web-ui.png)](http://travis-ci.org/guoyao/graceful-web-ui)
+[![Build Status](https://api.travis-ci.org/guoyao/gui.png)](http://travis-ci.org/guoyao/gui)
 [![Dependency Status](https://gemnasium.com/guoyao/graceful-web-ui.png)](https://gemnasium.com/guoyao/graceful-web-ui)
 [![Coverage Status](https://coveralls.io/repos/guoyao/graceful-web-ui/badge.png?branch=dev)](https://coveralls.io/r/guoyao/graceful-web-ui?branch=dev)
 
