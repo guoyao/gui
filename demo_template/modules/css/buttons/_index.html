@@ -1,0 +1,113 @@
+<div class="module-container">
+  <h1>Buttons</h1>
+
+  <hr/>
+
+  <h2 id="buttons-options">Options</h2>
+
+  <p>Use any of the available button classes to quickly create a styled button.</p>
+
+  <div>
+    <button type="button" class="gui-btn gui-btn-default">Default</button>
+    <button type="button" class="gui-btn gui-btn-primary">Primary</button>
+    <button type="button" class="gui-btn gui-btn-success">Success</button>
+    <button type="button" class="gui-btn gui-btn-info">Info</button>
+    <button type="button" class="gui-btn gui-btn-warning">Warning</button>
+    <button type="button" class="gui-btn gui-btn-danger">Danger</button>
+    <button type="button" class="gui-btn gui-btn-link">Link</button>
+  </div>
+
+ <pre class="prettyprint" style="margin-top: 12px;">
+&lt!-- Standard gray button with gradient --&gt;
+&lt;button type="button" class="gui-btn gui-btn-default"&gt;Default&lt;/button&gt;
+
+&lt;!-- Provides extra visual weight and identifies the primary action in a set of buttons --&gt;
+&lt;button type="button" class="gui-btn gui-btn-primary"&gt;Primary&lt;/button&gt;
+
+&lt;!-- Indicates a successful or positive action --&gt;
+&lt;button type="button" class="gui-btn gui-btn-success"&gt;Success&lt;/button&gt;
+
+&lt;!-- Contextual button for informational alert messages --&gt;
+&lt;button type="button" class="gui-btn gui-btn-info"&gt;Info&lt;/button&gt;
+
+&lt;!-- Indicates caution should be taken with this action --&gt;
+&lt;button type="button" class="gui-btn gui-btn-warning"&gt;Warning&lt;/button&gt;
+
+&lt;!-- Indicates a dangerous or potentially negative action --&gt;
+&lt;button type="button" class="gui-btn gui-btn-danger"&gt;Danger&lt;/button&gt;
+
+&lt;!-- Deemphasize a button by making it look like a link while maintaining button behavior --&gt;
+&lt;button type="button" class="gui-btn gui-btn-link"&gt;Link&lt;/button&gt;</pre>
+
+  <h2 id="buttons-sizes">Sizes</h2>
+
+  <p>Fancy larger or smaller buttons? Add <code>.gui-btn-lg</code>, <code>.gui-btn-sm</code>, or <code>.gui-btn-xs</code> for
+    additional sizes.</p>
+
+  <div>
+    <p>
+      <button type="button" class="gui-btn gui-btn-primary gui-btn-lg">Large button</button>
+      <button type="button" class="gui-btn gui-btn-default gui-btn-lg">Large button</button>
+    </p>
+    <p>
+      <button type="button" class="gui-btn gui-btn-primary">Default button</button>
+      <button type="button" class="gui-btn gui-btn-default">Default button</button>
+    </p>
+    <p>
+      <button type="button" class="gui-btn gui-btn-primary gui-btn-sm">Small button</button>
+      <button type="button" class="gui-btn gui-btn-default gui-btn-sm">Small button</button>
+    </p>
+    <p>
+      <button type="button" class="gui-btn gui-btn-primary gui-btn-xs">Extra small button</button>
+      <button type="button" class="gui-btn gui-btn-default gui-btn-xs">Extra small button</button>
+    </p>
+  </div>
+
+  <pre class="prettyprint">&lt;p&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-primary gui-btn-lg"&gt;Large button&lt;/button&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-default gui-btn-lg"&gt;Large button&lt;/button&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-primary"&gt;Default button&lt;/button&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-default"&gt;Default button&lt;/button&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-primary gui-btn-sm"&gt;Small button&lt;/button&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-default gui-btn-sm"&gt;Small button&lt;/button&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-primary gui-btn-xs"&gt;Extra small button&lt;/button&gt;
+&nbsp; &lt;button type="button" class="gui-btn gui-btn-default gui-btn-xs"&gt;Extra small button&lt;/button&gt;
+&lt;/p&gt;</pre>
+
+  <p>Create block level buttons&mdash;those that span the full width of a parent&mdash; by adding <code>.gui-btn-block</code>.</p>
+  <div>
+    <div class="well" style="max-width: 400px; margin: 0 auto 10px;">
+      <button type="button" class="gui-btn gui-btn-primary gui-btn-lg gui-btn-block">Block level button</button>
+      <button type="button" class="gui-btn gui-btn-default gui-btn-lg gui-btn-block">Block level button</button>
+    </div>
+    <pre class="prettyprint">&lt;button type="button" class="gui-btn gui-btn-primary gui-btn-lg gui-btn-block"&gt;Block level button&lt;/button&gt;
+&lt;button type="button" class="gui-btn gui-btn-default gui-btn-lg gui-btn-block"&gt;Block level button&lt;/button&gt;</pre>
+  </div>
+
+  <h2>Disabled state</h2>
+  <p>Make buttons look unclickable by fading them back 50%.</p>
+
+  <h3>Button element</h3>
+  <p>Add the <code>disabled</code> attribute to <code>&lt;button&gt;</code> buttons.</p>
+  <p>
+    <button type="button" class="gui-btn gui-btn-primary gui-btn-lg" disabled="disabled">Primary button</button>
+    <button type="button" class="gui-btn gui-btn-default gui-btn-lg" disabled="disabled">Button</button>
+  </p>
+  <pre class="prettyprint">&lt;button type="button" class="gui-btn gui-btn-lg gui-btn-primary" disabled="disabled"&gt;Primary button&lt;/button&gt;
+&lt;button type="button" class="gui-btn gui-btn-default gui-btn-lg" disabled="disabled"&gt;Button&lt;/button&gt;</pre>
+
+  <h3>Anchor element</h3>
+  <p>Add the <code>.disabled</code> class to <code>&lt;a&gt;</code> buttons.</p>
+  <p>
+    <a href="#" class="gui-btn gui-btn-primary gui-btn-lg disabled">Primary link</a>
+    <a href="#" class="gui-btn gui-btn-default gui-btn-lg disabled">Link</a>
+  </p>
+  <pre class="prettyprint">&lt;a href="#" class="gui-btn gui-btn-primary gui-btn-lg disabled"&gt;Primary link&lt;/a&gt;
+&lt;a href="#" class="gui-btn gui-btn-default gui-btn-lg disabled"&gt;Link&lt;/a&gt;</pre>
+</div>

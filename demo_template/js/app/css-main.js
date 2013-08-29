@@ -9,7 +9,8 @@ define(["./demo"], function (demo) {
     new demo.Initializer([
         new Module("Normalize", "normalize"),
         new Module("Grid System", "grid-system"),
-        new Module("Typography", "typography")
+        new Module("Typography", "typography"),
+        new Module("Buttons", "buttons")
     ], {
         modulesDirectory: "modules/css"
     }).init();
