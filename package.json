@@ -10,7 +10,7 @@
         "css"
     ],
     "scripts": {
-        "test": "grunt test"
+        "test": "grunt test --force"
     },
     "repository": {
         "type": "git",
