@@ -123,7 +123,7 @@ $(function (undefined) {
 		moduleDebug._setNewDate('date',date)
 		//set test title format
 		var curYear = year,
-			curMonth = month,
+			curMonth = month + 1,
 			titleformate = curYear + '\n' + curMonth + '月';
 		
 		deepEqual(titleformate,moduleDebug._calTitle(),"title set as current time")

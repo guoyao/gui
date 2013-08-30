@@ -1,0 +1,94 @@
+//
+// Datepicker
+// --------------------------------------------------
+
+.grace-date-picker {
+  width: 211px;
+  padding: 0 5px 5px;
+  border: 1px solid #c3c3c3;
+  border-radius: 5px;
+  overflow: hidden;
+  .grace-date-header {
+    width: 100%;
+    height: 30px;
+    margin: 5px auto;
+    position: relative;
+    background: #c3c3c3;
+    border-radius: 5px;
+    .grace-date-title {
+      text-align: center;
+      line-height: 30px;
+    }
+    .grace-date-py-btn, .grace-date-ny-btn {
+      width: 20px;
+      height: 20px;
+      top: 15px;
+      margin-top: -10px;
+      color: white;
+      border-radius: 10px;
+      background: #696969;
+      line-height: 20px;
+      text-align: center;
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+    .grace-date-py-btn {
+      left: 5px;
+    }
+    .grace-date-ny-btn {
+      right: 5px;
+    }
+    .grace-date-pm-btn, .grace-date-nm-btn {
+      width: 20px;
+      height: 20px;
+      top: 15px;
+      margin-top: -10px;
+      color: white;
+      border-radius: 10px;
+      font-weight;: bold;
+      background: #363636;
+      line-height: 20px;
+      text-align: center;
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+    .grace-date-pm-btn {
+      left: 38px;
+    }
+    .grace-date-nm-btn {
+      right: 38px;
+    }
+  }
+  .grace-date-calender {
+    width: 100%;
+    border-collapse: collapse;
+    .grace-date-week {
+      span {
+        display: block;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+    .grace-date-dates {
+      span, a {
+        display: block;
+        text-align: center;
+      }
+      a {
+        cursor: pointer;
+        background: #ebebeb;
+        border: 1px solid #808080;
+        color: #909090;
+        border-radius: 2px;
+        &:hover {
+          background: #c3c3c3;
+          color: #292929;
+        }
+      }
+    }
+  }
+}
+

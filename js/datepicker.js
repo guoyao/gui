@@ -7,8 +7,8 @@
 		old = $.fn.graceDatePicker;
 
 	var module = {
-		dayInCh : ['日','一','二','三','四','五','六'],
-		orgDay : ['Sun','Mon','Tue','Thu','Fri','Sat'],
+		//dayInCh : ['日','一','二','三','四','五','六'],
+		
 		//
 		_init:function(obj,option){
 			this.obj = obj;
@@ -133,20 +133,20 @@
 				if(curMonth < 11){
 					this._setNewDate('month',curMonth + 1);
 				}else{
-					this._setNewDate('month',1);
+					this._setNewDate('month',0);
 				}
 			}else if(cal === -1){
 				if(curMonth > 0){
 					this._setNewDate('month',curMonth - 1);
 				}else{
-					this._setNewDate('month',12);
+					this._setNewDate('month',11);
 				}
 			}
 		},
 		//tested 
 		_calTitle:function(){
 			var curYear = this._getNewDate().year,
-				curMonth = this._getNewDate().month,
+				curMonth = this._getNewDate().month + 1,
 				titleformat = curYear + '\n' + curMonth + '月';
 
 			return titleformat;
@@ -176,6 +176,7 @@
 					.stop(true,true)
 					.fadeIn();
 				//mo.obj = $(e.target);
+				mo._highCurLightDate();
 			});
 		},
 		//test covered by the past
@@ -234,7 +235,7 @@
 		//
 		_setInputVal : function(){
 			var curYear = this._getNewDate().year,
-				curMonth = this._getNewDate().month,
+				curMonth = this._getNewDate().month + 1,
 				curDate = this._getNewDate().date;
 
 			var spliter = this.defaults.dateSpliter;
@@ -243,19 +244,30 @@
 
 			$(this.obj).val(inputVal);
 		},
+		//
+		_highCurLightDate : function(index){
+			var curYear = this._getNewDate().year,
+				curMonth = this._getNewDate().month,
+				curDate = this._getNewDate().date;
+			var firstDay = this._calFirstDay();
+			var tdIndex = curDate + firstDay -1;
+			var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
+			dateObj.eq(tdIndex).addClass('grace-date-current-date');
+		},
 		//tested
 		_appendElem : function(){
 			if($('.' + this.defaults.mainWrapper).length === 0){
-				$('<div class=' + this.defaults.mainWrapper +'>\
+				$('<div class=' + this.defaults.mainWrapper +' style="display:none;position: absolute;">\
 					<div class='+ this.defaults.header +'>\
-						<a class='+ this.defaults.prevYearBtn +'></a>\
-						<a class='+ this.defaults.nextYearBtn +'></a>\
-						<a class='+ this.defaults.prevMonthBtn +'></a>\
-						<a class='+ this.defaults.nextMonthBtn +'></a>\
+						<a class='+ this.defaults.prevYearBtn +'>&lt;&lt;</a>\
+						<a class='+ this.defaults.nextYearBtn +'>&gt;&gt;</a>\
+						<a class='+ this.defaults.prevMonthBtn +'>&lt;</a>\
+						<a class='+ this.defaults.nextMonthBtn +'>&gt;</a>\
 						<div class='+ this.defaults.title +'></div>\
 					</div>\
 					<table class='+ this.defaults.calender +'>\
 						<thead class='+ this.defaults.week +'>\
+							<tr></tr>\
 						</thead>\
 						<tbody class='+ this.defaults.dates +'>\
 							<tr></tr>\
@@ -264,6 +276,16 @@
 				</div>').appendTo(this.defaults.topNode);
 
 				this._eventHandler();
+
+				this._addWeekTitle();
+			}
+		},
+		_addWeekTitle : function(){
+			var weekTitle = this.defaults.weekTitle;
+			var weekTitleNode = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.week + ' tr');
+
+			for(var i = 0; i < weekTitle.length; i++){
+				$('<th><span>' + weekTitle[i] + '</span></th>').appendTo(weekTitleNode);
 			}
 		}
 	}
@@ -289,7 +311,8 @@
 		//dateInput : "grace-date-input",
 		topNode : "body",
 		initNewDate : new Date(),
-		dateSpliter : '-'
+		dateSpliter : '-',
+		weekTitle : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
 	}
 
 	$.fn.graceDatePicker.noConflict = function () {
