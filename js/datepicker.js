@@ -7,48 +7,34 @@
 		old = $.fn.graceDatePicker;
 
 	var module = {
-		//newDate:[],
 		dayInCh : ['日','一','二','三','四','五','六'],
 		orgDay : ['Sun','Mon','Tue','Thu','Fri','Sat'],
+		//
 		_init:function(obj,option){
 			this.obj = obj;
 			this._initOptions(option);
-			//this._setNewDate();
 			this._initNewDate();
 			this._getNewDate();
 			this._appendElem();
 			this._iptFocus();
-			//this._setTitle();
-			//this._appendEmptyCalenderWp();
-			//this._setCalender();
-			//this._initDatePickerPos();
-			//this._eventHandler();
 		},
 		//tested
 		_initOptions:function(option){
 			this.defaults = $.extend({},$.fn.graceDatePicker.defaults,option);
 		},
 		//tested
-		//_initNewDate : function(){
-			//var initNewDate = this.defaults.initNewDate;
-			//this.newDate['year'] = initNewDate.getFullYear();
-			//this.newDate['month'] = initNewDate.getMonth();
-			//this.newDate['date'] = initNewDate.getDate();
-		//},
-		//
 		_initNewDate :function(){
 			var initNewDate = this.defaults.initNewDate;
 			
-			$(this.obj)
-				.data({
-					'year':initNewDate.getFullYear(),
-					'month':initNewDate.getMonth(),
-					'date':initNewDate.getDate()
-					});
+			this._setNewDate('year',initNewDate.getFullYear());
+			this._setNewDate('month',initNewDate.getMonth());
+			this._setNewDate('date',initNewDate.getDate());
 		},
+		//tested
 		_setNewDate : function(type,value){
 			this.obj.data(type,value);
 		},
+		//tested
 		_getNewDate : function(){
 			var date = {};
 				date.year = $(this.obj).data('year');
@@ -56,7 +42,7 @@
 				date.date = $(this.obj).data('date');
 			return date;
 		},
-		//
+		//tested
 		_initDatePickerPos : function(){
 			var inputOffset = this._getInputProp(),
 				left = inputOffset.left,
@@ -79,12 +65,12 @@
 			}
 			return prop;
 		},
-		//
+		//tested
 		_setCalender : function(){
 			var totalDate = this._calTotalDate();
 			var daysPerWeek = 7;
 			var trIndex = 0;
-			var datesObj = $('.' + this.defaults.dates);
+			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
 			
 			for (var j = 0;j < totalDate; j++){
 				if(datesObj.find("td").length % daysPerWeek === 0){
@@ -100,19 +86,19 @@
 				}
 			}
 		},
-		//
+		//tested
 		_appendEmptyCalenderWp : function(){
 			var firstDay = this._calFirstDay();
-			var datesObj = $('.' + this.defaults.dates);
+			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
 
 			for(var i = 0; i < firstDay; i++){
 				$('<td><span></span></td>')
 					.appendTo(datesObj.find("tr").eq(0));
 			}
 		},
-		//
+		//tested
 		_clearCalender : function(){
-			var datesObj = $('.' + this.defaults.dates);
+			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
 			datesObj.html('<tr></tr>');
 		},
 		//tested
@@ -137,7 +123,6 @@
 			if(cal === 1){
 				this._setNewDate('year',curYear + 1);
 			}else if(cal === -1){
-				//this.newDate['year'] -= 1;
 				this._setNewDate('year',curYear - 1);
 			}
 		},
@@ -147,10 +132,8 @@
 			if(cal === 1){
 				if(curMonth < 11){
 					this._setNewDate('month',curMonth + 1);
-					//this.newDate['month'] += 1;
 				}else{
 					this._setNewDate('month',1);
-					//this.newDate['month'] = 0;
 				}
 			}else if(cal === -1){
 				if(curMonth > 0){
@@ -168,12 +151,12 @@
 
 			return titleformat;
 		},
-		//
+		//tested
 		_setTitle:function(){
-			var title = $('.' + this.defaults.title);
+			var title = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.title);
 			return title.html(this._calTitle());
 		},
-		//
+		//tested step by step
 		_rerenderCalender : function(){
 			this._initDatePickerPos();
 			this._clearCalender();
@@ -181,7 +164,7 @@
 			this._setCalender();
 			this._setTitle();
 		},
-		//focus to show clender
+		//bind focus several times
 		_iptFocus :function(){
 			var mo = this,
 				dateInputObj = $(this.obj);
@@ -195,7 +178,7 @@
 				//mo.obj = $(e.target);
 			});
 		},
-		//
+		//test covered by the past
 		_eventHandler:function(){
 			var mo = this,
 				mainWrapper = $('.' + this.defaults.mainWrapper),
@@ -307,7 +290,6 @@
 		topNode : "body",
 		initNewDate : new Date(),
 		dateSpliter : '-'
-
 	}
 
 	$.fn.graceDatePicker.noConflict = function () {
