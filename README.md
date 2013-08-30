@@ -24,10 +24,11 @@ To get started, check out [http://gui.guoyao.me](http://gui.guoyao.me)!
 
 ## Quick start
 
-Two quick start options are available:
+Three quick start options are available:
 
 * [Download the latest devlopment version](https://github.com/guoyao/gui/archive/dev.zip).
 * Clone the repo: `git clone git://github.com/guoyao/gui.git`.
+* Install with [Bower](http://bower.io): `bower install gui`.
 
 Read the [Getting Started page](http://gui.guoyao.me/) for information on the framework contents, templates and examples, and more.
 
