@@ -20,8 +20,7 @@
 (function (window) {
     "use strict";
 
-    var document = window.document,
-        console = window.console,
+    var console = window.console,
         $ = window.jQuery,
         gui = window.gui;
 
@@ -80,6 +79,37 @@
                 }
             }
             return $$guiTab;
+        };
+    }
+
+    //
+    // Button
+    // --------------------------------------------------
+
+    if(!!$.fn.guiButton) {
+        $.fn.guiButton.iePatch = function ($$guiButton, option) {
+            if (gui.browserInfo.version <= 9) {
+                $("a.disabled").click(function () {
+                    return false;
+                });
+            }
+            if (gui.browserInfo.version <= 6) { // lte IE 6
+                $$guiButton.each(function () {
+                    var $this = $(this);
+                    var backgroundColor = $this.css("background-color");
+                    var hoverBackgroundColor = gui.darken(backgroundColor, 0.08);
+                    if ($this.hasClass("disabled") || $this.attr("disabled")) {
+                        $this.css("cursor", "not-allowed");
+                    } else {
+                        $this.hover(function () {
+                            $this.css("background-color", hoverBackgroundColor);
+                        }, function () {
+                            $this.css("background-color", backgroundColor);
+                        });
+                    }
+                });
+            }
+            return $$guiButton;
         };
     }
 

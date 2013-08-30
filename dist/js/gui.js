@@ -29,7 +29,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 (function (window) {
     "use strict";
 
-    var console = window.console;
+    var console = window.console,
+        $ = window.jQuery;
+
     if (!!console) {
         if (!console.log) {
             console.log = function (value) {
@@ -52,8 +54,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         };
         window.console = console;
     }
-
-    var $ = window.jQuery;
 
     var gui = (function () {
         var browserInfo = {
@@ -101,12 +101,57 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             return div.innerHTML;
         }
 
+        // ratio should be 0..1
+        function darken(color, ratio) {
+            var red, green, blue, alpha, rgb, hex, dotIndex = -1;
+            if (color.indexOf("rgb") != -1) {
+                rgb = color.replace('rgb(', '').replace(')', '').split(',');
+                red = parseInt($.trim(rgb[0]) * (1 - ratio), 10);
+                green = parseInt($.trim(rgb[1]) * (1 - ratio), 10);
+                blue = parseInt($.trim(rgb[2]) * (1 - ratio), 10);
+                red = red > 255 ? 255 : red;
+                green = green > 255 ? 255 : green;
+                blue = blue > 255 ? 255 : blue;
+                color = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+                if (rgb.length > 3) {
+                    alpha = parseFloat($.trim(rgb[3]));
+                    alpha = alpha > 1 ? 1 : alpha;
+                    color = 'rgb(' + red + ', ' + green + ', ' + blue + ', ' + alpha + ')';
+                }
+            } else if(color.indexOf("#") != -1) {
+                hex = $.trim(color).substr(1);
+                if (hex.length == 3)
+                    hex = hex.substr(0, 1) + hex.substr(0, 1) + hex.substr(1, 1) + hex.substr(1, 1) + hex.substr(2, 1) + hex.substr(2, 1);
+                red = parseInt(hex.substr(0, 2), 16) * (1 - ratio);
+                green = parseInt(hex.substr(2, 2), 16) * (1 - ratio);
+                blue = parseInt(hex.substr(4, 2), 16) * (1 - ratio);
+                red = (red > 255 ? 255 : red).toString(16);
+                green = (green > 255 ? 255 : green).toString(16);
+                blue = (blue > 255 ? 255 : blue).toString(16);
+                dotIndex = red.indexOf(".");
+                if (dotIndex != -1)
+                    red = red.substring(0, dotIndex);
+                dotIndex = green.indexOf(".");
+                if (dotIndex != -1)
+                    green = green.substring(0, dotIndex);
+                dotIndex = blue.indexOf(".");
+                if (dotIndex != -1)
+                    blue = blue.substring(0, dotIndex);
+                red = red.length < 2 ? "0" + red : red;
+                green = green.length < 2 ? "0" + green : green;
+                blue = blue.length < 2 ? "0" + blue : blue;
+                color = "#" + red + green + blue;
+            }
+            return color;
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
             showHide: showHide,
             htmlEncode: htmlEncode,
-            htmlDecode: htmlDecode
+            htmlDecode: htmlDecode,
+            darken: darken
         }
     })();
 
@@ -1031,6 +1076,44 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 /* ========================================================================
+ * GUI: button.js v0.1.0
+ * http://www.gui.guoyao.me/
+ * ========================================================================
+ * Copyright 2013 Guoyao Wu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+(function (window) {
+    "use strict";
+
+    var $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiButton;
+
+    $.fn.guiButton = function (option) {
+        return gui.plugin.patch($.fn.guiButton, this, option);
+    };
+
+    // NO CONFLICT
+    // ===============
+
+    $.fn.guiButton.noConflict = function () {
+        $.fn.guiButton = old;
+        return this;
+    };
+})(window);
+/* ========================================================================
  * GUI: nav-ie-patch.js v0.1.0
  * http://www.gui.guoyao.me/
  * ========================================================================
@@ -1052,8 +1135,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 (function (window) {
     "use strict";
 
-    var document = window.document,
-        console = window.console,
+    var console = window.console,
         $ = window.jQuery,
         gui = window.gui;
 
@@ -1112,6 +1194,37 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 }
             }
             return $$guiTab;
+        };
+    }
+
+    //
+    // Button
+    // --------------------------------------------------
+
+    if(!!$.fn.guiButton) {
+        $.fn.guiButton.iePatch = function ($$guiButton, option) {
+            if (gui.browserInfo.version <= 9) {
+                $("a.disabled").click(function () {
+                    return false;
+                });
+            }
+            if (gui.browserInfo.version <= 6) { // lte IE 6
+                $$guiButton.each(function () {
+                    var $this = $(this);
+                    var backgroundColor = $this.css("background-color");
+                    var hoverBackgroundColor = gui.darken(backgroundColor, 0.08);
+                    if ($this.hasClass("disabled") || $this.attr("disabled")) {
+                        $this.css("cursor", "not-allowed");
+                    } else {
+                        $this.hover(function () {
+                            $this.css("background-color", hoverBackgroundColor);
+                        }, function () {
+                            $this.css("background-color", backgroundColor);
+                        });
+                    }
+                });
+            }
+            return $$guiButton;
         };
     }
 

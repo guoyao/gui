@@ -20,7 +20,9 @@
 (function (window) {
     "use strict";
 
-    var console = window.console;
+    var console = window.console,
+        $ = window.jQuery;
+
     if (!!console) {
         if (!console.log) {
             console.log = function (value) {
@@ -43,8 +45,6 @@
         };
         window.console = console;
     }
-
-    var $ = window.jQuery;
 
     var gui = (function () {
         var browserInfo = {
@@ -92,12 +92,57 @@
             return div.innerHTML;
         }
 
+        // ratio should be 0..1
+        function darken(color, ratio) {
+            var red, green, blue, alpha, rgb, hex, dotIndex = -1;
+            if (color.indexOf("rgb") != -1) {
+                rgb = color.replace('rgb(', '').replace(')', '').split(',');
+                red = parseInt($.trim(rgb[0]) * (1 - ratio), 10);
+                green = parseInt($.trim(rgb[1]) * (1 - ratio), 10);
+                blue = parseInt($.trim(rgb[2]) * (1 - ratio), 10);
+                red = red > 255 ? 255 : red;
+                green = green > 255 ? 255 : green;
+                blue = blue > 255 ? 255 : blue;
+                color = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+                if (rgb.length > 3) {
+                    alpha = parseFloat($.trim(rgb[3]));
+                    alpha = alpha > 1 ? 1 : alpha;
+                    color = 'rgb(' + red + ', ' + green + ', ' + blue + ', ' + alpha + ')';
+                }
+            } else if(color.indexOf("#") != -1) {
+                hex = $.trim(color).substr(1);
+                if (hex.length == 3)
+                    hex = hex.substr(0, 1) + hex.substr(0, 1) + hex.substr(1, 1) + hex.substr(1, 1) + hex.substr(2, 1) + hex.substr(2, 1);
+                red = parseInt(hex.substr(0, 2), 16) * (1 - ratio);
+                green = parseInt(hex.substr(2, 2), 16) * (1 - ratio);
+                blue = parseInt(hex.substr(4, 2), 16) * (1 - ratio);
+                red = (red > 255 ? 255 : red).toString(16);
+                green = (green > 255 ? 255 : green).toString(16);
+                blue = (blue > 255 ? 255 : blue).toString(16);
+                dotIndex = red.indexOf(".");
+                if (dotIndex != -1)
+                    red = red.substring(0, dotIndex);
+                dotIndex = green.indexOf(".");
+                if (dotIndex != -1)
+                    green = green.substring(0, dotIndex);
+                dotIndex = blue.indexOf(".");
+                if (dotIndex != -1)
+                    blue = blue.substring(0, dotIndex);
+                red = red.length < 2 ? "0" + red : red;
+                green = green.length < 2 ? "0" + green : green;
+                blue = blue.length < 2 ? "0" + blue : blue;
+                color = "#" + red + green + blue;
+            }
+            return color;
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
             showHide: showHide,
             htmlEncode: htmlEncode,
-            htmlDecode: htmlDecode
+            htmlDecode: htmlDecode,
+            darken: darken
         }
     })();
 
