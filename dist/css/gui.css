@@ -2240,6 +2240,10 @@ input[type="button"].gui-btn-block {
   background: black;
 }
 
+.gui-date-picker .gui-date-calender .gui-date-dates .gui-date-today a {
+  background: #ffe5b1 !important;
+}
+
 /*!
  * css hack for ie explorer
  */

@@ -3,7 +3,7 @@
 
 	var console = window.console,
 		$ = window.jQuery,
-		grace = window.grace,
+		gui = window.gui,
 		old = $.fn.guiDatePicker;
 
 	var module = {
@@ -317,7 +317,7 @@
 		
 		module._init(this, option);
 
-		return this;
+		return this.each(function(){});
 	}
 
 	$.fn.guiDatePicker.defaults = {
