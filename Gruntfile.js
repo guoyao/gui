@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 stripBanners: false
             },
             gui: {
-                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/panel.js', 'js/button.js', 'js/ie-patch.js'],
+                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/datepicker.js', 'js/panel.js', 'js/button.js', 'js/ie-patch.js'],
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
         },

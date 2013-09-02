@@ -1,0 +1,105 @@
+//
+// Datepicker
+// --------------------------------------------------
+
+.gui-date-picker {
+  width: 211px;
+  padding: 0 5px 5px;
+  border: 1px solid #c3c3c3;
+  border-radius: 5px;
+  overflow: hidden;
+  background:white;
+  .gui-date-header {
+    width: 100%;
+    height: 30px;
+    margin: 5px auto;
+    position: relative;
+    background: #c3c3c3;
+    border-radius: 5px;
+    .gui-date-title {
+      text-align: center;
+      line-height: 30px;
+    }
+    .gui-date-py-btn, .gui-date-ny-btn {
+      width: 20px;
+      height: 20px;
+      top: 15px;
+      margin-top: -10px;
+      color: white;
+      border-radius: 10px;
+      background: #696969;
+      line-height: 20px;
+      text-align: center;
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+    .gui-date-py-btn {
+      left: 5px;
+    }
+    .gui-date-ny-btn {
+      right: 5px;
+    }
+    .gui-date-pm-btn, .gui-date-nm-btn {
+      width: 20px;
+      height: 20px;
+      top: 15px;
+      margin-top: -10px;
+      color: white;
+      border-radius: 10px;
+      font-weight: bold;
+      background: #363636;
+      line-height: 20px;
+      text-align: center;
+      position: absolute;
+      display: block;
+      cursor: pointer;
+    }
+    .gui-date-pm-btn {
+      left: 38px;
+    }
+    .gui-date-nm-btn {
+      right: 38px;
+    }
+  }
+  .gui-date-calender {
+    width: 100%;
+    border-collapse: collapse;
+    .gui-date-week {
+      span {
+        display: block;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+    .gui-date-dates {
+      span, a {
+        display: block;
+        text-align: center;
+      }
+      a {
+        cursor: pointer;
+        background: #ebebeb;
+        border: 1px solid #808080;
+        color: #909090;
+        border-radius: 2px;
+        &:hover {
+          background: #c3c3c3;
+          color: #292929;
+        }
+      }
+      .gui-date-current-date {
+         a {
+           background: black;
+         }
+      }
+	  .gui-date-today {
+		 a {
+			 background: #ffe5b1 !important;
+		 }
+	  }
+    }
+  }
+}
+
