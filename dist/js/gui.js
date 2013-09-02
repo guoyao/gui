@@ -582,8 +582,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this.defaults = $.extend({}, $.fn.guiSlider.defaults, option);
 		},
 		//_sliceSelectorSymbol: function (name) {
-			//var reg = /[.#]*/;
-			//return name = name.replace(reg, '');
+		//var reg = /[.#]*/;
+		//return name = name.replace(reg, '');
 		//},
 		_initFetchData: function () {
 			if (this.defaults.remote.url !== undefined) {
@@ -646,16 +646,16 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						.appendTo($("." + this.defaults.indicatorTextClass))
 						.css({
 							"left": i / (this.defaults.data.indicatordata.length - 1) * 100 + "%",
-							"margin-left": - $("." + this.defaults.indicatorTextClass)
-												.find('span')
-												.eq(i)
-												.width()
-												 / 2 + 
-											 $("." + this.defaults.btnWrapperClass)
-												.find("." + this.defaults.btnClass)
-												.outerWidth()
-												 / 4
-							});
+							"margin-left": -$("." + this.defaults.indicatorTextClass)
+								.find('span')
+								.eq(i)
+								.width()
+								/ 2 +
+								$("." + this.defaults.btnWrapperClass)
+									.find("." + this.defaults.btnClass)
+									.outerWidth()
+									/ 4
+						});
 				}
 				if (parseInt($("." + this.defaults.indicatorTextClass).find("span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $("." + this.defaults.rangeBarClass).outerWidth()) {
 					for (var j = 0; j < this.defaults.data.indicatordata.length; j++) {
@@ -664,9 +664,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 								.find("span")
 								.eq(j)
 								.css({
-									"top" : $("." + this.defaults.indicatorTextClass)
-												.find("span")
-												.height()
+									"top": $("." + this.defaults.indicatorTextClass)
+										.find("span")
+										.height()
 								});
 						}
 					}
@@ -756,10 +756,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			}
 			for (var k = 0; k < $("." + this.defaults.btnWrapperClass).find("." + this.defaults.btnClass).length; k++) {
 				btnLeft.push(parseInt($("." + this.defaults.btnWrapperClass)
-											.find("." + this.defaults.btnClass)
-											.eq(k)
-											.css("left")
-										, 10));
+					.find("." + this.defaults.btnClass)
+					.eq(k)
+					.css("left")
+					, 10));
 			}
 			var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
 			$("." + this.defaults.btnWrapperClass)

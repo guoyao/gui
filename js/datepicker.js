@@ -12,8 +12,21 @@
 			this._initOptions(option);
 			this._initNewDate();
 			this._getNewDate();
+			//this._setNowHighlight();
 			this._appendElem();
 			this._iptFocus();
+		},
+		//
+		_calNowHighlight : function(){
+			var now = new Date(),
+				nowYear = now.getFullYear(),
+				nowMonth = now.getMonth();
+			var objCur = this._getNewDate();
+			var objCurYear = objCur.year,
+				objCurMonth = objCur.month;
+			if(nowYear == objCurYear && nowMonth == objCurMonth){
+				return true;
+			}
 		},
 		//tested
 		_initOptions:function(option){
@@ -159,6 +172,7 @@
 			this._clearCalender();
 			this._appendEmptyCalenderWp();
 			this._setCalender();
+			this._highlightToday();
 			this._setTitle();
 		},
 		//bind focus several times
@@ -174,9 +188,10 @@
 					.fadeIn();
 				//mo.obj = $(e.target);
 				mo._highCurLightDate();
+				mo._highlightToday();
 			});
 		},
-		//test covered by the past
+		//test covered by the others
 		_eventHandler:function(){
 			var mo = this,
 				mainWrapper = $('.' + this.defaults.mainWrapper),
@@ -251,6 +266,17 @@
 			var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
 			dateObj.eq(tdIndex).addClass(this.defaults.curDateClass);
 		},
+		//
+		_highlightToday : function(){
+			if(this._calNowHighlight()){
+				var now = new Date();
+				var nowDate = now.getDate();
+				var firstDay = this._calFirstDay();
+				var tdIndex = nowDate + firstDay - 1;
+				var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
+				dateObj.eq(tdIndex).addClass(this.defaults.todayClass);
+			}
+		},
 		//tested
 		_appendElem : function(){
 			if($('.' + this.defaults.mainWrapper).length === 0){
@@ -306,6 +332,7 @@
 		prevMonthBtn : "gui-date-pm-btn",
 		nextMonthBtn : "gui-date-nm-btn",
 		curDateClass : "gui-date-current-date",
+		todayClass : "gui-date-today",
 		//dateInput : "gui-date-input",
 		topNode : "body",
 		initNewDate : new Date(),
