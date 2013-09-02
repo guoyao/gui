@@ -20,10 +20,20 @@ $(function (undefined) {
 	/*global set for test*/
     module("DatePicker",{
 		setup:function(){
+			//set test environment
 			moduleDebug = $.fn.guiDatePicker.debug;
 			moduleDebug._initOptions(option);
-			moduleDebug._initNewDate();
+			//moduleDebug._initNewDate();
+			//make calender append to the test area
+			moduleDebug.defaults.topNode = "#qunit-fixture";
+			//append test input
+			$("#qunit-fixture").append('<input class="test-input" type="test"/>');
+			//set local obj
+			moduleDebug.obj = $(".test-input");
 		},teardown:function(){
+			//destroy calender element
+			$('.' + moduleDebug.defaults.mainWrapper).remove();
+			//destroy graceDatePicker module
 			moduleDebug = undefined;
 		}
 	});
@@ -31,7 +41,7 @@ $(function (undefined) {
 	/*repeat test for every modules*/
     test("should provide no conflict", function () {
         var guiDatePicker = $.fn.guiDatePicker.noConflict();
-        ok(!$.fn.guiDatePicker, 'guiTab was set back to undefined (org value)');
+        ok(!$.fn.guiDatePicker, 'guiDatePicker was set back to undefined (org value)');
         $.fn.guiDatePicker = guiDatePicker;
     });
 
@@ -43,100 +53,165 @@ $(function (undefined) {
         ok($(document.body).guiDatePicker()[0] == document.body, 'document.body returned');
     });
 	
-	/*specific test for local functions*/
-	test("init calender wrapper",function(){
-		
-		$.fn.guiDatePicker.defaults.topNode = "#qunit-fixture";
-		
-		var TopNode = $.fn.guiDatePicker.defaults.topNode;
-		
-		moduleDebug._appendElem();
-		console.log($.fn.guiDatePicker.defaults.topNode)
-		var appendedHtml = $("#qunit-fixture").html();
-		var defaultsVar = moduleDebug.defaults;
-		
-		var appendElem = '<div class=' + defaultsVar.mainWrapper +'>\
-								<div class='+ defaultsVar.header +'>\
-								<a class='+ defaultsVar.prevYearBtn +'></a>\
-								<a class='+ defaultsVar.nextYearBtn +'></a>\
-								<a class='+ defaultsVar.prevMonthBtn +'></a>\
-								<a class='+ defaultsVar.nextMonthBtn +'></a>\
-								<div class='+ defaultsVar.title +'></div>\
-							</div>\
-							<table class='+ defaultsVar.calender +'>\
-								<thead class='+ defaultsVar.week +'>\
-								</thead>\
-								<tbody class='+ defaultsVar.dates +'>\
-									<tr></tr>\
-								</tbody>\
-							</table>\
-						</div>';
-		
-		deepEqual(appendedHtml,appendElem,"should be the same!")
-	});
 	
-	test("the function which set the date object",function(){
-		/*_initNewDate*/
+	/*specific test for local functions*/
+	/* _appendElem() */
+	test("init calender wrapper",function(){
+		moduleDebug._appendElem();
+		
+		var $appendedHtml = $("#qunit-fixture").find('.' + moduleDebug.defaults.mainWrapper);
+		
+		equal( $("div", $appendedHtml).length,2,"3 div appended")
+		equal( $("a", $appendedHtml).length,4,"4 a appended")
+		equal( $("table", $appendedHtml).length,1,"1 table appended")
+	});
+	/* _initNewDate() _getNewDate() */
+	test("the function which set the input data",function(){
+		//init local variable
+		moduleDebug._initNewDate();
 		//get local date variable
-		var year = moduleDebug.newDate['year'],
-			month = moduleDebug.newDate['month'],
-			date = moduleDebug.newDate['date'];
+		var year = moduleDebug._getNewDate().year,
+			month = moduleDebug._getNewDate().month,
+			date = moduleDebug._getNewDate().date;
 		//get compare date variable	
-		var curyear = testDateObj.getFullYear(),
-			curmonth = testDateObj.getMonth(),
-			curdate = testDateObj.getDate();
+		var curyear = moduleDebug.obj.data('year'),
+			curmonth = moduleDebug.obj.data('month'),
+			curdate = moduleDebug.obj.data('date');
 			
 		deepEqual(year,curyear,"initial the year variable");
 		deepEqual(month,curmonth,"initial the month variable");
 		deepEqual(date,curdate,"initial the date variable");
 	});
-	
+	/* _recalYearFactory() _recalMonthFactory() */
     test("mod year object after click button",function(){
 		/* _recalYearFactory ** _recalMonthFactory */
+		moduleDebug._setNewDate('year',year);
+		moduleDebug._setNewDate('month',month);
+		moduleDebug._setNewDate('date',date);
 		//counting the next year value
 			moduleDebug._recalYearFactory(1);
 		//init local function to set/get date	
-		var nextFullYear = moduleDebug.newDate['year'];
+		var nextFullYear = moduleDebug.obj.data('year');
 		
 		//counting the prev year value
 			moduleDebug._recalYearFactory(-1);
 		//init local function to set/get date
-		var prevFullYear = moduleDebug.newDate['year'];
+		var prevFullYear = moduleDebug.obj.data('year');
 		
 		//counting the next year value
 			moduleDebug._recalMonthFactory(1);
 		//init local function to set/get date	
-		var nextMonth = moduleDebug.newDate['month'];
+		var nextMonth = moduleDebug.obj.data('month');
 		
 		//counting the prev year value
 			moduleDebug._recalMonthFactory(-1);
 		//init local function to set/get date
-		var prevMonth = moduleDebug.newDate['month'];
+		var prevMonth = moduleDebug.obj.data('month');
+		//console.log(moduleDebug.obj)
 			
 		deepEqual(nextFullYear , year + 1 , "calculate the next year");
 		deepEqual(prevFullYear , year , "calculate the prev year");
-		deepEqual(nextMonth , testDateObj.getMonth() + 1 , "calculate the next month");
-		deepEqual(prevMonth , testDateObj.getMonth() , "calculate the prev month");
+		deepEqual(nextMonth , month + 1 , "calculate the next month");
+		deepEqual(prevMonth , month , "calculate the prev month");
 	});
-	
+	/* _calTitle() */
 	test("calculate the title format",function(){
+		//init test data
+		moduleDebug._setNewDate('year',year)
+		moduleDebug._setNewDate('month',month)
+		moduleDebug._setNewDate('date',date)
 		//set test title format
-		var curYear = testDateObj.getFullYear(),
-			curMonth = (testDateObj.getMonth() + 1),
+		var curYear = year,
+			curMonth = month + 1,
 			titleformate = curYear + '\n' + curMonth + '月';
 		
 		deepEqual(titleformate,moduleDebug._calTitle(),"title set as current time")
 	});
-	
+	/* _calFirstDay() _calTotalDate() */
 	test("calculate the first day of month and total days of a month",function(){
+		//init test data
+		moduleDebug._setNewDate('year',year)
+		moduleDebug._setNewDate('month',month)
+		moduleDebug._setNewDate('date',date)
 		//set the test date
-		var curyear = testDateObj.getFullYear(),
-			curmonth = testDateObj.getMonth() + 1;
+		var curyear = year,
+			curmonth = month;
 		//get first date of week
 		var fristDayOfWeek = new Date(curyear,curmonth,1).getDay();
 		//get total dates of month
 		var totalDateOfWeek = new Date(curyear,curmonth,0).getDate();
-		deepEqual(moduleDebug._calFirstDay(),fristDayOfWeek,"first day of month")
-		deepEqual(moduleDebug._calTotalDate(),totalDateOfWeek,"first day of month")
+		deepEqual(fristDayOfWeek ,moduleDebug._calFirstDay(),"first day of month")
+		deepEqual(totalDateOfWeek ,moduleDebug._calTotalDate(),"first day of month")
+	});
+	/* _setActiveDate() */
+	test("output date value",function(){
+		//init test data
+		moduleDebug._setNewDate('year',year)
+		moduleDebug._setNewDate('month',month)
+		moduleDebug._setNewDate('date',date)
+		//will return after set current date and set type to number to the value
+		moduleDebug._setActiveDate(date);
+		var curDate = moduleDebug.obj.data('date');
+		deepEqual(curDate,date,"shold be the same type and value")
+	});
+	/*_getInputProp()*/
+	test("get input property",function(){
+		//clear calender
+		var input = moduleDebug._getInputProp();
+		
+		var objOffset = moduleDebug.obj.offset();
+		var objW = moduleDebug.obj.outerWidth();
+		var objH = moduleDebug.obj.outerHeight();
+		
+		var dateWp = $('.' + moduleDebug.defaults.dates);
+		deepEqual(objOffset.left , input.left,"same left offset value!")
+		deepEqual(objOffset.top , input.top,"same top offset value!")
+		deepEqual(objH , input.h,"same outerHeight value!")
+		deepEqual(objW , input.w,"same outerWidth value!")
+	});
+	/* _initDatePickerPos()	_clearCalender() _appendEmptyCalenderWp() _setCalender() _setTitle()*/
+	test("calender render and rerender function collection",function(){
+		//init test data
+		moduleDebug._setNewDate('year',year)
+		moduleDebug._setNewDate('month',month)
+		moduleDebug._setNewDate('date',date)
+		//init test calender wrapper
+		moduleDebug._appendElem();
+		
+		//get clear target wrapper
+		var calenderDates = $('.' + moduleDebug.defaults.mainWrapper).find('.' + moduleDebug.defaults.dates)
+		//set calender position
+		moduleDebug._initDatePickerPos();
+		//clear calender date
+		moduleDebug._clearCalender();
+		
+		deepEqual($("tr",calenderDates).length , 1,"calender date should be ereased!")
+		
+		/*---------------------------------------------------------*/
+		
+		//calculate the first day of the month
+		var firstDay = moduleDebug._calFirstDay();
+		//append empty elements before first day
+		moduleDebug._appendEmptyCalenderWp();
+		
+		deepEqual($("tr td",calenderDates).length , firstDay,"calender date should be ereased!")
+		
+		/*---------------------------------------------------------*/
+		
+		//get total dates of the month
+		var totalDate = moduleDebug._calTotalDate();
+		//set the dates to calender
+		moduleDebug._setCalender();
+		
+		deepEqual($("td",calenderDates).length , firstDay + totalDate,"calender date should be ereased!")
+		
+		/*---------------------------------------------------------*/
+		//get the title element
+		var title = $('.' + moduleDebug.defaults.mainWrapper).find('.' + moduleDebug.defaults.title);
+		//set date to title
+		moduleDebug._setTitle();
+		
+		deepEqual(title.html() , moduleDebug._calTitle(),"calender date should be ereased!")
+		
 	});
 });

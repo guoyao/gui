@@ -14,6 +14,7 @@ define(["./demo"], function (demo) {
         new Module("Panel Navigator", "panel-navigator"),
         new Module("Place Holder", "place-holder"),
         new Module("Slider", "slider"),
+        new Module("Date Picker", "date-picker"),
         new Module("Button Bar", "button-bar")
     ], {
         modulesDirectory: "modules/components"
