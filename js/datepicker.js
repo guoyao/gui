@@ -312,7 +312,7 @@
 		topNode : "body",
 		initNewDate : new Date(),
 		dateSpliter : '-',
-		weekTitle : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+		weekTitle : ['日','一','二','三','四','五','六']
 	}
 
 	$.fn.graceDatePicker.noConflict = function () {
