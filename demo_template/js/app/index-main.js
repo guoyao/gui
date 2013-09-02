@@ -13,7 +13,8 @@ define(["./demo"], function (demo) {
         new Module("Popup Window", "popup-window"),
         new Module("Panel Navigator", "panel-navigator"),
         new Module("Place Holder", "place-holder"),
-        new Module("Slider", "slider")
+        new Module("Slider", "slider"),
+		new Module("Date Picker", "date-picker")
     ], {
         modulesDirectory: "modules/components"
     }).init();
