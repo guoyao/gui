@@ -113,4 +113,17 @@
         };
     }
 
+    //
+    // Button bar
+    // --------------------------------------------------
+
+    if(!!$.fn.guiButtonBar) {
+        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, option) {
+            if (gui.browserInfo.version <= 6) { // lte IE 6
+                $$guiButtonBar.find(".gui-btn + .gui-btn").css("margin-left", "-1px");
+            }
+            return $$guiButtonBar;
+        };
+    }
+
 })(window);
