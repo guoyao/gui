@@ -4,12 +4,9 @@
 	var console = window.console,
 		$ = window.jQuery,
 		grace = window.grace,
-		old = $.fn.graceDatePicker;
+		old = $.fn.guiDatePicker;
 
 	var module = {
-		//dayInCh : ['日','一','二','三','四','五','六'],
-		
-		//
 		_init:function(obj,option){
 			this.obj = obj;
 			this._initOptions(option);
@@ -20,7 +17,7 @@
 		},
 		//tested
 		_initOptions:function(option){
-			this.defaults = $.extend({},$.fn.graceDatePicker.defaults,option);
+			this.defaults = $.extend({},$.fn.guiDatePicker.defaults,option);
 		},
 		//tested
 		_initNewDate :function(){
@@ -252,7 +249,7 @@
 			var firstDay = this._calFirstDay();
 			var tdIndex = curDate + firstDay -1;
 			var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
-			dateObj.eq(tdIndex).addClass('grace-date-current-date');
+			dateObj.eq(tdIndex).addClass(this.defaults.curDateClass);
 		},
 		//tested
 		_appendElem : function(){
@@ -290,37 +287,38 @@
 		}
 	}
 	
-	$.fn.graceDatePicker = function (option) {
+	$.fn.guiDatePicker = function (option) {
 		
 		module._init(this, option);
 
 		return this;
 	}
 
-	$.fn.graceDatePicker.defaults = {
-		mainWrapper : "grace-date-picker",
-		nextYearBtn : "grace-date-ny-btn",
-		prevYearBtn : "grace-date-py-btn",
-		title : "grace-date-title",
-		calender : "grace-date-calender",
-		week : "grace-date-week",
-		dates : "grace-date-dates",
-		header : "grace-date-header",
-		prevMonthBtn : "grace-date-pm-btn",
-		nextMonthBtn : "grace-date-nm-btn",
-		//dateInput : "grace-date-input",
+	$.fn.guiDatePicker.defaults = {
+		mainWrapper : "gui-date-picker",
+		nextYearBtn : "gui-date-ny-btn",
+		prevYearBtn : "gui-date-py-btn",
+		title : "gui-date-title",
+		calender : "gui-date-calender",
+		week : "gui-date-week",
+		dates : "gui-date-dates",
+		header : "gui-date-header",
+		prevMonthBtn : "gui-date-pm-btn",
+		nextMonthBtn : "gui-date-nm-btn",
+		curDateClass : "gui-date-current-date",
+		//dateInput : "gui-date-input",
 		topNode : "body",
 		initNewDate : new Date(),
 		dateSpliter : '-',
 		weekTitle : ['日','一','二','三','四','五','六']
 	}
 
-	$.fn.graceDatePicker.noConflict = function () {
-		$.fn.graceDatePicker = old;
+	$.fn.guiDatePicker.noConflict = function () {
+		$.fn.guiDatePicker = old;
 		return this;
 	};
 
 	//for debug
-	$.fn.graceDatePicker.debug = module;
+	$.fn.guiDatePicker.debug = module;
 
 })(window);

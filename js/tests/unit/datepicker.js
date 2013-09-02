@@ -21,7 +21,7 @@ $(function (undefined) {
     module("DatePicker",{
 		setup:function(){
 			//set test environment
-			moduleDebug = $.fn.graceDatePicker.debug;
+			moduleDebug = $.fn.guiDatePicker.debug;
 			moduleDebug._initOptions(option);
 			//moduleDebug._initNewDate();
 			//make calender append to the test area
@@ -41,7 +41,7 @@ $(function (undefined) {
 	/*repeat test for every modules*/
     test("should provide no conflict", function () {
         var guiDatePicker = $.fn.guiDatePicker.noConflict();
-        ok(!$.fn.guiDatePicker, 'guiTab was set back to undefined (org value)');
+        ok(!$.fn.guiDatePicker, 'guiDatePicker was set back to undefined (org value)');
         $.fn.guiDatePicker = guiDatePicker;
     });
 
