@@ -1,7 +1,7 @@
 # [GUI](http://gui.guoyao.me)
 [![Build Status](https://api.travis-ci.org/guoyao/gui.png)](http://travis-ci.org/guoyao/gui)
 [![Dependency Status](https://gemnasium.com/guoyao/gui.png)](https://gemnasium.com/guoyao/gui)
-[![Coverage Status](https://coveralls.io/repos/guoyao/graceful-web-ui/badge.png?branch=dev)](https://coveralls.io/r/guoyao/graceful-web-ui?branch=dev)
+[![Coverage Status](https://coveralls.io/repos/guoyao/gui/badge.png?branch=dev)](https://coveralls.io/r/guoyao/gui?branch=dev)
 
 supported browser: ie6+ firefox4+ safari chrome and so on.
 
