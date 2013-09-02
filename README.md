@@ -1,50 +1,54 @@
-# [Graceful Web UI](http://grace.guoyao.me) [![Build Status](https://api.travis-ci.org/guoyao/graceful-web-ui.png)](http://travis-ci.org/guoyao/graceful-web-ui)
+# [GUI](http://gui.guoyao.me)
+[![Build Status](https://api.travis-ci.org/guoyao/gui.png)](http://travis-ci.org/guoyao/gui)
+[![Dependency Status](https://gemnasium.com/guoyao/gui.png)](https://gemnasium.com/guoyao/gui)
+[![Coverage Status](https://coveralls.io/repos/guoyao/graceful-web-ui/badge.png?branch=dev)](https://coveralls.io/r/guoyao/graceful-web-ui?branch=dev)
 
 supported browser: ie6+ firefox4+ safari chrome and so on.
 
-project homepage: [http://www.grace.guoyao.me/](http://www.grace.guoyao.me/)
+project homepage: [http://www.gui.guoyao.me/](http://www.gui.guoyao.me/)
 
 including source code and demo for
-[*graceful-web-ui*](http://www.grace.guoyao.me/)
+[*GUI*](http://www.gui.guoyao.me/)
 by [guoyao](http://www.guoyao.me/).
 
 
 
 
-# [Graceful-web-ui v0.1.0alpha](http://grace.guoyao.me)
+# [GUI v0.1.0](http://gui.guoyao.me)
 
-Graceful-web-ui is a graceful, cross browser, and powerful front-end framework for faster and easier web development, created and maintained by [Guoyao Wu](http://guoyao.me).
+GUI is a graceful, cross browser, and powerful front-end framework for faster and easier web development, created and maintained by [Guoyao Wu](http://guoyao.me).
 
-To get started, check out [http://grace.guoyao.me](http://grace.guoyao.me)!
+To get started, check out [http://gui.guoyao.me](http://gui.guoyao.me)!
 
 
 
 ## Quick start
 
-Two quick start options are available:
+Three quick start options are available:
 
-* [Download the latest devlopment version](https://github.com/guoyao/graceful-web-ui/archive/dev.zip).
-* Clone the repo: `git clone git://github.com/guoyao/graceful-web-ui.git`.
+* [Download the latest devlopment version](https://github.com/guoyao/gui/archive/dev.zip).
+* Clone the repo: `git clone git://github.com/guoyao/gui.git`.
+* Install with [Bower](http://bower.io): `bower install gui`.
 
-Read the [Getting Started page](http://grace.guoyao.me/) for information on the framework contents, templates and examples, and more.
+Read the [Getting Started page](http://gui.guoyao.me/) for information on the framework contents, templates and examples, and more.
 
 
 
 ## Bugs and feature requests
 
-Have a bug or a feature request? [Please open a new issue](https://github.com/guoyao/graceful-web-ui/issues). Before opening any issue, please search for existing issues and read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
+Have a bug or a feature request? [Please open a new issue](https://github.com/guoyao/gui/issues). Before opening any issue, please search for existing issues and read the [Issue Guidelines](https://github.com/necolas/issue-guidelines), written by [Nicolas Gallagher](https://github.com/necolas/).
 
 
 
 ## Documentation
 
-Please check [Getting Started page](http://grace.guoyao.me/) for information, no standard documentation now.
+Please check [Getting Started page](http://gui.guoyao.me/) for information, no standard documentation now.
 
 
 
 ## Compiling CSS and JavaScript
 
-Graceful-web-ui uses [Grunt](http://gruntjs.com/) with convenient methods for working with the framework. It's how we compile our code, run tests, and more. To use it, install the required dependencies as directed and then run some Grunt commands.
+GUI uses [Grunt](http://gruntjs.com/) with convenient methods for working with the framework. It's how we compile our code, run tests, and more. To use it, install the required dependencies as directed and then run some Grunt commands.
 
 ### Install Grunt
 
@@ -82,7 +86,7 @@ Should you encounter problems with installing dependencies or running Grunt comm
 
 ## Contributing
 
-Please read through our guidelines for contributing to Graceful-web-ui. Included are directions for opening issues, coding standards, and notes on development.
+Please read through our guidelines for contributing to GUI. Included are directions for opening issues, coding standards, and notes on development.
 
 More over, if your pull request contains JavaScript patches or features, you must include relevant unit tests.
 
@@ -99,7 +103,7 @@ Keep track of development and community news.
 
 ## Versioning
 
-For transparency and insight into our release cycle, and for striving to maintain backward compatibility, Graceful-web-ui will be maintained under the Semantic Versioning guidelines as much as possible.
+For transparency and insight into our release cycle, and for striving to maintain backward compatibility, GUI will be maintained under the Semantic Versioning guidelines as much as possible.
 
 Releases will be numbered with the following format:
 

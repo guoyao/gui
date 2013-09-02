@@ -46,15 +46,17 @@
 
   QUnit.begin = function () {
     sendMessage('qunit.begin')
-    console.log("Starting test suite")
+    console.log("\nStarting test suite")
     console.log("================================================\n")
   }
 
   QUnit.moduleDone = function (opts) {
     if (opts.failed === 0) {
-      console.log("\r\u2714 All tests passed in '" + opts.name + "' module")
+//      console.log("\r\u2714 All tests passed in '" + opts.name + "' module")
+      console.log("All tests passed in '" + opts.name + "' module")
     } else {
-      console.log("\u2716 " + opts.failed + " tests failed in '" + opts.name + "' module")
+//      console.log("\u2716 " + opts.failed + " tests failed in '" + opts.name + "' module")
+      console.log(opts.failed + " tests failed in '" + opts.name + "' module")
     }
     sendMessage('qunit.moduleDone', opts.name, opts.failed, opts.passed, opts.total)
   }

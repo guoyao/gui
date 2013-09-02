@@ -1,6 +1,6 @@
 /* ========================================================================
- * Graceful-web-ui: nav-ie-patch.js v0.1.0alpha
- * http://www.grace.guoyao.me/
+ * GUI: nav-ie-patch.js v0.1.0
+ * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
  *
@@ -20,10 +20,9 @@
 (function (window) {
     "use strict";
 
-    var document = window.document,
-        console = window.console,
+    var console = window.console,
         $ = window.jQuery,
-        grace = window.grace;
+        gui = window.gui;
 
     function setMaxHeight($$elements, childSelector, modifiedValue) {
         $$elements.each(function () {
@@ -46,25 +45,25 @@
     // Navs
     // --------------------------------------------------
 
-    if(!!$.fn.graceNav) {
-        $.fn.graceNav.iePatch = function ($$graceNav, option) {
-            if (grace.plugin.isPluginInitialize(option)) {
-                if (grace.browserInfo.version <= 6) { // lte IE 6
-                    $$graceNav.find("li").hover(function () {
+    if(!!$.fn.guiNav) {
+        $.fn.guiNav.iePatch = function ($$guiNav, option) {
+            if (gui.plugin.isPluginInitialize(option)) {
+                if (gui.browserInfo.version <= 6) { // lte IE 6
+                    $$guiNav.find("li").hover(function () {
                         $(this).children("ul").css("display", "block");
                     }, function () {
                         $(this).children("ul").css("display", "none");
                     });
-                    $$graceNav.each(function () {
-                        var $graceNav = $(this),
-                            isVertical = $graceNav.hasClass("grace-nav-vertical");
+                    $$guiNav.each(function () {
+                        var $guiNav = $(this),
+                            isVertical = $guiNav.hasClass("gui-nav-vertical");
                         if (!isVertical) {
-                            $graceNav.children("li").css("float", "left");
+                            $guiNav.children("li").css("float", "left");
                         }
                     });
                 }
             }
-            return $$graceNav;
+            return $$guiNav;
         };
     }
 
@@ -72,14 +71,45 @@
     // Tabs
     // --------------------------------------------------
 
-    if(!!$.fn.graceTab) {
-        $.fn.graceTab.iePatch = function ($$graceTab, option) {
-            if (grace.plugin.isPluginInitialize(option)) {
-                if (grace.browserInfo.version <= 7) { // lte IE 7
-                    setMaxHeight($$graceTab.children(".tabs"), "li", -1);
+    if(!!$.fn.guiTab) {
+        $.fn.guiTab.iePatch = function ($$guiTab, option) {
+            if (gui.plugin.isPluginInitialize(option)) {
+                if (gui.browserInfo.version <= 7) { // lte IE 7
+                    setMaxHeight($$guiTab.children(".tabs"), "li", -1);
                 }
             }
-            return $$graceTab;
+            return $$guiTab;
+        };
+    }
+
+    //
+    // Button
+    // --------------------------------------------------
+
+    if(!!$.fn.guiButton) {
+        $.fn.guiButton.iePatch = function ($$guiButton, option) {
+            if (gui.browserInfo.version <= 9) {
+                $("a.disabled").click(function () {
+                    return false;
+                });
+            }
+            if (gui.browserInfo.version <= 6) { // lte IE 6
+                $$guiButton.each(function () {
+                    var $this = $(this);
+                    var backgroundColor = $this.css("background-color");
+                    var hoverBackgroundColor = gui.darken(backgroundColor, 0.08);
+                    if ($this.hasClass("disabled") || $this.attr("disabled")) {
+                        $this.css("cursor", "not-allowed");
+                    } else {
+                        $this.hover(function () {
+                            $this.css("background-color", hoverBackgroundColor);
+                        }, function () {
+                            $this.css("background-color", backgroundColor);
+                        });
+                    }
+                });
+            }
+            return $$guiButton;
         };
     }
 

@@ -3,10 +3,10 @@
 
 	var console = window.console,
 		$ = window.jQuery,
-		grace = window.grace,
-		old = $.fn.gracePlaceholder;
+		gui = window.gui,
+		old = $.fn.guiPlaceholder;
 
-	$.fn.gracePlaceholder = function (option) {
+	$.fn.guiPlaceholder = function (option) {
 
 		//define object
 		var placeholder = {
@@ -109,8 +109,8 @@
 		return this;
 	}
 
-	$.fn.gracePlaceholder.noConflict = function () {
-		$.fn.gracePlaceholder = old;
+	$.fn.guiPlaceholder.noConflict = function () {
+		$.fn.guiPlaceholder = old;
 		return this;
 	};
 

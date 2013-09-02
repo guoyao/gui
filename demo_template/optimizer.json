@@ -1,0 +1,23 @@
+{
+    "appDir": "demo_template",
+    "dir": "demo",
+    "optimizeCss": "standard",
+    "removeCombined": true,
+    "mainConfigFile": "demo_template/js/common.js",
+    "modules": [
+        {
+            "name": "../common",
+            "include": ["jquery", "app/demo"]
+        },
+        {
+            "name": "../index",
+            "include": ["app/index-main"],
+            "exclude": ["../common"]
+        },
+        {
+            "name": "../css",
+            "include": ["app/css-main"],
+            "exclude": ["../common"]
+        }
+    ]
+}

@@ -40,24 +40,23 @@ $(function (undefined) {
 
 	/*repeat test for every modules*/
     test("should provide no conflict", function () {
-        var graceDatePicker = $.fn.graceDatePicker.noConflict();
-        ok(!$.fn.graceDatePicker, 'graceTab was set back to undefined (org value)');
-        $.fn.graceDatePicker = graceDatePicker;
+        var guiDatePicker = $.fn.guiDatePicker.noConflict();
+        ok(!$.fn.guiDatePicker, 'guiTab was set back to undefined (org value)');
+        $.fn.guiDatePicker = guiDatePicker;
     });
 
     test("should be defined on jquery object", function () {
-        ok($(document.body).graceDatePicker, 'graceDatePicker method is defined');
+        ok($(document.body).guiDatePicker, 'guiDatePicker method is defined');
     });
 
     test("should return element", function () {
-        ok($(document.body).graceDatePicker()[0] == document.body, 'document.body returned');
+        ok($(document.body).guiDatePicker()[0] == document.body, 'document.body returned');
     });
 	
 	
 	/*specific test for local functions*/
 	/* _appendElem() */
 	test("init calender wrapper",function(){
-		
 		moduleDebug._appendElem();
 		
 		var $appendedHtml = $("#qunit-fixture").find('.' + moduleDebug.defaults.mainWrapper);

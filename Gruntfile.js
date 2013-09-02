@@ -18,7 +18,7 @@ module.exports = function (grunt) {
             '* <%= _.pluck(pkg.licenses, "url").join(", ") %>\n' +
             '*/\n',
 
-        jqueryCheck: 'if (!jQuery) { throw new Error(\"Graceful-web-ui requires jQuery\") }\n\n',
+        jqueryCheck: 'if (!jQuery) { throw new Error(\"GUI requires jQuery\") }\n\n',
 
         clean: {
             dist: ['dist']
@@ -29,9 +29,9 @@ module.exports = function (grunt) {
                 banner: '<%= banner %><%= jqueryCheck %>',
                 stripBanners: false
             },
-            grace: {
-                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/datepicker.js', 'js/panel.js', 'js/ie-patch.js'],
-                dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.js'
+            gui: {
+                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/datepicker.js', 'js/panel.js', 'js/button.js', 'js/ie-patch.js'],
+                dest: 'dist/js/<%= pkg.name %>.js'
             }
         },
 
@@ -39,11 +39,11 @@ module.exports = function (grunt) {
             options: {
                 compile: true
             },
-            grace: {
+            gui: {
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.css': ['less/graceful-web-ui.less'],
-                    'demo/css/index.css': ['demo/less/index.less'],
-                    'demo/css/lib/prettify.css': ['demo/less/prettify.less']
+                    'dist/css/<%= pkg.name %>.css': ['less/gui.less'],
+                    'demo_template/css/index.css': ['demo_template/less/index.less'],
+                    'demo_template/css/lib/prettify.css': ['demo_template/less/prettify.less']
                 }
             },
             min: {
@@ -51,7 +51,7 @@ module.exports = function (grunt) {
                     compress: true
                 },
                 files: {
-                    'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css': ['less/graceful-web-ui.less']
+                    'dist/css/<%= pkg.name %>.min.css': ['less/gui.less']
                 }
             }
         },
@@ -60,23 +60,24 @@ module.exports = function (grunt) {
             options: {
                 banner: '<%= banner %>'
             },
-            grace: {
+            gui: {
                 files: {
-                    'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.grace.dest %>']
+                    'dist/js/<%= pkg.name %>.min.js': ['<%= concat.gui.dest %>']
                 }
             }
         },
 
         copy: {
-            demo: {
+            demo_template: {
                 files: [
                     {
-                        'demo/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>-<%= pkg.version %>.min.css',
-                        'demo/js/<%= pkg.name %>.min.js': 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js',
-                        'demo/js/lib/jquery.min.js': 'bower_components/jquery/jquery.min.js',
-                        'demo/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js'
+                        'demo_template/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.min.css',
+                        'demo_template/js/lib/<%= pkg.name %>.js': 'dist/js/<%= pkg.name %>.min.js',
+                        'demo_template/js/lib/jquery.js': 'bower_components/jquery/jquery.min.js',
+                        'demo_template/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js',
+                        'demo_template/js/lib/require.js': 'bower_components/requirejs/require.js'
                     },
-                    {expand: true, src: ['assets/**'], dest: 'demo'}
+                    {expand: true, src: ['assets/**'], dest: 'demo_template'}
                 ]
             },
             test: {
@@ -88,7 +89,7 @@ module.exports = function (grunt) {
             },
             dist_assets: {
                 files: [
-                    {expand: true, src: ['assets/graceful-web-ui/**'], dest: 'dist'}
+                    {expand: true, src: ['assets/gui/**'], dest: 'dist'}
                 ]
             }
         },
@@ -99,6 +100,39 @@ module.exports = function (grunt) {
                     port: 3000,
                     base: 'demo',
                     keepalive: true
+                }
+            }
+        },
+
+        watch: {
+            src: {
+                files: '<%= jshint.src.src %>',
+                tasks: ['jshint:src', 'qunit']
+            },
+            test: {
+                files: '<%= jshint.test.src %>',
+                tasks: ['jshint:test', 'qunit']
+            },
+            recess: {
+                files: 'less/*.less',
+                tasks: ['recess', 'copy:demo_template']
+            }
+        },
+
+        bower: {
+            install: {
+                options: {
+                    copy: false,
+                    cleanTargetDir: true
+                }
+            }
+        },
+
+        requirejs: {
+            options: grunt.file.readJSON('demo_template/optimizer.json'),
+            demo_optimize: {
+                options: {
+                    fileExclusionRegExp: /less|optimizer\.json/
                 }
             }
         },
@@ -119,33 +153,32 @@ module.exports = function (grunt) {
         },
 
         qunit: {
-            options: {
-                inject: 'js/tests/unit/phantom.js'
+            phantom: {
+                options: {
+                    inject: 'js/tests/unit/phantom.js',
+                    coverage: {
+                        src: ['js/*.js'],
+                        instrumentedFiles: "temp/",
+                        lcovReport: "report/"
+                    }
+                },
+                src: ['js/tests/*.html']
             },
-            files: ['js/tests/*.html']
-        },
-
-        watch: {
-            src: {
-                files: '<%= jshint.src.src %>',
-                tasks: ['jshint:src', 'qunit']
-            },
-            test: {
-                files: '<%= jshint.test.src %>',
-                tasks: ['jshint:test', 'qunit']
-            },
-            recess: {
-                files: 'less/*.less',
-                tasks: ['recess', 'copy:demo']
+            coverage: {
+                options: {
+                    coverage: {
+                        src: ['js/*.js'],
+                        instrumentedFiles: "temp/",
+                        lcovReport: "report/"
+                    }
+                },
+                src: ['js/tests/*.html']
             }
         },
 
-        bower: {
-            install: {
-                options: {
-                    copy: false,
-                    cleanTargetDir: true
-                }
+        shell: {
+            coverall: {
+                command: 'node_modules/coveralls/bin/coveralls.js <report/lcov.info'
             }
         }
     });
@@ -156,13 +189,21 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-qunit-istanbul');
+    grunt.loadNpmTasks('grunt-shell');
 
     // Test task.
-    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit']);
+    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit', 'shell:coverall']);
+
+    // generate coverage report after tests
+//    grunt.event.on('qunit.done', function () {
+//        grunt.task.run('shell:coverall');
+//    });
 
     // CSS distribution task.
     grunt.registerTask('dist-css', ['recess']);
@@ -177,12 +218,12 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['clean', 'dist-css', 'dist-js', 'dist-assets']);
 
     // Demo distribution task.
-    grunt.registerTask('dist-demo', ['dist', 'bower', 'copy:demo']);
+    grunt.registerTask('dist-demo', ['dist', 'bower', 'copy:demo_template', 'requirejs:demo_optimize']);
 
     // Start local server for demo
     grunt.registerTask('s', ['dist-demo', 'connect']);
 
     // Default task(s).
-    grunt.registerTask('default', ['dist-demo']);
+    grunt.registerTask('default', ['dist']);
 
 };

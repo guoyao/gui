@@ -43,7 +43,8 @@
 // Webkit-style focus
 .tab-focus() {
   // Default
-  outline: thin dotted #333;
+  outline: thin dotted #333
+;
   // Webkit
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
@@ -61,16 +62,29 @@
   width: @width;
   height: @height;
 }
+
 .square(@size) {
   .size(@size, @size);
 }
 
 // Placeholder text
 .placeholder(@color: @input-color-placeholder) {
-  &:-moz-placeholder            { color: @color; } // Firefox 4-18
-  &::-moz-placeholder           { color: @color; } // Firefox 19+
-  &:-ms-input-placeholder       { color: @color; } // Internet Explorer 10+
-  &::-webkit-input-placeholder  { color: @color; } // Safari and Chrome
+  &:-moz-placeholder {
+    color: @color;
+  }
+  // Firefox 4-18
+  &::-moz-placeholder {
+    color: @color;
+  }
+  // Firefox 19+
+  &:-ms-input-placeholder {
+    color: @color;
+  }
+  // Internet Explorer 10+
+  &::-webkit-input-placeholder {
+    color: @color;
+  }
+  // Safari and Chrome
 }
 
 // Text overflow
@@ -96,14 +110,17 @@
   border-top-right-radius: @radius;
   border-top-left-radius: @radius;
 }
+
 .border-right-radius(@radius) {
   border-bottom-right-radius: @radius;
   border-top-right-radius: @radius;
 }
+
 .border-bottom-radius(@radius) {
   border-bottom-right-radius: @radius;
   border-bottom-left-radius: @radius;
 }
+
 .border-left-radius(@radius) {
   border-bottom-left-radius: @radius;
   border-top-left-radius: @radius;
@@ -114,6 +131,22 @@
   -webkit-box-sizing: @boxmodel;
   -moz-box-sizing: @boxmodel;
   box-sizing: @boxmodel;
+}
+
+// User select
+// For selecting text on the page
+.user-select(@select) {
+  -webkit-user-select: @select;
+  -moz-user-select: @select;
+  -ms-user-select: @select; // IE10+
+  -o-user-select: @select;
+  user-select: @select;
+}
+
+// Drop shadows
+.box-shadow(@shadow) {
+  -webkit-box-shadow: @shadow; // iOS <4.3 & Android <4.1
+  box-shadow: @shadow;
 }
 
 // Grid System
@@ -164,7 +197,7 @@
 
 // Generate the columns
 .make-column-fluid(@column) {
-  @grid-content-width:  @grid-total-width - @grid-gutter-width;
+  @grid-content-width: @grid-total-width - @grid-gutter-width;
   @grid-column-width: @grid-total-width / @grid-columns - @grid-gutter-width;
   display: block;
   _display: inline;
@@ -176,9 +209,55 @@
 
 // Generate the column offsets
 .make-column-fluid-offset(@column) {
-  @grid-content-width:  @grid-total-width - @grid-gutter-width;
+  @grid-content-width: @grid-total-width - @grid-gutter-width;
   @grid-column-width: @grid-total-width / @grid-columns - @grid-gutter-width;
   margin-left: percentage((@grid-column-width * @column + (@column + 1) * @grid-gutter-width) / @grid-content-width);
+}
+
+// Button variants
+// -------------------------
+// Easily pump out default styles, as well as :hover, :focus, :active,
+// and disabled options for all buttons
+.button-variant(@color, @background, @border) {
+  color: @color;
+  background-color: @background;
+  border-color: @border;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    color: @color;
+    background-color: darken(@background, 8%);
+    border-color: darken(@border, 12%);
+  }
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    background-image: none;
+  }
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      background-color: @background;
+      border-color: @border
+    }
+  }
+}
+
+// Button sizes
+// -------------------------
+.button-size(@padding-vertical, @padding-horizontal, @font-size, @line-height, @border-radius) {
+  padding: @padding-vertical @padding-horizontal;
+  font-size: @font-size;
+  line-height: @line-height;
+  border-radius: @border-radius;
 }
 
 // OTHERS
