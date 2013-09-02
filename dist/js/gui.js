@@ -1008,10 +1008,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			var inputNode = $(this.obj) || undefined,
 				prop = [];
 			if(inputNode){
-				prop['left'] = inputNode.offset().left,
-				prop['top'] = inputNode.offset().top,
-				prop['h'] = parseInt(inputNode.outerHeight(),10),
-				prop['w'] = parseInt(inputNode.outerWidth(),10);
+				prop.left = inputNode.offset().left,
+				prop.top = inputNode.offset().top,
+				prop.h = parseInt(inputNode.outerHeight(),10),
+				prop.w = parseInt(inputNode.outerWidth(),10);
 			}
 			return prop;
 		},
@@ -1180,7 +1180,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		//tested
 		_setActiveDate : function(num){
-			this._setNewDate('date',parseInt(num));
+			this._setNewDate('date',parseInt(num,10));
 		},
 		//
 		_setInputVal : function(){
@@ -1207,23 +1207,23 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		//tested
 		_appendElem : function(){
 			if($('.' + this.defaults.mainWrapper).length === 0){
-				$('<div class=' + this.defaults.mainWrapper +' style="display:none;position: absolute;">\
-					<div class='+ this.defaults.header +'>\
-						<a class='+ this.defaults.prevYearBtn +'>&lt;&lt;</a>\
-						<a class='+ this.defaults.nextYearBtn +'>&gt;&gt;</a>\
-						<a class='+ this.defaults.prevMonthBtn +'>&lt;</a>\
-						<a class='+ this.defaults.nextMonthBtn +'>&gt;</a>\
-						<div class='+ this.defaults.title +'></div>\
-					</div>\
-					<table class='+ this.defaults.calender +'>\
-						<thead class='+ this.defaults.week +'>\
-							<tr></tr>\
-						</thead>\
-						<tbody class='+ this.defaults.dates +'>\
-							<tr></tr>\
-						</tbody>\
-					</table>\
-				</div>').appendTo(this.defaults.topNode);
+				$('<div class=' + this.defaults.mainWrapper +' style="display:none;position: absolute;">' + 
+					'<div class='+ this.defaults.header +'>' + 
+						'<a class='+ this.defaults.prevYearBtn +'>&lt;&lt;</a>' + 
+						'<a class='+ this.defaults.nextYearBtn +'>&gt;&gt;</a>' + 
+						'<a class='+ this.defaults.prevMonthBtn +'>&lt;</a>' + 
+						'<a class='+ this.defaults.nextMonthBtn +'>&gt;</a>' + 
+						'<div class='+ this.defaults.title +'></div>' + 
+					'</div>' + 
+					'<table class='+ this.defaults.calender +'>' + 
+						'<thead class='+ this.defaults.week +'>'+
+							'<tr></tr>' + 
+						'</thead>' + 
+						'<tbody class='+ this.defaults.dates +'>' + 
+							'<tr></tr>' + 
+						'</tbody>' + 
+					'</table>' + 
+				'</div>').appendTo(this.defaults.topNode);
 
 				this._eventHandler();
 
