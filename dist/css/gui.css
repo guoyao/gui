@@ -1536,18 +1536,10 @@ fieldset[disabled] .gui-btn {
   border-color: #cccccc;
 }
 
-.gui-btn-default:hover,
-.gui-btn-default:focus,
-.gui-btn-default:active,
-.gui-btn-default.active {
+.gui-btn-default:hover {
   color: #333333;
   background-color: #ebebeb;
   border-color: #adadad;
-}
-
-.gui-btn-default:active,
-.gui-btn-default.active {
-  background-image: none;
 }
 
 .gui-btn-default.disabled,
@@ -1575,18 +1567,10 @@ fieldset[disabled] .gui-btn-default.active {
   border-color: #357ebd;
 }
 
-.gui-btn-primary:hover,
-.gui-btn-primary:focus,
-.gui-btn-primary:active,
-.gui-btn-primary.active {
+.gui-btn-primary:hover {
   color: #ffffff;
   background-color: #3276b1;
   border-color: #285e8e;
-}
-
-.gui-btn-primary:active,
-.gui-btn-primary.active {
-  background-image: none;
 }
 
 .gui-btn-primary.disabled,
@@ -1614,18 +1598,10 @@ fieldset[disabled] .gui-btn-primary.active {
   border-color: #eea236;
 }
 
-.gui-btn-warning:hover,
-.gui-btn-warning:focus,
-.gui-btn-warning:active,
-.gui-btn-warning.active {
+.gui-btn-warning:hover {
   color: #ffffff;
   background-color: #ed9c28;
   border-color: #d58512;
-}
-
-.gui-btn-warning:active,
-.gui-btn-warning.active {
-  background-image: none;
 }
 
 .gui-btn-warning.disabled,
@@ -1653,18 +1629,10 @@ fieldset[disabled] .gui-btn-warning.active {
   border-color: #d43f3a;
 }
 
-.gui-btn-danger:hover,
-.gui-btn-danger:focus,
-.gui-btn-danger:active,
-.gui-btn-danger.active {
+.gui-btn-danger:hover {
   color: #ffffff;
   background-color: #d2322d;
   border-color: #ac2925;
-}
-
-.gui-btn-danger:active,
-.gui-btn-danger.active {
-  background-image: none;
 }
 
 .gui-btn-danger.disabled,
@@ -1692,18 +1660,10 @@ fieldset[disabled] .gui-btn-danger.active {
   border-color: #4cae4c;
 }
 
-.gui-btn-success:hover,
-.gui-btn-success:focus,
-.gui-btn-success:active,
-.gui-btn-success.active {
+.gui-btn-success:hover {
   color: #ffffff;
   background-color: #47a447;
   border-color: #398439;
-}
-
-.gui-btn-success:active,
-.gui-btn-success.active {
-  background-image: none;
 }
 
 .gui-btn-success.disabled,
@@ -1731,18 +1691,10 @@ fieldset[disabled] .gui-btn-success.active {
   border-color: #46b8da;
 }
 
-.gui-btn-info:hover,
-.gui-btn-info:focus,
-.gui-btn-info:active,
-.gui-btn-info.active {
+.gui-btn-info:hover {
   color: #ffffff;
   background-color: #39b3d7;
   border-color: #269abc;
-}
-
-.gui-btn-info:active,
-.gui-btn-info.active {
-  background-image: none;
 }
 
 .gui-btn-info.disabled,
@@ -1836,6 +1788,30 @@ input[type="submit"].gui-btn-block,
 input[type="reset"].gui-btn-block,
 input[type="button"].gui-btn-block {
   width: 100%;
+}
+
+.gui-btn-default-active {
+  background-color: #ebebeb;
+}
+
+.gui-btn-primary-active {
+  background-color: #3276b1;
+}
+
+.gui-btn-warning-active {
+  background-color: #ed9c28;
+}
+
+.gui-btn-danger-active {
+  background-color: #d2322d;
+}
+
+.gui-btn-success-active {
+  background-color: #47a447;
+}
+
+.gui-btn-info-active {
+  background-color: #39b3d7;
 }
 
 .gui-nav {
@@ -2122,13 +2098,11 @@ input[type="button"].gui-btn-block {
 }
 
 .gui-btn-bar {
-  position: relative;
   display: inline-block;
   vertical-align: middle;
 }
 
 .gui-btn-bar .gui-btn {
-  position: relative;
   float: left;
 }
 
@@ -2137,10 +2111,6 @@ input[type="button"].gui-btn-block {
 .gui-btn-bar .gui-btn:active,
 .gui-btn-bar .gui-btn.active {
   z-index: 2;
-}
-
-.gui-btn-bar .gui-btn:focus {
-  outline: none;
 }
 
 .gui-btn-bar .gui-btn + .gui-btn {

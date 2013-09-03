@@ -1465,7 +1465,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 /* ========================================================================
- * GUI: button.js v0.1.0
+ * GUI: button-bar.js v0.1.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -1487,10 +1487,45 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     "use strict";
 
     var $ = window.jQuery,
+        console = window.console,
         gui = window.gui,
         old = $.fn.guiButtonBar;
 
+    var GuiButtonBar = function (element) {
+        this.$element = $(element);
+    };
+
+    $.extend(GuiButtonBar.prototype, {});
+
     $.fn.guiButtonBar = function (option) {
+        var defaults = {
+            selectedIndex: -1
+            },
+            options = $.extend({}, defaults, option),
+            $buttons,
+            selectedItem,
+            buttonStyle;
+
+        this.each(function () {
+            if (options.selectedIndex > -1) {
+                $buttons = $(this).find(".gui-btn");
+                if (options.selectedIndex < $buttons.length) {
+                    selectedItem = $buttons[options.selectedIndex];
+                    buttonStyle = /gui\-btn\-[^\s]+/.exec(selectedItem.className);
+                    $(selectedItem).addClass(buttonStyle + "-active").attr("selected", true);
+                }
+            }
+        });
+
+        this.delegate(".gui-btn", "click", function () {
+            var $button = $(this);
+            buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
+            if (buttonStyle) {
+                $button.siblings().removeClass(buttonStyle + "-active").attr("selected", false);
+                $button.addClass(buttonStyle + "-active").attr("selected", true);
+            }
+        });
+
         return gui.plugin.patch($.fn.guiButtonBar, this, option);
     };
 
@@ -1599,16 +1634,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             }
             if (gui.browserInfo.version <= 6) { // lte IE 6
                 $$guiButton.each(function () {
-                    var $this = $(this);
-                    var backgroundColor = $this.css("background-color");
-                    var hoverBackgroundColor = gui.darken(backgroundColor, 0.08);
+                    var $this = $(this),
+                        buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
                     if ($this.hasClass("disabled") || $this.attr("disabled")) {
                         $this.css("cursor", "not-allowed");
                     } else {
                         $this.hover(function () {
-                            $this.css("background-color", hoverBackgroundColor);
+                            $this.addClass(buttonStyle + "-active");
                         }, function () {
-                            $this.css("background-color", backgroundColor);
+                            if (!$this.attr("selected")) {
+                                $this.removeClass(buttonStyle + "-active");
+                            }
                         });
                     }
                 });

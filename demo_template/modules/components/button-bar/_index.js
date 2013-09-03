@@ -15,10 +15,13 @@ require(["jquery", "prettify", "gui"], function ($, prettify) {
         if (gui.browserInfo.version <= 8) { // lte IE 8
             $(".bs-callout p:last-child").css("margin-bottom", 0);
         }
-        if (gui.browserInfo.version <= 6) { // lte IE 6
-            $(".gui-btn-bar").guiButtonBar();
-        }
     }
+
+    $(".gui-btn-bar").guiButtonBar({
+        selectedIndex: 0
+    }).click(function (e) {
+            console.debug($(e.target).text());
+        });
 
     prettify.prettyPrint();
 });

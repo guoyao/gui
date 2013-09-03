@@ -223,17 +223,10 @@
   background-color: @background;
   border-color: @border;
 
-  &:hover,
-  &:focus,
-  &:active,
-  &.active {
+  &:hover {
     color: @color;
     background-color: darken(@background, 8%);
     border-color: darken(@border, 12%);
-  }
-  &:active,
-  &.active {
-    background-image: none;
   }
   &.disabled,
   &[disabled],
