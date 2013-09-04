@@ -95,16 +95,17 @@
             }
             if (gui.browserInfo.version <= 6) { // lte IE 6
                 $$guiButton.each(function () {
-                    var $this = $(this);
-                    var backgroundColor = $this.css("background-color");
-                    var hoverBackgroundColor = gui.darken(backgroundColor, 0.08);
+                    var $this = $(this),
+                        buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
                     if ($this.hasClass("disabled") || $this.attr("disabled")) {
                         $this.css("cursor", "not-allowed");
                     } else {
                         $this.hover(function () {
-                            $this.css("background-color", hoverBackgroundColor);
+                            $this.addClass(buttonStyle + "-active");
                         }, function () {
-                            $this.css("background-color", backgroundColor);
+                            if (!$this.attr("selected")) {
+                                $this.removeClass(buttonStyle + "-active");
+                            }
                         });
                     }
                 });

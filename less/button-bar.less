@@ -4,11 +4,9 @@
 
 // Make the div behave like a button
 .gui-btn-bar {
-  position: relative;
   display: inline-block;
   vertical-align: middle; // match .gui-btn alignment given font-size hack above
   .gui-btn {
-    position: relative;
     float: left;
     // Bring the "active" button to the front
     &:hover,
@@ -16,10 +14,6 @@
     &:active,
     &.active {
       z-index: 2;
-    }
-    &:focus {
-      // Remove focus outline when dropdown JS adds it after closing the menu
-      outline: none;
     }
   }
 }

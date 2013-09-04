@@ -1,5 +1,5 @@
 /* ========================================================================
- * GUI: button.js v0.1.0
+ * GUI: button-bar.js v0.1.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -21,10 +21,39 @@
     "use strict";
 
     var $ = window.jQuery,
+        console = window.console,
         gui = window.gui,
         old = $.fn.guiButtonBar;
 
     $.fn.guiButtonBar = function (option) {
+        var defaults = {
+            selectedIndex: -1
+            },
+            options = $.extend({}, defaults, option),
+            $buttons,
+            selectedItem,
+            buttonStyle;
+
+        this.each(function () {
+            if (options.selectedIndex > -1) {
+                $buttons = $(this).find(".gui-btn");
+                if (options.selectedIndex < $buttons.length) {
+                    selectedItem = $buttons[options.selectedIndex];
+                    buttonStyle = /gui\-btn\-[^\s]+/.exec(selectedItem.className);
+                    $(selectedItem).addClass(buttonStyle + "-active").attr("selected", true);
+                }
+            }
+        });
+
+        this.delegate(".gui-btn", "click", function () {
+            var $button = $(this);
+            buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
+            if (buttonStyle) {
+                $button.siblings().removeClass(buttonStyle + "-active").attr("selected", false);
+                $button.addClass(buttonStyle + "-active").attr("selected", true);
+            }
+        });
+
         return gui.plugin.patch($.fn.guiButtonBar, this, option);
     };
 
