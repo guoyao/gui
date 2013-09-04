@@ -340,12 +340,12 @@
 		weekTitle : ['日','一','二','三','四','五','六']
 	}
 
+	//for debug
+	$.fn.guiDatePicker.debug = module;
+
 	$.fn.guiDatePicker.noConflict = function () {
 		$.fn.guiDatePicker = old;
 		return this;
 	};
-
-	//for debug
-	$.fn.guiDatePicker.debug = module;
 
 })(window);
