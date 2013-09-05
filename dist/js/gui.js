@@ -67,17 +67,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 })()
             },
             plugin = {
-                patch: function (plugin, $$elements, option) {
+                patch: function (plugin, $$elements, options) {
                     if (browserInfo.isIE && !!plugin && $.isFunction(plugin.iePatch)) {
-                        plugin.iePatch($$elements, option);
+                        plugin.iePatch($$elements, options);
                     }
                     return $$elements;
                 },
-                isPluginMethodCall: function (option) {
-                    return typeof option === "string";
+                isPluginMethodCall: function (options) {
+                    return typeof options === "string";
                 },
-                isPluginInitialize: function (option) {
-                    return option === undefined || option === null || typeof option === "object";
+                isPluginInitialize: function (options) {
+                    return options === undefined || options === null || typeof options === "object";
                 }
             };
 
@@ -190,80 +190,36 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         gui = window.gui,
         old = $.fn.guiNav;
 
-    var GuiNav = function (element) {
-        this.$element = $(element);
-    };
-
-//    $.extend(GuiNav.prototype, {});
-
-    $.fn.guiNav = function (option) {
+    $.fn.guiNav = function (options) {
 
         var defaults = {
-                backgroundColor: "#eeeeee",
-                border: "",
-                itemWidth: "120px",
-                itemHeight: "30px",
-                itemOverColor: "#d5d5d5",
-                itemFadeIn: true,
-                animationDuration: 500
-            },
-            isMethodCall = gui.plugin.isPluginMethodCall(option);
+            styleName: "",
+            itemFadeIn: true,
+            animationDuration: 500
+        };
 
-        function initEach($guiNav) {
-            var isVertical = $guiNav.hasClass("gui-nav-vertical"),
-                options = $.extend({}, defaults, option, $guiNav.data("option"));
-
-            $guiNav.css({
-                backgroundColor: options.backgroundColor,
-                border: options.border
-            }).find("ul").css({
-                    backgroundColor: options.backgroundColor,
-                    border: options.border
-                });
-
-            $guiNav.find("a").css({
-                width: options.itemWidth,
-                height: options.itemHeight,
-                lineHeight: options.itemHeight
-            }).hover(function () {
-                    $(this).css("backgroundColor", options.itemOverColor);
-                }, function () {
-                    $(this).css("backgroundColor", options.backgroundColor);
-                });
-
-            if (isVertical) {
-                $guiNav.css("width", options.itemWidth)
-                    .find("ul").css("left", options.itemWidth);
-            } else {
-                $guiNav.css("height", options.itemHeight)
-                    .find("ul ul").css("left", options.itemWidth);
-            }
-
-            if (options.itemFadeIn) {
-                $guiNav.find("li").hover(function () {
-                    $(this).children("ul").css("opacity", 0).animate({opacity: 1}, options.animationDuration);
-                }, function () {
-                });
-            }
-        }
+        options = $.extend(defaults, options);
 
         this.each(function () {
-            var $guiNav = $(this);
-            var data = $guiNav.data('gui.nav');
-            if (!data) {
-                $guiNav.data('gui.nav', (data = new GuiNav(this)))
+            var $guiNav = $(this),
+                isVertical = $guiNav.hasClass("gui-nav-vertical");
+
+            if (options.styleName) {
+                $guiNav.addClass(options.styleName);
             }
-            if (isMethodCall) {
-                data[option]();
-            } else {
-                initEach($guiNav);
-            }
+
+            $guiNav.find("li").mouseenter(function () {
+                var $navItem = $(this),
+                    $$subMenu = $navItem.children("ul");
+                $$subMenu.css("left", (isVertical || !$navItem.parent().hasClass("gui-nav")) ? $navItem.width() : 0);
+                if (options.itemFadeIn) {
+                    $$subMenu.css("opacity", 0).animate({opacity: 1}, options.animationDuration);
+                }
+            });
         });
 
-        return gui.plugin.patch($.fn.guiNav, this, option);
+        return gui.plugin.patch($.fn.guiNav, this, options);
     };
-
-    $.fn.guiNav.Constructor = GuiNav;
 
     // NO CONFLICT
     // ===============
@@ -1491,12 +1447,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         gui = window.gui,
         old = $.fn.guiButtonBar;
 
-    var GuiButtonBar = function (element) {
-        this.$element = $(element);
-    };
-
-    $.extend(GuiButtonBar.prototype, {});
-
     $.fn.guiButtonBar = function (option) {
         var defaults = {
             selectedIndex: -1
@@ -1584,23 +1534,60 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // Navs
     // --------------------------------------------------
 
-    if(!!$.fn.guiNav) {
-        $.fn.guiNav.iePatch = function ($$guiNav, option) {
-            if (gui.plugin.isPluginInitialize(option)) {
-                if (gui.browserInfo.version <= 6) { // lte IE 6
-                    $$guiNav.find("li").hover(function () {
-                        $(this).children("ul").css("display", "block");
-                    }, function () {
-                        $(this).children("ul").css("display", "none");
-                    });
-                    $$guiNav.each(function () {
-                        var $guiNav = $(this),
-                            isVertical = $guiNav.hasClass("gui-nav-vertical");
-                        if (!isVertical) {
-                            $guiNav.children("li").css("float", "left");
-                        }
-                    });
-                }
+    if (!!$.fn.guiNav) {
+        $.fn.guiNav.iePatch = function ($$guiNav, options) {
+            if (gui.browserInfo.version <= 6) { // lte IE 6
+                $$guiNav.find("li").hover(function () {
+                    $(this).children("ul").css("display", "block");
+                }, function () {
+                    $(this).children("ul").css("display", "none");
+                });
+                $$guiNav.each(function () {
+                    var $guiNav = $(this),
+                        isVertical = $guiNav.hasClass("gui-nav-vertical");
+                    if (!isVertical) {
+                        $guiNav.children("li").css("float", "left");
+                        $guiNav.find("li li").each(function () {
+                            var $this = $(this);
+                            $this.width($this.parent().width());
+                            if ($this.children("ul").length > 0) {
+                                $this.css("margin-bottom", "-3px");
+                            }
+                        });
+                    } else {
+                        $guiNav.children("li").css("margin-left", "-16px").width($guiNav.width());
+                        $guiNav.find("li").mouseenter(function () {
+                            var $$subMenu = $(this).children("ul");
+                            $$subMenu.children("li").width($$subMenu.width());
+                        }).each(function () {
+                                var $this = $(this);
+                                if ($this.children("ul").length > 0) {
+                                    $this.css("margin-bottom", "-3px");
+                                }
+                            });
+                    }
+                });
+            } else  if (gui.browserInfo.version <= 7) {
+                $$guiNav.each(function () {
+                    var $guiNav = $(this),
+                        isVertical = $guiNav.hasClass("gui-nav-vertical");
+                    if (isVertical) {
+                        $guiNav.children("li").css("margin-left", "-16px").width($guiNav.width()).each(function () {
+                            var $this = $(this);
+                            if ($this.children("ul").length > 0) {
+                                $this.css("margin-bottom", "-3px");
+                            }
+                        });
+                    }
+                });
+            } else  if (gui.browserInfo.version <= 8) {
+                $$guiNav.each(function () {
+                    var $guiNav = $(this),
+                        isVertical = $guiNav.hasClass("gui-nav-vertical");
+                    if (!isVertical) {
+                        $guiNav.children("li:not(:first-child)").css("margin-left", "-4px");
+                    }
+                });
             }
             return $$guiNav;
         };
@@ -1610,9 +1597,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // Tabs
     // --------------------------------------------------
 
-    if(!!$.fn.guiTab) {
-        $.fn.guiTab.iePatch = function ($$guiTab, option) {
-            if (gui.plugin.isPluginInitialize(option)) {
+    if (!!$.fn.guiTab) {
+        $.fn.guiTab.iePatch = function ($$guiTab, options) {
+            if (gui.plugin.isPluginInitialize(options)) {
                 if (gui.browserInfo.version <= 7) { // lte IE 7
                     setMaxHeight($$guiTab.children(".tabs"), "li", -1);
                 }
@@ -1625,8 +1612,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // Button
     // --------------------------------------------------
 
-    if(!!$.fn.guiButton) {
-        $.fn.guiButton.iePatch = function ($$guiButton, option) {
+    if (!!$.fn.guiButton) {
+        $.fn.guiButton.iePatch = function ($$guiButton, options) {
             if (gui.browserInfo.version <= 9) {
                 $("a.disabled").click(function () {
                     return false;
@@ -1657,8 +1644,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // Button bar
     // --------------------------------------------------
 
-    if(!!$.fn.guiButtonBar) {
-        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, option) {
+    if (!!$.fn.guiButtonBar) {
+        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, options) {
             if (gui.browserInfo.version <= 6) { // lte IE 6
                 $$guiButtonBar.find(".gui-btn + .gui-btn").css("margin-left", "-1px");
             }

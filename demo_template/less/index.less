@@ -23,20 +23,32 @@ a {
   left: 0;
   z-index: 100;
   width: 100%;
-  background-color: #000000;
+  background-color: #000;
   a {
     color: @gray-light;
     &:hover, &:focus, &.active {
-      color: #ffffff;
+      color: #fff;
+    }
+  }
+  .gui-nav {
+    background-color: #000;
+    border: 0;
+    a {
+      padding: 0 30px;
+      height: 38px;
+      line-height: 38px;
+      &:hover {
+        background-color: #000;
+      }
     }
   }
 }
 
 #project-description {
-  color:  #ffffff;
+  color:  #fff;
   text-align: center;
   background-color: #2C143F;
-  margin-top: 40px;
+  margin-top: 38px;
   _margin-top: 0;
   margin-bottom: 15px;
   padding-top: @padding-base-vertical;
@@ -44,7 +56,7 @@ a {
     margin-right: @padding-large-horizontal;
     color: #dfdfdf;
     &:hover, &:focus {
-      color: #ffffff;
+      color: #fff;
     }
   }
   span {
@@ -155,7 +167,6 @@ a {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
 }
-
 
 // ie-patch
 //-----------------------------------------------------------------------

@@ -25,80 +25,36 @@
         gui = window.gui,
         old = $.fn.guiNav;
 
-    var GuiNav = function (element) {
-        this.$element = $(element);
-    };
-
-//    $.extend(GuiNav.prototype, {});
-
-    $.fn.guiNav = function (option) {
+    $.fn.guiNav = function (options) {
 
         var defaults = {
-                backgroundColor: "#eeeeee",
-                border: "",
-                itemWidth: "120px",
-                itemHeight: "30px",
-                itemOverColor: "#d5d5d5",
-                itemFadeIn: true,
-                animationDuration: 500
-            },
-            isMethodCall = gui.plugin.isPluginMethodCall(option);
+            styleName: "",
+            itemFadeIn: true,
+            animationDuration: 500
+        };
 
-        function initEach($guiNav) {
-            var isVertical = $guiNav.hasClass("gui-nav-vertical"),
-                options = $.extend({}, defaults, option, $guiNav.data("option"));
-
-            $guiNav.css({
-                backgroundColor: options.backgroundColor,
-                border: options.border
-            }).find("ul").css({
-                    backgroundColor: options.backgroundColor,
-                    border: options.border
-                });
-
-            $guiNav.find("a").css({
-                width: options.itemWidth,
-                height: options.itemHeight,
-                lineHeight: options.itemHeight
-            }).hover(function () {
-                    $(this).css("backgroundColor", options.itemOverColor);
-                }, function () {
-                    $(this).css("backgroundColor", options.backgroundColor);
-                });
-
-            if (isVertical) {
-                $guiNav.css("width", options.itemWidth)
-                    .find("ul").css("left", options.itemWidth);
-            } else {
-                $guiNav.css("height", options.itemHeight)
-                    .find("ul ul").css("left", options.itemWidth);
-            }
-
-            if (options.itemFadeIn) {
-                $guiNav.find("li").hover(function () {
-                    $(this).children("ul").css("opacity", 0).animate({opacity: 1}, options.animationDuration);
-                }, function () {
-                });
-            }
-        }
+        options = $.extend(defaults, options);
 
         this.each(function () {
-            var $guiNav = $(this);
-            var data = $guiNav.data('gui.nav');
-            if (!data) {
-                $guiNav.data('gui.nav', (data = new GuiNav(this)))
+            var $guiNav = $(this),
+                isVertical = $guiNav.hasClass("gui-nav-vertical");
+
+            if (options.styleName) {
+                $guiNav.addClass(options.styleName);
             }
-            if (isMethodCall) {
-                data[option]();
-            } else {
-                initEach($guiNav);
-            }
+
+            $guiNav.find("li").mouseenter(function () {
+                var $navItem = $(this),
+                    $$subMenu = $navItem.children("ul");
+                $$subMenu.css("left", (isVertical || !$navItem.parent().hasClass("gui-nav")) ? $navItem.width() : 0);
+                if (options.itemFadeIn) {
+                    $$subMenu.css("opacity", 0).animate({opacity: 1}, options.animationDuration);
+                }
+            });
         });
 
-        return gui.plugin.patch($.fn.guiNav, this, option);
+        return gui.plugin.patch($.fn.guiNav, this, options);
     };
-
-    $.fn.guiNav.Constructor = GuiNav;
 
     // NO CONFLICT
     // ===============

@@ -7,8 +7,15 @@
 // --------------------------------------------------
 
 .gui-nav {
-  li {
-    *display: inline; //  hack for ie6 at horizontal state(second layer only), and ie6, 7 at vertical state
+  *display: inline;
+  > li {
+    *float: left;
+  }
+}
+
+.gui-nav-vertical {
+  > li {
+    *float: none;
   }
 }
 

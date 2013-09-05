@@ -1815,20 +1815,18 @@ input[type="button"].gui-btn-block {
 }
 
 .gui-nav {
+  display: inline-block;
   padding: 0;
   margin: 0;
   list-style-type: none;
   background-color: #eeeeee;
+  border: 1px solid #d1d1d1;
 }
 
 .gui-nav a {
   display: block;
-  width: 120px;
-  height: 30px;
-  overflow: hidden;
-  line-height: 30px;
+  padding: 6px 24px;
   text-align: center;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -1838,6 +1836,8 @@ input[type="button"].gui-btn-block {
 
 .gui-nav li {
   position: relative;
+  padding: 0;
+  margin: 0;
 }
 
 .gui-nav li:hover > ul {
@@ -1845,7 +1845,11 @@ input[type="button"].gui-btn-block {
 }
 
 .gui-nav > li {
-  float: left;
+  display: inline-block;
+}
+
+.gui-nav > li:not(:first-child) {
+  margin-left: -4px;
 }
 
 .gui-nav ul {
@@ -1859,17 +1863,18 @@ input[type="button"].gui-btn-block {
 
 .gui-nav ul ul {
   top: 0;
-  left: 120px;
 }
 
 .gui-nav-vertical > li {
-  float: none;
-  width: 120px;
+  display: block;
+}
+
+.gui-nav-vertical > li:not(:first-child) {
+  margin-left: 0;
 }
 
 .gui-nav-vertical ul {
   top: 0;
-  left: 120px;
 }
 
 .gui-tab .tabs {
@@ -2250,8 +2255,16 @@ input[type="button"].gui-btn-block {
  * css hack for ie explorer
  */
 
-.gui-nav li {
+.gui-nav {
   *display: inline;
+}
+
+.gui-nav > li {
+  *float: left;
+}
+
+.gui-nav-vertical > li {
+  *float: none;
 }
 
 .gui-tab .tabs li {

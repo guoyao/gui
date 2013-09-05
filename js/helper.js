@@ -58,17 +58,17 @@
                 })()
             },
             plugin = {
-                patch: function (plugin, $$elements, option) {
+                patch: function (plugin, $$elements, options) {
                     if (browserInfo.isIE && !!plugin && $.isFunction(plugin.iePatch)) {
-                        plugin.iePatch($$elements, option);
+                        plugin.iePatch($$elements, options);
                     }
                     return $$elements;
                 },
-                isPluginMethodCall: function (option) {
-                    return typeof option === "string";
+                isPluginMethodCall: function (options) {
+                    return typeof options === "string";
                 },
-                isPluginInitialize: function (option) {
-                    return option === undefined || option === null || typeof option === "object";
+                isPluginInitialize: function (options) {
+                    return options === undefined || options === null || typeof options === "object";
                 }
             };
 
