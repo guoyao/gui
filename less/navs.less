@@ -6,26 +6,31 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  background-color: @nav-theme-color;
+  display: inline-block;
+  background-color: @nav-background-color;
+  border: @border-weight @border-type @border-color;
   a {
     display: block;
     text-align: center;
-    line-height: @nav-item-height;
-    height: @nav-item-height;
-    width: @nav-item-width;
-    .text-overflow;
+    padding: @padding-base-vertical @padding-base-horizontal * 2;
+    white-space: nowrap;
     &:hover {
       background-color: @nav-item-hover-color;
     }
   }
   li {
     position: relative;
+    margin: 0;
+    padding: 0;
     &:hover > ul { // ie6 does't support :hover class except link tag('a'), we use js to imitate this feature for ie6
       display: block;
     }
   }
   > li { // ie6 does't support direct child selecotr('>'), we use js to imitate this feature for ie6
-    float: left;
+    display: inline-block;
+    &:not(:first-child) { // inline-block bug: occurs in latest firefox(23.0.1), chrome(29.0.1547.57), opera(16.0), ie(8, 9)
+      margin-left: -4px;
+    }
   }
   ul {
     display: none;
@@ -33,21 +38,21 @@
     margin: 0;
     padding: 0;
     list-style-type: none;
-    background-color: @nav-theme-color;
+    background-color: @nav-background-color;
     ul {
       top: 0;
-      left: @nav-item-width;
     }
   }
 }
 
 .gui-nav-vertical {
   > li {
-    float: none;
-    width: @nav-item-width;
+    display: block;
+    &:not(:first-child) {
+      margin-left: 0;
+    }
   }
   ul {
     top: 0;
-    left: @nav-item-width;
   }
 }

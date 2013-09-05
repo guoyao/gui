@@ -45,23 +45,60 @@
     // Navs
     // --------------------------------------------------
 
-    if(!!$.fn.guiNav) {
-        $.fn.guiNav.iePatch = function ($$guiNav, option) {
-            if (gui.plugin.isPluginInitialize(option)) {
-                if (gui.browserInfo.version <= 6) { // lte IE 6
-                    $$guiNav.find("li").hover(function () {
-                        $(this).children("ul").css("display", "block");
-                    }, function () {
-                        $(this).children("ul").css("display", "none");
-                    });
-                    $$guiNav.each(function () {
-                        var $guiNav = $(this),
-                            isVertical = $guiNav.hasClass("gui-nav-vertical");
-                        if (!isVertical) {
-                            $guiNav.children("li").css("float", "left");
-                        }
-                    });
-                }
+    if (!!$.fn.guiNav) {
+        $.fn.guiNav.iePatch = function ($$guiNav, options) {
+            if (gui.browserInfo.version <= 6) { // lte IE 6
+                $$guiNav.find("li").hover(function () {
+                    $(this).children("ul").css("display", "block");
+                }, function () {
+                    $(this).children("ul").css("display", "none");
+                });
+                $$guiNav.each(function () {
+                    var $guiNav = $(this),
+                        isVertical = $guiNav.hasClass("gui-nav-vertical");
+                    if (!isVertical) {
+                        $guiNav.children("li").css("float", "left");
+                        $guiNav.find("li li").each(function () {
+                            var $this = $(this);
+                            $this.width($this.parent().width());
+                            if ($this.children("ul").length > 0) {
+                                $this.css("margin-bottom", "-3px");
+                            }
+                        });
+                    } else {
+                        $guiNav.children("li").css("margin-left", "-16px").width($guiNav.width());
+                        $guiNav.find("li").mouseenter(function () {
+                            var $$subMenu = $(this).children("ul");
+                            $$subMenu.children("li").width($$subMenu.width());
+                        }).each(function () {
+                                var $this = $(this);
+                                if ($this.children("ul").length > 0) {
+                                    $this.css("margin-bottom", "-3px");
+                                }
+                            });
+                    }
+                });
+            } else  if (gui.browserInfo.version <= 7) {
+                $$guiNav.each(function () {
+                    var $guiNav = $(this),
+                        isVertical = $guiNav.hasClass("gui-nav-vertical");
+                    if (isVertical) {
+                        $guiNav.children("li").css("margin-left", "-16px").width($guiNav.width()).each(function () {
+                            var $this = $(this);
+                            if ($this.children("ul").length > 0) {
+                                $this.css("margin-bottom", "-3px");
+                            }
+                        });
+                    }
+                });
+            } else  if (gui.browserInfo.version <= 8) {
+                $$guiNav.each(function () {
+                    var $guiNav = $(this),
+                        isVertical = $guiNav.hasClass("gui-nav-vertical");
+                    if (!isVertical) {
+                        $guiNav.children("li:not(:first-child)").css("margin-left", "-4px");
+                    }
+                });
             }
             return $$guiNav;
         };
@@ -71,9 +108,9 @@
     // Tabs
     // --------------------------------------------------
 
-    if(!!$.fn.guiTab) {
-        $.fn.guiTab.iePatch = function ($$guiTab, option) {
-            if (gui.plugin.isPluginInitialize(option)) {
+    if (!!$.fn.guiTab) {
+        $.fn.guiTab.iePatch = function ($$guiTab, options) {
+            if (gui.plugin.isPluginInitialize(options)) {
                 if (gui.browserInfo.version <= 7) { // lte IE 7
                     setMaxHeight($$guiTab.children(".tabs"), "li", -1);
                 }
@@ -86,8 +123,8 @@
     // Button
     // --------------------------------------------------
 
-    if(!!$.fn.guiButton) {
-        $.fn.guiButton.iePatch = function ($$guiButton, option) {
+    if (!!$.fn.guiButton) {
+        $.fn.guiButton.iePatch = function ($$guiButton, options) {
             if (gui.browserInfo.version <= 9) {
                 $("a.disabled").click(function () {
                     return false;
@@ -118,8 +155,8 @@
     // Button bar
     // --------------------------------------------------
 
-    if(!!$.fn.guiButtonBar) {
-        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, option) {
+    if (!!$.fn.guiButtonBar) {
+        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, options) {
             if (gui.browserInfo.version <= 6) { // lte IE 6
                 $$guiButtonBar.find(".gui-btn + .gui-btn").css("margin-left", "-1px");
             }
