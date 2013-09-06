@@ -26,5 +26,8 @@ require(["jquery", "prettify", "gui"], function ($) {
     $("#top-nav .gui-nav").guiNav();
     if (gui.browserInfo.isIE && gui.browserInfo.version <= 6) {
         $("#navigator").find("li:last-child a").css("border-bottom", 0);
+        $("#top-nav").guiAffix({
+            offset: 0
+        });
     }
 });
