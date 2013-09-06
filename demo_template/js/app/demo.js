@@ -39,7 +39,7 @@ define(["jquery"], function ($) {
             return false;
         });
 
-        $navigator.find("li:first-child a").trigger("click");
+        $navigator.find("li:last-child a").trigger("click");
 
         return initializer;
     };

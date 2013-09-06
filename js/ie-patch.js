@@ -180,14 +180,14 @@
                     if (!data.affixed) {
                         $this.data("affixed", true);
                         $window.on("scroll.gui.affix.data-api", function () {
-                            if (data.offset.top == 0 || data.offset.top) {
+                            if (data.offset.top === 0 || data.offset.top) {
                                 $this.css("top", $window.scrollTop() + parseInt(data.offset.top, 10) + "px");
-                            } else if (data.offset.bottom == 0 || data.offset.bottom) {
+                            } else if (data.offset.bottom === 0 || data.offset.bottom) {
                                 $this.css("top", $window.scrollTop() + $window.height() - $this.outerHeight() - parseInt(data.offset.bottom, 10) + "px");
                             }
-                            if (data.offset.left == 0 || data.offset.left) {
+                            if (data.offset.left === 0 || data.offset.left) {
                                 $this.css("left", $window.scrollLeft() + parseInt(data.offset.left, 10) + "px");
-                            } else if (data.offset.right == 0 || data.offset.right) {
+                            } else if (data.offset.right === 0 || data.offset.right) {
                                 $this.css("left", $window.scrollLeft() + $window.width() - $this.outerWidth() - parseInt(data.offset.right, 10) + "px");
                             }
                         });

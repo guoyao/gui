@@ -33,10 +33,10 @@
             if (typeof data.offset != "object") {
                 data.offset = {top: data.offset, left: data.offset};
             }
-            if (data.offsetTop == 0 || data.offsetTop) data.offset.top = data.offsetTop;
-            if (data.offsetBottom == 0 || data.offsetBottom) data.offset.bottom = data.offsetBottom;
-            if (data.offsetLeft == 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
-            if (data.offsetRight == 0 || data.offsetRight) data.offset.right = data.offsetRight;
+            if (data.offsetTop === 0 || data.offsetTop) data.offset.top = data.offsetTop;
+            if (data.offsetBottom === 0 || data.offsetBottom) data.offset.bottom = data.offsetBottom;
+            if (data.offsetLeft === 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
+            if (data.offsetRight === 0 || data.offsetRight) data.offset.right = data.offsetRight;
 
             if (options) {
                 if (typeof options.offset === "object") {
