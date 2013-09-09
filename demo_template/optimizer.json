@@ -18,6 +18,11 @@
             "name": "../css",
             "include": ["app/css-main"],
             "exclude": ["../common"]
+        },
+        {
+            "name": "../javascript",
+            "include": ["app/javascript-main"],
+            "exclude": ["../common"]
         }
     ]
 }

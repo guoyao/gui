@@ -2299,3 +2299,7 @@ input[type="button"].gui-btn-block {
 .gui-btn-bar .gui-btn {
   *margin-right: 0;
 }
+
+html {
+  _background-image: url(about:blank);
+}
