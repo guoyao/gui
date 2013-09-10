@@ -21,7 +21,7 @@
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 /*!
@@ -35,7 +35,7 @@
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 /*! normalize.css v1.1.2 | MIT License | git.io/normalize */
@@ -585,7 +585,7 @@ table {
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 * {
@@ -628,8 +628,7 @@ a:focus {
 }
 
 a:focus {
-  outline: thin dotted #333
-;
+  outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -652,7 +651,7 @@ hr {
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 p {
@@ -1475,7 +1474,7 @@ pre code {
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 .gui-btn {
@@ -1499,14 +1498,10 @@ pre code {
 }
 
 .gui-btn:focus {
-  outline: thin dotted #333
-;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
+  outline: none;
 }
 
-.gui-btn:hover,
-.gui-btn:focus {
+.gui-btn:hover {
   color: #333333;
   text-decoration: none;
 }
@@ -1536,7 +1531,9 @@ fieldset[disabled] .gui-btn {
   border-color: #cccccc;
 }
 
-.gui-btn-default:hover {
+.gui-btn-default:hover,
+.gui-btn-default:active,
+.gui-btn-default.active {
   color: #333333;
   background-color: #ebebeb;
   border-color: #adadad;
@@ -1567,7 +1564,9 @@ fieldset[disabled] .gui-btn-default.active {
   border-color: #357ebd;
 }
 
-.gui-btn-primary:hover {
+.gui-btn-primary:hover,
+.gui-btn-primary:active,
+.gui-btn-primary.active {
   color: #ffffff;
   background-color: #3276b1;
   border-color: #285e8e;
@@ -1598,7 +1597,9 @@ fieldset[disabled] .gui-btn-primary.active {
   border-color: #eea236;
 }
 
-.gui-btn-warning:hover {
+.gui-btn-warning:hover,
+.gui-btn-warning:active,
+.gui-btn-warning.active {
   color: #ffffff;
   background-color: #ed9c28;
   border-color: #d58512;
@@ -1629,7 +1630,9 @@ fieldset[disabled] .gui-btn-warning.active {
   border-color: #d43f3a;
 }
 
-.gui-btn-danger:hover {
+.gui-btn-danger:hover,
+.gui-btn-danger:active,
+.gui-btn-danger.active {
   color: #ffffff;
   background-color: #d2322d;
   border-color: #ac2925;
@@ -1660,7 +1663,9 @@ fieldset[disabled] .gui-btn-danger.active {
   border-color: #4cae4c;
 }
 
-.gui-btn-success:hover {
+.gui-btn-success:hover,
+.gui-btn-success:active,
+.gui-btn-success.active {
   color: #ffffff;
   background-color: #47a447;
   border-color: #398439;
@@ -1691,7 +1696,9 @@ fieldset[disabled] .gui-btn-success.active {
   border-color: #46b8da;
 }
 
-.gui-btn-info:hover {
+.gui-btn-info:hover,
+.gui-btn-info:active,
+.gui-btn-info.active {
   color: #ffffff;
   background-color: #39b3d7;
   border-color: #269abc;
@@ -1788,30 +1795,6 @@ input[type="submit"].gui-btn-block,
 input[type="reset"].gui-btn-block,
 input[type="button"].gui-btn-block {
   width: 100%;
-}
-
-.gui-btn-default-active {
-  background-color: #ebebeb;
-}
-
-.gui-btn-primary-active {
-  background-color: #3276b1;
-}
-
-.gui-btn-warning-active {
-  background-color: #ed9c28;
-}
-
-.gui-btn-danger-active {
-  background-color: #d2322d;
-}
-
-.gui-btn-success-active {
-  background-color: #47a447;
-}
-
-.gui-btn-info-active {
-  background-color: #39b3d7;
 }
 
 .gui-nav {
@@ -2073,7 +2056,7 @@ input[type="button"].gui-btn-block {
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 .well {
@@ -2103,11 +2086,13 @@ input[type="button"].gui-btn-block {
 }
 
 .gui-btn-bar {
+  position: relative;
   display: inline-block;
   vertical-align: middle;
 }
 
 .gui-btn-bar .gui-btn {
+  position: relative;
   float: left;
 }
 
@@ -2116,6 +2101,10 @@ input[type="button"].gui-btn-block {
 .gui-btn-bar .gui-btn:active,
 .gui-btn-bar .gui-btn.active {
   z-index: 2;
+}
+
+.gui-btn-bar .gui-btn:focus {
+  outline: none;
 }
 
 .gui-btn-bar .gui-btn + .gui-btn {
@@ -2138,6 +2127,11 @@ input[type="button"].gui-btn-block {
 .gui-btn-bar .gui-btn:last-child:not(:first-child) {
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
+}
+
+[data-toggle="buttons"] > .gui-btn > input[type="radio"],
+[data-toggle="buttons"] > .gui-btn > input[type="checkbox"] {
+  display: none;
 }
 
 .gui-date-picker {

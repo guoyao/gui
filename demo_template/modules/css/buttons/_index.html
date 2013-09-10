@@ -101,7 +101,7 @@
   </p>
   <pre class="prettyprint">&lt;button type="button" class="gui-btn gui-btn-lg gui-btn-primary" disabled="disabled"&gt;Primary button&lt;/button&gt;
 &lt;button type="button" class="gui-btn gui-btn-default gui-btn-lg" disabled="disabled"&gt;Button&lt;/button&gt;</pre>
-  <div class="bs-callout bs-callout-danger">
+  <div class="gui-callout gui-callout-danger">
     <h4>Cross-browser compatibility</h4>
     <p>If you add the <code>disabled</code> attribute to a <code>&lt;button&gt;</code>, Internet Explorer 9 and below will render text gray with a nasty text-shadow that we cannot fix.</p>
   </div>
@@ -117,7 +117,7 @@
   <p>
     We use <code>.disabled</code> as a utility class here, similar to the common <code>.active</code> class, so no prefix is required.
   </p>
-  <div class="bs-callout bs-callout-warning">
+  <div class="gui-callout gui-callout-warning">
     <h4>Link functionality not impacted</h4>
     <p>This class will only change the <code>&lt;a&gt;</code>'s appearance, not its functionality. Use custom JavaScript to disable links here.</p>
   </div>
@@ -134,14 +134,14 @@
 &lt;button class="gui-btn gui-btn-default" type="submit"&gt;Button&lt;/button&gt;
 &lt;input class="gui-btn gui-btn-default" type="button" value="Input"&gt;
 &lt;input class="gui-btn gui-btn-default" type="submit" value="Submit"&gt;</pre>
-  <div class="bs-callout bs-callout-warning">
+  <div class="gui-callout gui-callout-warning">
     <h4>Cross-browser rendering</h4>
     <p>As a best practice, <strong>we highly recommend using the <code>&lt;button&gt;</code> element whenever possible</strong> to ensure matching cross-browser rendering.</p>
     <p>Among other things, there's <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=697451">a Firefox bug</a> that prevents us from setting the <code>line-height</code> of <code>&lt;input&gt;</code>-based buttons, causing them to not exactly match the height of other buttons on Firefox.</p>
   </div>
 
   <h2>Cross-browser compatibility</h2>
-  <div class="bs-callout bs-callout-danger">
+  <div class="gui-callout gui-callout-danger">
     <p>You can use following codes for cross-browser compatibility, especially old ie version.</p>
     <pre class="prettyprint" style="margin-bottom: 0;">$(".gui-btn").guiButton();</pre>
   </div>

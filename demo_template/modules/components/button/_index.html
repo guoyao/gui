@@ -1,0 +1,70 @@
+<div class="module-container">
+  <h1 id="buttons">Buttons</h1>
+
+  <hr/>
+
+  <h2 id="buttons-examples">Example uses</h2>
+  <p>Do more with buttons. Control button states.</p>
+
+  <h4>Stateful</h4>
+  <p>Add <code>data-loading-text="Loading..."</code> to use a loading state on a button.</p>
+  <div>
+    <button type="button" id="loading-btn" data-loading-text="Loading..." class="gui-btn gui-btn-primary">
+      Loading state
+    </button>
+  </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;button type="button" id="fat-btn" data-loading-text="Loading..." class="gui-btn gui-btn-primary"&gt;
+  Loading state
+&lt;/button&gt;</pre>
+
+  <h4>Single toggle</h4>
+  <p>Add <code>data-toggle="button"</code> to activate toggling on a single button.</p>
+  <div>
+    <button type="button" class="gui-btn gui-btn-primary" data-toggle="button">
+      Single toggle
+    </button>
+  </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;button type="button" class="gui-btn gui-btn-primary" data-toggle="button"&gt;
+  Single toggle
+&lt;/button&gt;</pre>
+
+  <h2 id="buttons-usage">Usage</h2>
+  <p>Enable buttons via JavaScript:</p>
+  <pre class="prettyprint">$('.gui-btn').guiButton();</pre>
+
+  <h3>Markup</h3>
+  <p>Data attributes are integral to the button plugin. Check out the example code below for the various markup types.</p>
+
+  <h3>Options</h3>
+  <p><em>None</em></p>
+
+  <h3>Methods</h3>
+
+  <h4>$().guiButton('toggle')</h4>
+  <p>Toggles push state. Gives the button the appearance that it has been activated.</p>
+  <div class="gui-callout gui-callout-info">
+    <h4>Auto toggling</h4>
+    <p>You can enable auto toggling of a button by using the <code>data-toggle</code> attribute.</p>
+  </div>
+  <pre class="prettyprint">&lt;button type="button" class="gui-btn" data-toggle="button"&gt;...&lt;/button&gt;</pre>
+
+  <h4>$().guiButton('loading')</h4>
+  <p>
+    Sets button state to loading - disables button and swaps text to loading text. Loading text should be defined on
+    the button element using the data attribute <code>data-loading-text</code>.
+  </p>
+  <pre class="prettyprint">&lt;button type="button" class="gui-btn" data-loading-text="loading stuff..."&gt;...&lt;/button&gt;</pre>
+
+  <h4>$().guiButton('reset')</h4>
+  <p>Resets button state - swaps text to original text.</p>
+
+  <h4>$().guiButton(string)</h4>
+  <p>Resets button state - swaps text to any data defined text state.</p>
+  <pre class="prettyprint">
+&lt;button type="button" class="gui-btn" data-complete-text="finished!" &gt;...&lt;/button&gt;
+&lt;script&gt;
+  $('.gui-btn').guiButton('complete');
+&lt;/script&gt;</pre>
+</div>

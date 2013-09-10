@@ -1031,6 +1031,20 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     };
 
 })(window);
+/*!
+ * Bootstrap v3.0.0
+ *
+ * Copyright 2013 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+
+/*!
+ * We imported some codes of bootstrap, and added our own's
+ */
+
 /* ========================================================================
  * GUI: button.js v0.1.0
  * http://www.gui.guoyao.me/
@@ -1054,12 +1068,84 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     "use strict";
 
     var $ = window.jQuery,
-        gui = window.gui,
-        old = $.fn.guiButton;
+        gui = window.gui;
+
+    // BUTTON PUBLIC CLASS DEFINITION
+    // ==============================
+
+    var GuiButton = function (element, options) {
+        this.$element = $(element);
+        this.options = $.extend({}, GuiButton.DEFAULTS, options);
+    };
+
+    GuiButton.DEFAULTS = {
+        loadingText: 'loading...'
+    };
+
+    GuiButton.prototype.setState = function (state) {
+        var d = 'disabled',
+            $el = this.$element,
+            val = $el.is('input') ? 'val' : 'html',
+            data = $el.data();
+
+        state = state + 'Text';
+
+        if (!data.resetText) {
+            $el.data('resetText', $el[val]());
+        }
+
+        $el[val](data[state] || this.options[state]);
+
+        // push to event loop to allow forms to submit
+        setTimeout(function () {
+            state == 'loadingText' ?
+                $el.addClass(d).attr(d, d) :
+                $el.removeClass(d).removeAttr(d);
+        }, 0);
+    };
+
+    GuiButton.prototype.toggle = function () {
+        var $parent = this.$element.closest('[data-toggle="buttons"]');
+
+        if ($parent.length) {
+            var $input = this.$element.find('input')
+                .prop('checked', !this.$element.hasClass('active'))
+                .trigger('change');
+            if ($input.prop('type') === 'radio') {
+                $parent.find('.active').removeClass('active');
+            }
+        }
+
+        this.$element.toggleClass('active');
+    };
+
+    // BUTTON PLUGIN DEFINITION
+    // ========================
+
+    var old = $.fn.guiButton;
 
     $.fn.guiButton = function (option) {
+        this.each(function () {
+            var $this = $(this),
+                data = $this.data('gui.button'),
+                options = typeof option == 'object' && option;
+
+            if (!data) {
+                $this.data('gui.button', (data = new GuiButton(this, options)));
+            }
+
+            if (option == 'toggle') {
+                data.toggle();
+            }
+            else if (option) {
+                data.setState(option);
+            }
+        });
+
         return gui.plugin.patch($.fn.guiButton, this, option);
-    };
+    }
+
+    $.fn.guiButton.Constructor = GuiButton;
 
     // NO CONFLICT
     // ===============
@@ -1068,6 +1154,19 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         $.fn.guiButton = old;
         return this;
     };
+
+    // BUTTON DATA-API
+    // ===============
+
+    $(window.document).on('click.gui.button.data-api', '[data-toggle^=button]', function (e) {
+        var $btn = $(e.target);
+        if (!$btn.hasClass('gui-btn')) {
+            $btn = $btn.closest('.gui-btn');
+        }
+        $btn.guiButton('toggle');
+        e.preventDefault();
+    });
+
 })(window);
 (function (window, undefined) {
 	"use strict";
@@ -1451,28 +1550,19 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         var defaults = {
             selectedIndex: -1
             },
-            options = $.extend({}, defaults, option),
-            $buttons,
-            selectedItem,
-            buttonStyle;
+            options = $.extend({}, defaults, option);
 
         this.each(function () {
-            if (options.selectedIndex > -1) {
-                $buttons = $(this).find(".gui-btn");
-                if (options.selectedIndex < $buttons.length) {
-                    selectedItem = $buttons[options.selectedIndex];
-                    buttonStyle = /gui\-btn\-[^\s]+/.exec(selectedItem.className);
-                    $(selectedItem).addClass(buttonStyle + "-active").attr("selected", true);
+            var $this = $(this),
+                data = $this.data(),
+                $$children;
+            if (data.toggle && data.toggle.indexOf("buttons") != -1) {
+                if (options.selectedIndex > -1) {
+                    $$children = $this.children(".gui-btn");
+                    if (options.selectedIndex < $$children.length) {
+                        $($$children[0]).guiButton("toggle");
+                    }
                 }
-            }
-        });
-
-        this.delegate(".gui-btn", "click", function () {
-            var $button = $(this);
-            buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
-            if (buttonStyle) {
-                $button.siblings().removeClass(buttonStyle + "-active").attr("selected", false);
-                $button.addClass(buttonStyle + "-active").attr("selected", true);
             }
         });
 
@@ -1522,10 +1612,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             if (typeof data.offset != "object") {
                 data.offset = {top: data.offset, left: data.offset};
             }
-            if (data.offsetTop == 0 || data.offsetTop) data.offset.top = data.offsetTop;
-            if (data.offsetBottom == 0 || data.offsetBottom) data.offset.bottom = data.offsetBottom;
-            if (data.offsetLeft == 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
-            if (data.offsetRight == 0 || data.offsetRight) data.offset.right = data.offsetRight;
+            if (data.offsetTop === 0 || data.offsetTop) data.offset.top = data.offsetTop;
+            if (data.offsetBottom === 0 || data.offsetBottom) data.offset.bottom = data.offsetBottom;
+            if (data.offsetLeft === 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
+            if (data.offsetRight === 0 || data.offsetRight) data.offset.right = data.offsetRight;
 
             if (options) {
                 if (typeof options.offset === "object") {
@@ -1740,14 +1830,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                     if (!data.affixed) {
                         $this.data("affixed", true);
                         $window.on("scroll.gui.affix.data-api", function () {
-                            if (data.offset.top == 0 || data.offset.top) {
+                            if (data.offset.top === 0 || data.offset.top) {
                                 $this.css("top", $window.scrollTop() + parseInt(data.offset.top, 10) + "px");
-                            } else if (data.offset.bottom == 0 || data.offset.bottom) {
+                            } else if (data.offset.bottom === 0 || data.offset.bottom) {
                                 $this.css("top", $window.scrollTop() + $window.height() - $this.outerHeight() - parseInt(data.offset.bottom, 10) + "px");
                             }
-                            if (data.offset.left == 0 || data.offset.left) {
+                            if (data.offset.left === 0 || data.offset.left) {
                                 $this.css("left", $window.scrollLeft() + parseInt(data.offset.left, 10) + "px");
-                            } else if (data.offset.right == 0 || data.offset.right) {
+                            } else if (data.offset.right === 0 || data.offset.right) {
                                 $this.css("left", $window.scrollLeft() + $window.width() - $this.outerWidth() - parseInt(data.offset.right, 10) + "px");
                             }
                         });

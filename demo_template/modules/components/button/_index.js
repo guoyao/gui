@@ -1,6 +1,6 @@
 /**
  * Author: guoyao
- * Time: 08-29-2013 16:09
+ * Time: 09-10-2013 17:02
  * Blog: http://www.guoyao.me
  */
 
@@ -17,8 +17,12 @@ require(["jquery", "prettify", "gui"], function ($, prettify) {
         }
     }
 
-    $(".gui-btn-bar").guiButtonBar({
-        selectedIndex: 0
+    $("#loading-btn").click(function () {
+        var $btn = $(this);
+        $btn.guiButton("loading");
+        setTimeout(function () {
+            $btn.guiButton("reset");
+        }, 3000);
     });
 
     prettify.prettyPrint();
