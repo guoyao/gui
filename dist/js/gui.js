@@ -372,43 +372,43 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	/*$.fn.guiCollapse = function (options) {
 
-	var defaults = {
-	switchBtnClass:'.tab-btn',
-	switchBtnToggleClass:'tab-btn-closed',
-	switchTabClass:'.tab-content',
-	animationDuration: 500
-	};
+	 var defaults = {
+	 switchBtnClass:'.tab-btn',
+	 switchBtnToggleClass:'tab-btn-closed',
+	 switchTabClass:'.tab-content',
+	 animationDuration: 500
+	 };
 
-	options = $.extend({}, defaults, options);
+	 options = $.extend({}, defaults, options);
 
-	function initEach() {
-	var $guiCollapse = $(this);
+	 function initEach() {
+	 var $guiCollapse = $(this);
 
-	$guiCollapse.find(options.switchBtnClass).each(function(){
-	var tabContent = $(this).siblings(options.switchTabClass);
-	var orgHeight;
-	if(!tabContent.is(":visible")){
-	tabContent.show();
-	orgHeight = tabContent.height();
-	tabContent.hide();
-	}else{
-	orgHeight = tabContent.height();
-	}
-	$(this).click(function(){
-	var curHeight = $(this).siblings(options.switchTabClass).height();
-	if(curHeight <= 0 || tabContent.is(":hidden")){
-	tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
-	$(this).removeClass(options.switchBtnToggleClass);
-	}else{
-	tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
-	$(this).addClass(options.switchBtnToggleClass);
-	}
-	});
-	});
-	}
+	 $guiCollapse.find(options.switchBtnClass).each(function(){
+	 var tabContent = $(this).siblings(options.switchTabClass);
+	 var orgHeight;
+	 if(!tabContent.is(":visible")){
+	 tabContent.show();
+	 orgHeight = tabContent.height();
+	 tabContent.hide();
+	 }else{
+	 orgHeight = tabContent.height();
+	 }
+	 $(this).click(function(){
+	 var curHeight = $(this).siblings(options.switchTabClass).height();
+	 if(curHeight <= 0 || tabContent.is(":hidden")){
+	 tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
+	 $(this).removeClass(options.switchBtnToggleClass);
+	 }else{
+	 tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
+	 $(this).addClass(options.switchBtnToggleClass);
+	 }
+	 });
+	 });
+	 }
 
-	return this.each(initEach);
-	};*/
+	 return this.each(initEach);
+	 };*/
 
 	var module = {
 		_init: function (obj, option) {
@@ -424,7 +424,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		_recordEleHeight: function () {
 			var mo = this;
-			this.obj
+			$(this.obj)
 				.find('.' + this.defaults.switchTabClass)
 				.each(function (i) {
 					if (!$(this).is(":visible")) {
@@ -439,25 +439,34 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		_eventHandler: function () {
 			var mo = this;
-			this.obj
+			$(this.obj)
 				.find('.' + this.defaults.switchBtnClass)
 				.each(function (i) {
 					$(this).click(function (e) {
 						//var tabIndex = $(e.target).eq(i);
 
-						var curHeight = $(this).siblings('.' + mo.defaults.switchTabClass).height();
+						//var curHeight = $(this).siblings('.' + mo.defaults.switchTabClass).height();
 						var tabContent = $(this).siblings('.' + mo.defaults.switchTabClass);
 
 						var animspeed = mo.defaults.animationDuration;
 						var toggleClass = mo.defaults.switchBtnToggleClass;
 
-						if (curHeight <= 0 || tabContent.is(":hidden")) {
-							tabContent.css({display: "block", height: 0, opacity: 0}).animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed);
-							$(this).removeClass(toggleClass);
-						} else {
-							tabContent.animate({'height': 0, 'opacity': 0}, animspeed);
-							$(this).addClass(toggleClass);
-						}
+						//if (curHeight <= 0 || tabContent.is(":hidden")) {
+						//tabContent
+						//.css({display: "block", height: 0, opacity: 0})
+						//.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed);
+						//$(this).removeClass(toggleClass);
+						//} else {
+						//tabContent
+						//.animate({'height': 0, 'opacity': 0}, animspeed);
+						//$(this).addClass(toggleClass);
+						//}
+						tabContent
+							.css({display: "block", height: 0, opacity: 0})
+							.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed)
+							.siblings()
+							.animate({'height': 0, 'opacity': 0}, animspeed);
+						$(this).addClass(toggleClass).siblings().removeClass(toggleClass);
 					});
 				});
 		}
@@ -465,9 +474,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	$.fn.guiCollapse = function (option) {
 
-		module._init(this, option);
-
 		return this.each(function () {
+			module._init(this, option);
 		});
 	}
 
@@ -478,14 +486,13 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		animationDuration: 500
 	};
 
+	//for debug
+	$.fn.guiCollapse.debug = module;
+
 	$.fn.guiCollapse.noConflict = function () {
 		$.fn.guiCollapse = old;
 		return this;
 	};
-
-	//for debug
-	$.fn.guiCollapse.debug = module;
-
 })(window);
 
 (function (window) {
@@ -1655,6 +1662,236 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 
+//
+(function (window, undefined) {
+	"use strict";
+
+	var console = window.console,
+		$ = window.jQuery,
+		gui = window.gui,
+		old = $.fn.guiCarousel;
+
+	$.fn.guiCarousel = function (option) {
+
+		var module = {
+			_init: function (obj, option) {
+				this.obj = obj;
+				this._initOptions(option);
+				this._eventHandler();
+				this._initAutoSlide();
+			},
+			_autoAnim: true,
+			_initOptions: function (option) {
+				this.defaults = $.extend({}, $.fn.guiCarousel.defaults, option);
+			},
+			_eventHandler: function () {
+				var that = this;
+
+				$(this.obj)
+					.find('[data-slide=next]')
+					.on("click", function (e) {
+
+						e.preventDefault();
+
+						var nextPram = that._calNextItemIndex();
+
+						that._toSlide(nextPram.num, nextPram.dir, that);
+						that._refreshIndicator(that);
+					});
+
+				$(this.obj)
+					.hover(function () {
+						that._autoAnim = false;
+					}, function () {
+						that._autoAnim = true;
+					})
+				$(this.obj)
+					.find('[data-slide=prev]')
+					.on("click", function (e) {
+
+						e.preventDefault();
+
+						var prevPram = that._calPrevItemIndex();
+
+						that._toSlide(prevPram.num, prevPram.dir, that);
+						that._refreshIndicator(that);
+					});
+				$(this.obj)
+					.find(this.defaults.indicators + " li")
+					.on("click", function (e) {
+
+						var nextPram = that._calIndicatorBtnIndex(e);
+						var curItemIndex = that._getCurrentItemIndex();
+
+						if(nextPram.num != curItemIndex){
+							that._toSlide(nextPram.num, nextPram.dir, that);
+							that._refreshIndicator(that);
+						}
+					})
+			},
+			_getCurrentItemIndex: function () {
+
+				var curIndex = $(this.obj).find(".carousel-inner .active.item").index();
+
+				return curIndex;
+			},
+			_calNextItemIndex: function () {
+
+				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
+
+				var nextIndex;
+
+				if (this._getCurrentItemIndex() === lastIndex) {
+					nextIndex = 0;
+				} else {
+					nextIndex = this._getCurrentItemIndex() + 1;
+				}
+				return {num: nextIndex, dir: "next"};
+			},
+			_calPrevItemIndex: function () {
+
+				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
+
+				var prevIndex;
+
+				if (this._getCurrentItemIndex() === 0) {
+					prevIndex = lastIndex;
+				} else {
+					prevIndex = this._getCurrentItemIndex() - 1;
+				}
+				return {num: prevIndex, dir: "prev"};
+			},
+			_calIndicatorBtnIndex: function (e) {
+
+				var nextIndex = parseInt($(e.target).attr("data-slide-to"), 10);
+
+				var curIndex = this._getCurrentItemIndex();
+
+				var direction;
+
+				if (nextIndex > curIndex) {
+					direction = "next";
+				} else {
+					direction = "prev";
+				}
+				return {num: nextIndex, dir: direction};
+			},
+			_refreshIndicator: function (that) {
+
+				$(that.obj)
+					.find(".carousel-inner .active.item")
+					.promise()
+					.done(function () {
+
+						var index = $(that.obj).find(".carousel-inner .prev.item ,.carousel-inner .next.item").index();
+
+						$(that.obj)
+							.find('.carousel-indicators li')
+							.eq(index)
+							.addClass("active")
+							.siblings()
+							.removeClass("active");
+					})
+			},
+			_toSlide: function (num, dir, that) {
+				var $activeObj = $(that.obj).find(".carousel-inner .active.item");
+				var $otherObj = $(that.obj).find(".carousel-inner .item");
+
+				if (!$activeObj.is(":animated")) {
+
+					switch (dir) {
+						case "next":
+
+							$otherObj.eq(num).addClass("next").css({"left": "100%"});
+
+							$activeObj.stop(false, true).animate(
+								{"left": "-100%"}
+								, "linear", function () {
+									$activeObj.removeClass("active");
+								});
+
+							$otherObj.eq(num).stop(false, true).animate({
+								"left": "0"
+							}, "linear", function () {
+								$otherObj.eq(num)
+									.removeClass("next")
+									.addClass("active");
+							});
+
+							break;
+						case "prev":
+
+							$otherObj.eq(num).addClass("prev").css({"left": "-100%"});
+
+							$activeObj.stop(false, true).animate(
+								{"left": "100%"}
+								, "linear", function () {
+									$activeObj.removeClass("active");
+								});
+
+							$otherObj.eq(num).stop(false, true).animate({
+								"left": "0"
+							}, "linear", function () {
+								$otherObj.eq(num)
+									.removeClass("prev")
+									.addClass("active");
+							});
+
+							break;
+					}
+				}
+			},
+			_initAutoSlide: function () {
+				var animTime = this.defaults.animTime;
+				var autoSlide = this.defaults.autoSlide;
+				var that = this;
+
+				if (autoSlide) {
+					var t = setInterval(function () {
+						that._autoSlide()
+					}, animTime);
+				}
+			},
+			_autoSlide: function () {
+				if (this._autoAnim) {
+					$(this.obj)
+						.find('[data-slide=prev]')
+						.trigger("click");
+				}
+			}
+		};
+
+		//for debug
+		$.fn.guiCarousel.debug = module;
+
+		console.log($.fn.guiCarousel.debug)
+
+		return this.each(function () {
+			module._init(this, option);
+		});
+	};
+
+	$.fn.guiCarousel.defaults = {
+		indicators: ".carousel-indicators",
+		inner: ".carousel-inner",
+		innerItem: ".item",
+		prevBtn: ".carousel-control-left",
+		nextBtn: ".carousel-control-right",
+		animSpeed: 500,
+		animTime: 5000,
+		hoverToStop: true,
+		autoSlide: true
+	};
+
+	$.fn.guiCarousel.noConflict = function () {
+		$.fn.guiCarousel = old;
+		return this;
+	};
+
+	//for debug
+	//$.fn.guiCarousel.debug = module;
+
+})(window);
 /* ========================================================================
  * GUI: ie-patch.js v0.1.0
  * http://www.gui.guoyao.me/

@@ -19,7 +19,7 @@ $(function () {
 			$("#qunit-fixture").append('<div class="test-div"><input class="test-input" id="test-id" type="test"/></div>');
 			//console.log($(".test-input").offset().left - 2 );
 			moduleDebug.obj = $(".test-div");
-			console.log($("#qunit-fixture").html())
+			//console.log($("#qunit-fixture").html())
 		}
 	});
 

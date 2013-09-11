@@ -47,19 +47,24 @@
 
 						e.preventDefault();
 
-						var nextPram = that._calNextItemIndex();
+						var prevPram = that._calPrevItemIndex();
 
-						that._toSlide(nextPram.num, nextPram.dir, that);
+						that._toSlide(prevPram.num, prevPram.dir, that);
 						that._refreshIndicator(that);
 					});
 				$(this.obj)
 					.find(this.defaults.indicators + " li")
 					.on("click", function (e) {
 
-						var nextPram = that._calIndicatorBtnIndex(e);
+						var targetClicked = e.target;
 
-						that._toSlide(nextPram.num, nextPram.dir, that);
-						that._refreshIndicator(that);
+						var nextPram = that._calIndicatorBtnIndex(targetClicked);
+						var curItemIndex = that._getCurrentItemIndex();
+
+						if(nextPram.num != curItemIndex){
+							that._toSlide(nextPram.num, nextPram.dir, that);
+							that._refreshIndicator(that);
+						}
 					})
 			},
 			_getCurrentItemIndex: function () {
@@ -92,11 +97,11 @@
 				} else {
 					prevIndex = this._getCurrentItemIndex() - 1;
 				}
-				return {num: nextIndex, dir: "prev"};
+				return {num: prevIndex, dir: "prev"};
 			},
-			_calIndicatorBtnIndex: function (e) {
+			_calIndicatorBtnIndex: function (target) {
 
-				var nextIndex = parseInt($(e.target).attr("data-slide-to"), 10);
+				var nextIndex = parseInt($(target).attr("data-slide-to"), 10);
 
 				var curIndex = this._getCurrentItemIndex();
 
@@ -129,11 +134,6 @@
 			_toSlide: function (num, dir, that) {
 				var $activeObj = $(that.obj).find(".carousel-inner .active.item");
 				var $otherObj = $(that.obj).find(".carousel-inner .item");
-				var $nextObj;
-				var $prevObj;
-				var nextClass;
-				var setNextLeft;
-				var setActiveLeft;
 
 				if (!$activeObj.is(":animated")) {
 
@@ -200,7 +200,9 @@
 		};
 
 		//for debug
-		$.fn.guiCarousel.debug = module;
+		if(option == 'debug'){
+			return module;
+		}
 
 		return this.each(function () {
 			module._init(this, option);

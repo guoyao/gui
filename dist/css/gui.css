@@ -2268,6 +2268,7 @@ input[type="button"].gui-btn-block {
 }
 
 .carousel .carousel-inner .active {
+  position: relative;
   left: 0;
   display: block;
 }

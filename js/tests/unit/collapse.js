@@ -57,12 +57,12 @@ $(function (undefined) {
 	/*repeat test for every modules*/
 	test("should provide no conflict", function () {
 		var guiCollapse = $.fn.guiCollapse.noConflict();
-		ok(!$.fn.guiCollapse, 'guicollapse was set back to undefined (org value)');
+		ok(!$.fn.guiCollapse, 'guiCollapse was set back to undefined (org value)');
 		$.fn.guiCollapse = guiCollapse;
 	});
 
 	test("should be defined on jquery object", function () {
-		ok($(document.body).guiCollapse, 'guiDatePicker method is defined');
+		ok($(document.body).guiCollapse, 'guiCollapse method is defined');
 	});
 
 	test("should return element", function () {

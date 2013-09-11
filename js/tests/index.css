@@ -7,3 +7,20 @@
 li.pass a {
     background-color: transparent !important;
 }
+
+/* carousel css */
+.#myCarousel {width:870px;margin:30px auto;}
+.carousel-text {background:black;opacity:0.8;color:white;text-align:center;width:100%;height:100px;line-height:100px;position:absolute;bottom:0;}
+.carousel {position: relative;}
+.carousel .carousel-inner {width:100%;overflow: hidden;position: relative;}
+.carousel .carousel-inner .item {position: absolute;top:0;display: none;}
+.carousel .carousel-inner .active {left:0;display: block;position: relative;}
+.carousel-inner	.prev ,.carousel-inner .next {display: block;}
+.carousel .carousel-control-left ,.carousel .carousel-control-right {width:40px;height:40px;line-height:30px;text-decoration:none;font-size:60px;color:white;position: absolute;display:block;top:40%;border: 3px solid white;background:black;opacity:0.5;text-align:center;filter:alpha(opacity=50);font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;border-radius: 25px;}
+.carousel .carousel-control-left {left: 10px;}
+.carousel .carousel-control-right {right:10px;}
+.carousel .carousel-control-left:hover ,.carousel .carousel-control-right:hover {opacity: 0.8;filter:alpha(opacity=80);}
+.carousel .carousel-indicators {position: absolute;top:10px;right:10px;z-index:1;}
+.carousel .carousel-indicators li {width:10px;height:10px;margin-left:5px;border-radius:5px;background:white;display: block;float: left;opacity: 0.5;filter:alpha(opacity=50);list-style-type: none;}
+.carousel .carousel-indicators li.active {opacity: 0.9;filter:alpha(opacity=90);}
+/* carousel css */
