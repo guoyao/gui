@@ -9,7 +9,7 @@
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 //
@@ -36,18 +36,18 @@
   .user-select(none);
 
   &:focus {
-    .tab-focus();
+//    .tab-focus();
+    outline: none;
   }
 
-  &:hover,
-  &:focus {
+  &:hover {
     color: @btn-default-color;
     text-decoration: none;
   }
 
   &:active,
   &.active {
-    outline: 0;
+    outline: none;
     background-image: none;
     .box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
   }
@@ -166,25 +166,4 @@ input[type="button"] {
   &.gui-btn-block {
     width: 100%;
   }
-}
-
-// button active style, mostly used in gui-btn-bar
-// ----------------------------------------------------------
-.gui-btn-default-active {
-  background-color: darken(@btn-default-bg, 8%);
-}
-.gui-btn-primary-active {
-  background-color: darken(@btn-primary-bg, 8%);
-}
-.gui-btn-warning-active {
-  background-color: darken(@btn-warning-bg, 8%);
-}
-.gui-btn-danger-active {
-  background-color: darken(@btn-danger-bg, 8%);
-}
-.gui-btn-success-active {
-  background-color: darken(@btn-success-bg, 8%);
-}
-.gui-btn-info-active {
-  background-color: darken(@btn-info-bg, 8%);
 }

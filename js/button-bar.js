@@ -29,28 +29,19 @@
         var defaults = {
             selectedIndex: -1
             },
-            options = $.extend({}, defaults, option),
-            $buttons,
-            selectedItem,
-            buttonStyle;
+            options = $.extend({}, defaults, option);
 
         this.each(function () {
-            if (options.selectedIndex > -1) {
-                $buttons = $(this).find(".gui-btn");
-                if (options.selectedIndex < $buttons.length) {
-                    selectedItem = $buttons[options.selectedIndex];
-                    buttonStyle = /gui\-btn\-[^\s]+/.exec(selectedItem.className);
-                    $(selectedItem).addClass(buttonStyle + "-active").attr("selected", true);
+            var $this = $(this),
+                data = $this.data(),
+                $$children;
+            if (data.toggle && data.toggle.indexOf("buttons") != -1) {
+                if (options.selectedIndex > -1) {
+                    $$children = $this.children(".gui-btn");
+                    if (options.selectedIndex < $$children.length) {
+                        $($$children[0]).guiButton("toggle");
+                    }
                 }
-            }
-        });
-
-        this.delegate(".gui-btn", "click", function () {
-            var $button = $(this);
-            buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
-            if (buttonStyle) {
-                $button.siblings().removeClass(buttonStyle + "-active").attr("selected", false);
-                $button.addClass(buttonStyle + "-active").attr("selected", true);
             }
         });
 

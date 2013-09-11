@@ -9,7 +9,7 @@
  */
 
 /*!
- * We imported some codes of bootstrap, and added added our own's
+ * We imported some codes of bootstrap, and added our own's
  */
 
 //
@@ -43,8 +43,7 @@
 // Webkit-style focus
 .tab-focus() {
   // Default
-  outline: thin dotted #333
-;
+  outline: thin dotted #333;
   // Webkit
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
@@ -223,7 +222,10 @@
   background-color: @background;
   border-color: @border;
 
-  &:hover {
+  &:hover,
+//  &:focus,
+  &:active,
+  &.active {
     color: @color;
     background-color: darken(@background, 8%);
     border-color: darken(@border, 12%);

@@ -4,9 +4,11 @@
 
 // Make the div behave like a button
 .gui-btn-bar {
+  position: relative;
   display: inline-block;
   vertical-align: middle; // match .gui-btn alignment given font-size hack above
   .gui-btn {
+    position: relative;
     float: left;
     // Bring the "active" button to the front
     &:hover,
@@ -14,6 +16,10 @@
     &:active,
     &.active {
       z-index: 2;
+    }
+    &:focus {
+      // Remove focus outline
+      outline: none;
     }
   }
 }
@@ -35,4 +41,10 @@
   .gui-btn:last-child:not(:first-child) {
     .border-left-radius(0);
   }
+}
+
+// Checkbox and radio options
+[data-toggle="buttons"] > .gui-btn > input[type="radio"],
+[data-toggle="buttons"] > .gui-btn > input[type="checkbox"] {
+  display: none;
 }

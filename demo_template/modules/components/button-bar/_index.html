@@ -3,6 +3,9 @@
 
   <hr/>
 
+  <p class="lead">Group a series of buttons together on a single line with the button bar. Add on optional JavaScript
+    radio and checkbox style behavior with <a href="#toogleButton">our button bar plugin</a>.</p>
+
   <div class="gui-btn-bar">
     <button type="button" class="gui-btn gui-btn-default">Left</button>
     <button type="button" class="gui-btn gui-btn-default">Middle</button>
@@ -84,5 +87,65 @@
  &lt;button type="button" class="gui-btn gui-btn-info"&gt;Left&lt;/button&gt;
  &lt;button type="button" class="gui-btn gui-btn-info"&gt;Middle&lt;/button&gt;
  &lt;button type="button" class="gui-btn gui-btn-info"&gt;Right&lt;/button&gt;
+&lt;/div&gt;</pre>
+
+  <h1 id="toogleButton">Toggle Button bar</h1>
+
+  <hr/>
+
+  <h4>Checkbox</h4>
+
+  <p>Add <code>data-toggle="buttons"</code> to a group of checkboxes for checkbox style toggling on gui-btn-bar.</p>
+
+  <div class="gui-btn-bar" data-toggle="buttons">
+    <label class="gui-btn gui-btn-primary">
+      <input type="checkbox"> Option 1
+    </label>
+    <label class="gui-btn gui-btn-primary">
+      <input type="checkbox"> Option 2
+    </label>
+    <label class="gui-btn gui-btn-primary">
+      <input type="checkbox"> Option 3
+    </label>
+  </div>
+  <pre class="prettyprint" style="margin-top: 10px;">
+&lt;div class="gui-btn-bar" data-toggle="buttons"&gt;
+  &lt;label class="gui-btn gui-btn-primary"&gt;
+    &lt;input type="checkbox"&gt; Option 1
+  &lt;/label&gt;
+  &lt;label class="gui-btn gui-btn-primary"&gt;
+    &lt;input type="checkbox"&gt; Option 2
+  &lt;/label&gt;
+  &lt;label class="gui-btn gui-btn-primary"&gt;
+    &lt;input type="checkbox"&gt; Option 3
+  &lt;/label&gt;
+&lt;/div&gt;</pre>
+
+  <h4>Radio</h4>
+
+  <p>Add <code>data-toggle="buttons"</code> to a group of radio inputs for radio style toggling on gui-btn-bar.</p>
+
+  <div class="gui-btn-bar" data-toggle="buttons">
+    <label class="gui-btn gui-btn-primary">
+      <input type="radio" name="options" id="option1"> Option 1
+    </label>
+    <label class="gui-btn gui-btn-primary">
+      <input type="radio" name="options" id="option2"> Option 2
+    </label>
+    <label class="gui-btn gui-btn-primary">
+      <input type="radio" name="options" id="option3"> Option 3
+    </label>
+  </div>
+  <pre class="prettyprint" style="margin-top: 10px;">
+&lt;div class="gui-btn-bar" data-toggle="buttons"&gt;
+  &lt;label class="gui-btn gui-btn-primary"&gt;
+    &lt;input type="radio" name="options" id="option1"&gt; Option 1
+  &lt;/label&gt;
+  &lt;label class="gui-btn gui-btn-primary"&gt;
+    &lt;input type="radio" name="options" id="option2"&gt; Option 2
+  &lt;/label&gt;
+  &lt;label class="gui-btn gui-btn-primary"&gt;
+    &lt;input type="radio" name="options" id="option3"&gt; Option 3
+  &lt;/label&gt;
 &lt;/div&gt;</pre>
 </div>

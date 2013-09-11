@@ -25,7 +25,7 @@
         gui = window.gui,
         old = $.fn.guiNav;
 
-    $.fn.guiNav = function (options) {
+    $.fn.guiNav = function (option) {
 
         var defaults = {
             styleName: "",
@@ -33,27 +33,27 @@
             animationDuration: 500
         };
 
-        options = $.extend(defaults, options);
+        option = $.extend(defaults, option);
 
         this.each(function () {
             var $guiNav = $(this),
                 isVertical = $guiNav.hasClass("gui-nav-vertical");
 
-            if (options.styleName) {
-                $guiNav.addClass(options.styleName);
+            if (option.styleName) {
+                $guiNav.addClass(option.styleName);
             }
 
             $guiNav.find("li").mouseenter(function () {
                 var $navItem = $(this),
                     $$subMenu = $navItem.children("ul");
                 $$subMenu.css("left", (isVertical || !$navItem.parent().hasClass("gui-nav")) ? $navItem.width() : 0);
-                if (options.itemFadeIn) {
-                    $$subMenu.css("opacity", 0).animate({opacity: 1}, options.animationDuration);
+                if (option.itemFadeIn) {
+                    $$subMenu.css("opacity", 0).animate({opacity: 1}, option.animationDuration);
                 }
             });
         });
 
-        return gui.plugin.patch($.fn.guiNav, this, options);
+        return gui.plugin.patch($.fn.guiNav, this, option);
     };
 
     // NO CONFLICT

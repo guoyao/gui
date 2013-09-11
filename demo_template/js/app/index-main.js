@@ -15,6 +15,7 @@ define(["./demo"], function (demo) {
         new Module("Place Holder", "place-holder"),
         new Module("Slider", "slider"),
         new Module("Date Picker", "date-picker"),
+        new Module("Button", "button"),
         new Module("Button Bar", "button-bar"),
         new Module("Carousel", "carousel")
     ], {
