@@ -16,7 +16,7 @@
 				this._eventHandler();
 				this._initAutoSlide();
 			},
-			_autoAnim : true,
+			_autoAnim: true,
 			_initOptions: function (option) {
 				this.defaults = $.extend({}, $.fn.guiCarousel.defaults, option);
 			},
@@ -31,15 +31,14 @@
 
 						var nextPram = that._calNextItemIndex();
 
-						that._toSlide(nextPram.num , nextPram.dir , that);
+						that._toSlide(nextPram.num, nextPram.dir, that);
 						that._refreshIndicator(that);
-
 					});
 
 				$(this.obj)
-					.hover(function(){
+					.hover(function () {
 						that._autoAnim = false;
-					},function(){
+					}, function () {
 						that._autoAnim = true;
 					})
 				$(this.obj)
@@ -50,68 +49,72 @@
 
 						var nextPram = that._calNextItemIndex();
 
-						that._toSlide(nextPram.num , nextPram.dir ,that);
+						that._toSlide(nextPram.num, nextPram.dir, that);
 						that._refreshIndicator(that);
-
 					});
 				$(this.obj)
 					.find(this.defaults.indicators + " li")
-					.on("click",function(e){
+					.on("click", function (e) {
 
 						var nextPram = that._calIndicatorBtnIndex(e);
 
-						that._toSlide(nextPram.num , nextPram.dir ,that);
+						that._toSlide(nextPram.num, nextPram.dir, that);
 						that._refreshIndicator(that);
-
 					})
 			},
-			_getCurrentItemIndex : function(){
+			_getCurrentItemIndex: function () {
 
 				var curIndex = $(this.obj).find(".carousel-inner .active.item").index();
 
 				return curIndex;
 			},
-			_calNextItemIndex : function(){
+			_calNextItemIndex: function () {
 
 				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
 
-				if( this._getCurrentItemIndex() === lastIndex ){
-					var nextIndex = 0;
-				}else{
-					var nextIndex = this._getCurrentItemIndex() + 1;
+				var nextIndex;
+
+				if (this._getCurrentItemIndex() === lastIndex) {
+					nextIndex = 0;
+				} else {
+					nextIndex = this._getCurrentItemIndex() + 1;
 				}
-				return {num:nextIndex,dir:"next"};
+				return {num: nextIndex, dir: "next"};
 			},
-			_calPrevItemIndex : function(){
+			_calPrevItemIndex: function () {
 
 				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
 
-				if( this._getCurrentItemIndex() === 0 ){
-					var prevIndex = lastIndex;
-				}else{
-					var prevIndex = this._getCurrentItemIndex() - 1;
-				}
-				return {num:nextIndex,dir:"prev"};
-			},
-			_calIndicatorBtnIndex : function(e){
+				var prevIndex;
 
-				var nextIndex = parseInt($(e.target).attr("data-slide-to"),10);
+				if (this._getCurrentItemIndex() === 0) {
+					prevIndex = lastIndex;
+				} else {
+					prevIndex = this._getCurrentItemIndex() - 1;
+				}
+				return {num: nextIndex, dir: "prev"};
+			},
+			_calIndicatorBtnIndex: function (e) {
+
+				var nextIndex = parseInt($(e.target).attr("data-slide-to"), 10);
 
 				var curIndex = this._getCurrentItemIndex();
 
-				if( nextIndex > curIndex ){
-					var direction = "next";
-				}else{
-					var direction = "prev";
+				var direction;
+
+				if (nextIndex > curIndex) {
+					direction = "next";
+				} else {
+					direction = "prev";
 				}
-				return {num:nextIndex,dir:direction};
+				return {num: nextIndex, dir: direction};
 			},
-			_refreshIndicator : function(that){
-				
+			_refreshIndicator: function (that) {
+
 				$(that.obj)
 					.find(".carousel-inner .active.item")
 					.promise()
-					.done(function(){
+					.done(function () {
 
 						var index = $(that.obj).find(".carousel-inner .prev.item ,.carousel-inner .next.item").index();
 
@@ -123,7 +126,7 @@
 							.removeClass("active");
 					})
 			},
-			_toSlide: function (num,dir,that) {
+			_toSlide: function (num, dir, that) {
 				var $activeObj = $(that.obj).find(".carousel-inner .active.item");
 				var $otherObj = $(that.obj).find(".carousel-inner .item");
 				var $nextObj;
@@ -176,17 +179,19 @@
 					}
 				}
 			},
-			_initAutoSlide : function(){
-				var animTime  = this.defaults.animTime;
+			_initAutoSlide: function () {
+				var animTime = this.defaults.animTime;
 				var autoSlide = this.defaults.autoSlide;
 				var that = this;
 
-				if(autoSlide){
-					var t = setInterval(function(){that._autoSlide()},animTime);
+				if (autoSlide) {
+					var t = setInterval(function () {
+						that._autoSlide()
+					}, animTime);
 				}
 			},
-			_autoSlide : function(){
-				if(this._autoAnim){
+			_autoSlide: function () {
+				if (this._autoAnim) {
 					$(this.obj)
 						.find('[data-slide=prev]')
 						.trigger("click");
@@ -194,21 +199,24 @@
 			}
 		};
 
+		//for debug
 		$.fn.guiCarousel.debug = module;
 
-		return this.each(function () {module._init(this, option);});
+		return this.each(function () {
+			module._init(this, option);
+		});
 	};
 
 	$.fn.guiCarousel.defaults = {
 		indicators: ".carousel-indicators",
-		inner : ".carousel-inner",
-		innerItem : ".item",
-		prevBtn : ".carousel-control-left",
-		nextBtn : ".carousel-control-right",
+		inner: ".carousel-inner",
+		innerItem: ".item",
+		prevBtn: ".carousel-control-left",
+		nextBtn: ".carousel-control-right",
 		animSpeed: 500,
 		animTime: 5000,
 		hoverToStop: true,
-		autoSlide : true
+		autoSlide: true
 	};
 
 	$.fn.guiCarousel.noConflict = function () {

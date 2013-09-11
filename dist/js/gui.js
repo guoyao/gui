@@ -365,50 +365,126 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 (function (window) {
 	"use strict";
 
-	var document = window.document,
-		console = window.console,
+	var console = window.console,
 		$ = window.jQuery,
-		gui = window.gui;
+		gui = window.gui,
+		old = $.fn.guiCollapse;
 
-	$.fn.guiCollapse = function (options) {
+	/*$.fn.guiCollapse = function (options) {
 
-		var defaults = {
-			switchBtnClass:'.tab-btn',
-			switchBtnToggleClass:'tab-btn-closed',
-			switchTabClass:'.tab-content',
-			animationDuration: 500
-		};
+	var defaults = {
+	switchBtnClass:'.tab-btn',
+	switchBtnToggleClass:'tab-btn-closed',
+	switchTabClass:'.tab-content',
+	animationDuration: 500
+	};
 
-		options = $.extend({}, defaults, options);
+	options = $.extend({}, defaults, options);
 
-		function initEach() {
-			var $guiCollapse = $(this);
-			
-			$guiCollapse.find(options.switchBtnClass).each(function(){
-				var tabContent = $(this).siblings(options.switchTabClass);
-				var orgHeight;
-				if(!tabContent.is(":visible")){
-					tabContent.show();
-					orgHeight = tabContent.height();
-					tabContent.hide();
-				}else{
-					orgHeight = tabContent.height();
-				}
-				$(this).click(function(){
-					var curHeight = $(this).siblings(options.switchTabClass).height();
-					if(curHeight <= 0 || tabContent.is(":hidden")){
-						tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
-						$(this).removeClass(options.switchBtnToggleClass);
-					}else{
-						tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
-						$(this).addClass(options.switchBtnToggleClass);
+	function initEach() {
+	var $guiCollapse = $(this);
+
+	$guiCollapse.find(options.switchBtnClass).each(function(){
+	var tabContent = $(this).siblings(options.switchTabClass);
+	var orgHeight;
+	if(!tabContent.is(":visible")){
+	tabContent.show();
+	orgHeight = tabContent.height();
+	tabContent.hide();
+	}else{
+	orgHeight = tabContent.height();
+	}
+	$(this).click(function(){
+	var curHeight = $(this).siblings(options.switchTabClass).height();
+	if(curHeight <= 0 || tabContent.is(":hidden")){
+	tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
+	$(this).removeClass(options.switchBtnToggleClass);
+	}else{
+	tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
+	$(this).addClass(options.switchBtnToggleClass);
+	}
+	});
+	});
+	}
+
+	return this.each(initEach);
+	};*/
+
+	var module = {
+		_init: function (obj, option) {
+			this.obj = obj;
+			this._initOptions(option);
+			this._recordEleHeight();
+			this._eventHandler();
+		},
+		orgHeight: [],
+		//good
+		_initOptions: function (option) {
+			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
+		},
+		_recordEleHeight: function () {
+			var mo = this;
+			this.obj
+				.find('.' + this.defaults.switchTabClass)
+				.each(function (i) {
+					if (!$(this).is(":visible")) {
+						$(this).show();
+						mo.orgHeight[i] = $(this).height();
+						$(this).hide();
+					} else {
+						mo.orgHeight[i] = $(this).height();
 					}
 				});
-			});
-		}
+			return mo.orgHeight;
+		},
+		_eventHandler: function () {
+			var mo = this;
+			this.obj
+				.find('.' + this.defaults.switchBtnClass)
+				.each(function (i) {
+					$(this).click(function (e) {
+						//var tabIndex = $(e.target).eq(i);
 
-		return this.each(initEach);
+						var curHeight = $(this).siblings('.' + mo.defaults.switchTabClass).height();
+						var tabContent = $(this).siblings('.' + mo.defaults.switchTabClass);
+
+						var animspeed = mo.defaults.animationDuration;
+						var toggleClass = mo.defaults.switchBtnToggleClass;
+
+						if (curHeight <= 0 || tabContent.is(":hidden")) {
+							tabContent.css({display: "block", height: 0, opacity: 0}).animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed);
+							$(this).removeClass(toggleClass);
+						} else {
+							tabContent.animate({'height': 0, 'opacity': 0}, animspeed);
+							$(this).addClass(toggleClass);
+						}
+					});
+				});
+		}
+	}
+
+	$.fn.guiCollapse = function (option) {
+
+		module._init(this, option);
+
+		return this.each(function () {
+		});
+	}
+
+	$.fn.guiCollapse.defaults = {
+		switchBtnClass: 'tab-btn',
+		switchBtnToggleClass: 'tab-btn-closed',
+		switchTabClass: 'tab-content',
+		animationDuration: 500
 	};
+
+	$.fn.guiCollapse.noConflict = function () {
+		$.fn.guiCollapse = old;
+		return this;
+	};
+
+	//for debug
+	$.fn.guiCollapse.debug = module;
 
 })(window);
 
@@ -797,108 +873,129 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiPlaceholder;
 
-	$.fn.guiPlaceholder = function (option) {
-
 		//define object
-		var placeholder = {
-			defaults: {
-				labelText: [],
-				labelMargin: '',
-				labelTextAlign: 'left',
-				labelOffset: {'top': 0, 'left': 0},
-				labelTextIndent: '5px',
-				animateSpeed: 300,
-				inputType: 'input'
+	var module = {
+		_inputId: {},
+		_inputSize: {},
+		_wrapperPosition: {},
+		_labelPosition: {},
+		_init: function (obj,option) {
+			this.obj = $(obj);
+			this._initOptions(option);
+			this._getInputEle();
+			this._addPlaceHolderElem();
+			this._EventHandler();
 			},
-			_init: function (obj) {
-				$.extend(this.defaults, option);
-				this._setInitialVarible(obj);
-				this._addPlaceHolderElem();
-				this._EventHandler();
-				this._destroy();
-			},
-			_setInitialVarible: function (obj) {
-				this.obj = obj;
-				this.inputTextObj = this.obj.find(this.defaults.inputType);
-			},
-			_addPlaceHolderElem: function () {
-				for (var i = 0; i < this.inputTextObj.length; i++) {
-					this._calculateLabelPostion(i);
-					this._getInputSize(i);
-					this._getInputId(i);
-					$('<label for=' + this._inputId.id + '></label>')
-						.insertAfter(this.inputTextObj.eq(i))
-						.text(this.defaults.labelText[i])
-						.css({'width': this._inputSize.width,
-							'height': this._inputSize.height,
-							'left': this._labelPosition.left + this.defaults.labelOffset.left,
-							'top': this._labelPosition.top + this.defaults.labelOffset.top,
-							'margin': this.defaults.labelMargin ? this.defaults.labelMargin : this._inputSize.margin,
-							'line-height': this._inputSize.height + 'px',
-							'text-indent': this.defaults.labelTextIndent,
-							'text-align': this.defaults.labelTextAlign,
-							'cursor': 'text',
-							'position': 'absolute'});
-				}
-			},
-			_inputId: {},
-			_getInputId: function (i) {
-				this._inputId.id = this.inputTextObj.eq(i).attr('id');
-				return this._inputId;//for unit test
-			},
-			_inputSize: {},
-			_getInputSize: function (i) {
-				this._inputSize.width = this.inputTextObj.eq(i).outerWidth();
-				this._inputSize.height = this.inputTextObj.eq(i).outerHeight();
-				this._inputSize.margin = this.inputTextObj.eq(i).css("margin");
-				return this._inputSize;//for unit test
-			},
-			_wrapperPosition: {},
-			_getParentPostion: function () {
-				this._wrapperPosition.left = this.obj.offset().left;
-				this._wrapperPosition.top = this.obj.offset().top;
-				return this._wrapperPosition;//for unit test
-			},
-			_labelPosition: {},
-			_calculateLabelPostion: function (i) {
-				this._getParentPostion();
-				var inputNodes = this.inputTextObj;
-				var inputLeft = inputNodes.eq(i).offset().left;
-				var inputTop = inputNodes.eq(i).offset().top;
-				var inputMarginTop = parseInt(inputNodes.eq(i).css('margin-top'), 10);
-				var inputMarginLeft = parseInt(inputNodes.eq(i).css('margin-left'), 10);
-				this._labelPosition.left = Math.abs(this._wrapperPosition.left - inputLeft + inputMarginLeft);
-				this._labelPosition.top = Math.abs(this._wrapperPosition.top - inputTop + inputMarginTop);
-				return this._labelPosition;//for unit test
-			},
-			_EventHandler: function () {
-				var defaults = this.defaults;
-				this.obj.delegate('label', 'mousedown', function (e) {
-					e.preventDefault();
-				});
-				this.obj.delegate(this.defaults.inputType, 'focus', function () {
-					$(this).parent().find('label').eq($(this).index(defaults.inputType)).stop(true, true).fadeOut(defaults.animateSpeed);
-				});
-				this.obj.delegate(this.defaults.inputType, 'blur', function () {
-					if($(this).val() === ''){
-						$(this).parent().find('label').eq($(this).index(defaults.inputType)).stop(true, true).fadeIn(defaults.animateSpeed);
-					}
-				});
-			},
-			_destroy: function () {
-				delete this._inputId,
-					this._inputSize,
-					this._wrapperPosition,
-					this._labelPosition;
+		//tested
+		_initOptions : function(option){
+			this.defaults = $.extend({},$.fn.guiPlaceholder.defaults, option);
+		},
+		//tesetd
+		_getInputEle : function () {
+			this.inputTextObj = this.obj.find(this.defaults.inputType);
+		},
+		//tested
+		_addPlaceHolderElem: function () {
+			this._getParentPostion();
+			for (var i = 0; i < this.inputTextObj.length; i++) {
+				this._calculateLabelPostion(i);
+				this._getInputSize(i);
+				this._getInputId(i);
+				$('<label for=' + this._inputId.id + '></label>')
+					.insertAfter(this.inputTextObj.eq(i))
+					.text(this.defaults.labelText[i])
+					.css({
+						'width': this._inputSize.width,
+						'height': this._inputSize.height,
+						'left': this._labelPosition.left + this.defaults.labelOffset.left,
+						'top': this._labelPosition.top + this.defaults.labelOffset.top,
+						//'margin': this.defaults.labelMargin ? this.defaults.labelMargin : this._inputSize.margin,
+						'line-height': this._inputSize.height + 'px',
+						'text-indent': this.defaults.labelTextIndent,
+						'text-align': this.defaults.labelTextAlign,
+						'cursor': 'text',
+						'position': 'absolute'
+					});
 			}
+		},
+		//tested
+		_getInputId: function (i) {
+			this._inputId.id = this.inputTextObj.eq(i).attr('id');
+			//return this._inputId;//for unit test
+		},
+		//tested
+		_getInputSize: function (i) {
+			this._inputSize.width = this.inputTextObj.eq(i).outerWidth();
+			this._inputSize.height = this.inputTextObj.eq(i).outerHeight();
+			this._inputSize.margin = this.inputTextObj.eq(i).css("margin");
+			//return this._inputSize;//for unit test
+		},
+		//tested
+		_getParentPostion: function () {
+			this._wrapperPosition.left = this.obj.offset().left;
+			this._wrapperPosition.top = this.obj.offset().top;
+			//return this._wrapperPosition;//for unit test
+		},
+		//tested
+		_calculateLabelPostion: function (i) {
+			var inputNodes = this.inputTextObj;
+			var inputLeft = inputNodes.eq(i).offset().left;
+			var inputTop = inputNodes.eq(i).offset().top;
+			var inputMarginTop = parseInt(inputNodes.eq(i).css('margin-top'), 10);
+			var inputMarginLeft = parseInt(inputNodes.eq(i).css('margin-left'), 10);
+
+			this._labelPosition.left = Math.abs(this._wrapperPosition.left - inputLeft + inputMarginLeft);
+			this._labelPosition.top = Math.abs(this._wrapperPosition.top - inputTop + inputMarginTop);
+			//return this._labelPosition;//for unit test
+		},
+		//tested
+		_EventHandler: function () {
+			var defaults = this.defaults;
+			this.obj.delegate('label', 'mousedown', function (e) {
+				e.preventDefault();
+			});
+			this.obj.delegate(this.defaults.inputType, 'focus', function () {
+				$(this)
+					.parent()
+					.find('label')
+					.eq($(this).index(defaults.inputType))
+					.stop(true, true)
+					.fadeOut(defaults.animateSpeed);
+			});
+			this.obj.delegate(this.defaults.inputType, 'blur', function () {
+				if($(this).val() === ''){
+					$(this)
+						.parent()
+						.find('label')
+						.eq($(this).index(defaults.inputType))
+						.stop(true, true)
+						.fadeIn(defaults.animateSpeed);
+				}
+			});
 		}
+	}
+
+	$.fn.guiPlaceholder = function (option) {
 
 		//$.extend({},placeholder.defaults, option);
 
-		placeholder._init(this);
-
-		return this;
+		return this.each(function(){
+			module._init(this,option);
+		});
 	}
+
+	$.fn.guiPlaceholder.defaults = {
+		labelText: [],
+		//labelMargin: '',
+		labelTextAlign: 'left',
+		labelOffset: {'top': 0, 'left': 0},
+		labelTextIndent: '5px',
+		animateSpeed: 300,
+		inputType: 'input'
+	};
+
+	//for debug
+	$.fn.guiPlaceholder.debug = module;
 
 	$.fn.guiPlaceholder.noConflict = function () {
 		$.fn.guiPlaceholder = old;
@@ -1074,7 +1171,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	var console = window.console,
 		$ = window.jQuery,
-		grace = window.grace,
+		gui = window.gui,
 		old = $.fn.guiDatePicker;
 
 	var module = {
@@ -1388,7 +1485,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		
 		module._init(this, option);
 
-		return this;
+		return this.each(function(){});
 	}
 
 	$.fn.guiDatePicker.defaults = {
@@ -1411,19 +1508,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		weekTitle : ['日','一','二','三','四','五','六']
 	}
 
+	//for debug
+	$.fn.guiDatePicker.debug = module;
+
 	$.fn.guiDatePicker.noConflict = function () {
 		$.fn.guiDatePicker = old;
 		return this;
 	};
 
-	//for debug
-	$.fn.guiDatePicker.debug = module;
-
-<<<<<<< HEAD
-})(window);
-/* ========================================================================
- * GUI: button-bar.js v0.1.0
-=======
 })(window);
 /* ========================================================================
  * GUI: button-bar.js v0.1.0
@@ -1494,7 +1586,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 })(window);
 /* ========================================================================
  * GUI: affix.js v0.1.0
->>>>>>> 885e9d6da142ff520ab8f4e65d996f72b2bd74a5
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -1516,219 +1607,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     "use strict";
 
     var $ = window.jQuery,
-<<<<<<< HEAD
-        console = window.console,
-        gui = window.gui,
-        old = $.fn.guiButtonBar;
-
-    $.fn.guiButtonBar = function (option) {
-        var defaults = {
-            selectedIndex: -1
-            },
-            options = $.extend({}, defaults, option),
-            $buttons,
-            selectedItem,
-            buttonStyle;
-
-        this.each(function () {
-            if (options.selectedIndex > -1) {
-                $buttons = $(this).find(".gui-btn");
-                if (options.selectedIndex < $buttons.length) {
-                    selectedItem = $buttons[options.selectedIndex];
-                    buttonStyle = /gui\-btn\-[^\s]+/.exec(selectedItem.className);
-                    $(selectedItem).addClass(buttonStyle + "-active").attr("selected", true);
-                }
-            }
-        });
-
-        this.delegate(".gui-btn", "click", function () {
-            var $button = $(this);
-            buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
-            if (buttonStyle) {
-                $button.siblings().removeClass(buttonStyle + "-active").attr("selected", false);
-                $button.addClass(buttonStyle + "-active").attr("selected", true);
-            }
-        });
-
-        return gui.plugin.patch($.fn.guiButtonBar, this, option);
-    };
-
-    // NO CONFLICT
-    // ===============
-
-    $.fn.guiButtonBar.noConflict = function () {
-        $.fn.guiButtonBar = old;
-        return this;
-    };
-})(window);
-/* ========================================================================
- * GUI: nav-ie-patch.js v0.1.0
- * http://www.gui.guoyao.me/
- * ========================================================================
- * Copyright 2013 Guoyao Wu
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ======================================================================== */
-
-(function (window) {
-    "use strict";
-
-    var console = window.console,
-        $ = window.jQuery,
-        gui = window.gui;
-
-    function setMaxHeight($$elements, childSelector, modifiedValue) {
-        $$elements.each(function () {
-            var $element = $(this),
-                maxHeight = 0;
-            $element.children(childSelector).each(function () {
-                var height = $(this).height();
-                if (height > maxHeight) {
-                    maxHeight = height;
-                }
-            });
-            if ($.isNumeric(modifiedValue)) {
-                maxHeight += modifiedValue;
-            }
-            $element.height(maxHeight);
-        });
-    }
-
-    //
-    // Navs
-    // --------------------------------------------------
-
-    if (!!$.fn.guiNav) {
-        $.fn.guiNav.iePatch = function ($$guiNav, options) {
-            if (gui.browserInfo.version <= 6) { // lte IE 6
-                $$guiNav.find("li").hover(function () {
-                    $(this).children("ul").css("display", "block");
-                }, function () {
-                    $(this).children("ul").css("display", "none");
-                });
-                $$guiNav.each(function () {
-                    var $guiNav = $(this),
-                        isVertical = $guiNav.hasClass("gui-nav-vertical");
-                    if (!isVertical) {
-                        $guiNav.children("li").css("float", "left");
-                        $guiNav.find("li li").each(function () {
-                            var $this = $(this);
-                            $this.width($this.parent().width());
-                            if ($this.children("ul").length > 0) {
-                                $this.css("margin-bottom", "-3px");
-                            }
-                        });
-                    } else {
-                        $guiNav.children("li").css("margin-left", "-16px").width($guiNav.width());
-                        $guiNav.find("li").mouseenter(function () {
-                            var $$subMenu = $(this).children("ul");
-                            $$subMenu.children("li").width($$subMenu.width());
-                        }).each(function () {
-                                var $this = $(this);
-                                if ($this.children("ul").length > 0) {
-                                    $this.css("margin-bottom", "-3px");
-                                }
-                            });
-                    }
-                });
-            } else  if (gui.browserInfo.version <= 7) {
-                $$guiNav.each(function () {
-                    var $guiNav = $(this),
-                        isVertical = $guiNav.hasClass("gui-nav-vertical");
-                    if (isVertical) {
-                        $guiNav.children("li").css("margin-left", "-16px").width($guiNav.width()).each(function () {
-                            var $this = $(this);
-                            if ($this.children("ul").length > 0) {
-                                $this.css("margin-bottom", "-3px");
-                            }
-                        });
-                    }
-                });
-            } else  if (gui.browserInfo.version <= 8) {
-                $$guiNav.each(function () {
-                    var $guiNav = $(this),
-                        isVertical = $guiNav.hasClass("gui-nav-vertical");
-                    if (!isVertical) {
-                        $guiNav.children("li:not(:first-child)").css("margin-left", "-4px");
-                    }
-                });
-            }
-            return $$guiNav;
-        };
-    }
-
-    //
-    // Tabs
-    // --------------------------------------------------
-
-    if (!!$.fn.guiTab) {
-        $.fn.guiTab.iePatch = function ($$guiTab, options) {
-            if (gui.plugin.isPluginInitialize(options)) {
-                if (gui.browserInfo.version <= 7) { // lte IE 7
-                    setMaxHeight($$guiTab.children(".tabs"), "li", -1);
-                }
-            }
-            return $$guiTab;
-        };
-    }
-
-    //
-    // Button
-    // --------------------------------------------------
-
-    if (!!$.fn.guiButton) {
-        $.fn.guiButton.iePatch = function ($$guiButton, options) {
-            if (gui.browserInfo.version <= 9) {
-                $("a.disabled").click(function () {
-                    return false;
-                });
-            }
-            if (gui.browserInfo.version <= 6) { // lte IE 6
-                $$guiButton.each(function () {
-                    var $this = $(this),
-                        buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
-                    if ($this.hasClass("disabled") || $this.attr("disabled")) {
-                        $this.css("cursor", "not-allowed");
-                    } else {
-                        $this.hover(function () {
-                            $this.addClass(buttonStyle + "-active");
-                        }, function () {
-                            if (!$this.attr("selected")) {
-                                $this.removeClass(buttonStyle + "-active");
-                            }
-                        });
-                    }
-                });
-            }
-            return $$guiButton;
-        };
-    }
-
-    //
-    // Button bar
-    // --------------------------------------------------
-
-    if (!!$.fn.guiButtonBar) {
-        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, options) {
-            if (gui.browserInfo.version <= 6) { // lte IE 6
-                $$guiButtonBar.find(".gui-btn + .gui-btn").css("margin-left", "-1px");
-            }
-            return $$guiButtonBar;
-        };
-    }
-
-})(window);
-=======
         old = $.fn.guiAffix;
 
     $.fn.guiAffix = function (options) {
@@ -1741,10 +1619,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             if (typeof data.offset != "object") {
                 data.offset = {top: data.offset, left: data.offset};
             }
-            if (data.offsetTop == 0 || data.offsetTop) data.offset.top = data.offsetTop;
-            if (data.offsetBottom == 0 || data.offsetBottom) data.offset.bottom = data.offsetBottom;
-            if (data.offsetLeft == 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
-            if (data.offsetRight == 0 || data.offsetRight) data.offset.right = data.offsetRight;
+            if (data.offsetTop === 0 || data.offsetTop) data.offset.top = data.offsetTop;
+            if (data.offsetBottom === 0 || data.offsetBottom) data.offset.bottom = data.offsetBottom;
+            if (data.offsetLeft === 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
+            if (data.offsetRight === 0 || data.offsetRight) data.offset.right = data.offsetRight;
 
             if (options) {
                 if (typeof options.offset === "object") {
@@ -1959,14 +1837,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                     if (!data.affixed) {
                         $this.data("affixed", true);
                         $window.on("scroll.gui.affix.data-api", function () {
-                            if (data.offset.top == 0 || data.offset.top) {
+                            if (data.offset.top === 0 || data.offset.top) {
                                 $this.css("top", $window.scrollTop() + parseInt(data.offset.top, 10) + "px");
-                            } else if (data.offset.bottom == 0 || data.offset.bottom) {
+                            } else if (data.offset.bottom === 0 || data.offset.bottom) {
                                 $this.css("top", $window.scrollTop() + $window.height() - $this.outerHeight() - parseInt(data.offset.bottom, 10) + "px");
                             }
-                            if (data.offset.left == 0 || data.offset.left) {
+                            if (data.offset.left === 0 || data.offset.left) {
                                 $this.css("left", $window.scrollLeft() + parseInt(data.offset.left, 10) + "px");
-                            } else if (data.offset.right == 0 || data.offset.right) {
+                            } else if (data.offset.right === 0 || data.offset.right) {
                                 $this.css("left", $window.scrollLeft() + $window.width() - $this.outerWidth() - parseInt(data.offset.right, 10) + "px");
                             }
                         });
@@ -1978,4 +1856,3 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     }
 
 })(window);
->>>>>>> 885e9d6da142ff520ab8f4e65d996f72b2bd74a5
