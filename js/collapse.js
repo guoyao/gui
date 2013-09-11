@@ -13,43 +13,43 @@
 
 	/*$.fn.guiCollapse = function (options) {
 
-	 var defaults = {
-	 switchBtnClass:'.tab-btn',
-	 switchBtnToggleClass:'tab-btn-closed',
-	 switchTabClass:'.tab-content',
-	 animationDuration: 500
-	 };
+	var defaults = {
+	switchBtnClass:'.tab-btn',
+	switchBtnToggleClass:'tab-btn-closed',
+	switchTabClass:'.tab-content',
+	animationDuration: 500
+	};
 
-	 options = $.extend({}, defaults, options);
+	options = $.extend({}, defaults, options);
 
-	 function initEach() {
-	 var $guiCollapse = $(this);
+	function initEach() {
+	var $guiCollapse = $(this);
 
-	 $guiCollapse.find(options.switchBtnClass).each(function(){
-	 var tabContent = $(this).siblings(options.switchTabClass);
-	 var orgHeight;
-	 if(!tabContent.is(":visible")){
-	 tabContent.show();
-	 orgHeight = tabContent.height();
-	 tabContent.hide();
-	 }else{
-	 orgHeight = tabContent.height();
-	 }
-	 $(this).click(function(){
-	 var curHeight = $(this).siblings(options.switchTabClass).height();
-	 if(curHeight <= 0 || tabContent.is(":hidden")){
-	 tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
-	 $(this).removeClass(options.switchBtnToggleClass);
-	 }else{
-	 tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
-	 $(this).addClass(options.switchBtnToggleClass);
-	 }
-	 });
-	 });
-	 }
+	$guiCollapse.find(options.switchBtnClass).each(function(){
+	var tabContent = $(this).siblings(options.switchTabClass);
+	var orgHeight;
+	if(!tabContent.is(":visible")){
+	tabContent.show();
+	orgHeight = tabContent.height();
+	tabContent.hide();
+	}else{
+	orgHeight = tabContent.height();
+	}
+	$(this).click(function(){
+	var curHeight = $(this).siblings(options.switchTabClass).height();
+	if(curHeight <= 0 || tabContent.is(":hidden")){
+	tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
+	$(this).removeClass(options.switchBtnToggleClass);
+	}else{
+	tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
+	$(this).addClass(options.switchBtnToggleClass);
+	}
+	});
+	});
+	}
 
-	 return this.each(initEach);
-	 };*/
+	return this.each(initEach);
+	};*/
 
 	var module = {
 		_init: function (obj, option) {
@@ -86,28 +86,28 @@
 					$(this).click(function (e) {
 						//var tabIndex = $(e.target).eq(i);
 
-						//var curHeight = $(this).siblings('.' + mo.defaults.switchTabClass).height();
+						var curHeight = $(this).siblings('.' + mo.defaults.switchTabClass).height();
 						var tabContent = $(this).siblings('.' + mo.defaults.switchTabClass);
 
 						var animspeed = mo.defaults.animationDuration;
 						var toggleClass = mo.defaults.switchBtnToggleClass;
 
-						//if (curHeight <= 0 || tabContent.is(":hidden")) {
+						if (curHeight <= 0 || tabContent.is(":hidden")) {
+							tabContent
+								.css({display: "block", height: 0, opacity: 0})
+								.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed);
+							$(this).removeClass(toggleClass);
+						} else {
+							tabContent
+								.animate({'height': 0, 'opacity': 0}, animspeed);
+							$(this).addClass(toggleClass);
+						}
 						//tabContent
-						//.css({display: "block", height: 0, opacity: 0})
-						//.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed);
-						//$(this).removeClass(toggleClass);
-						//} else {
-						//tabContent
-						//.animate({'height': 0, 'opacity': 0}, animspeed);
-						//$(this).addClass(toggleClass);
-						//}
-						tabContent
-							.css({display: "block", height: 0, opacity: 0})
-							.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed)
-							.siblings()
-							.animate({'height': 0, 'opacity': 0}, animspeed);
-						$(this).addClass(toggleClass).siblings().removeClass(toggleClass);
+							//.css({display: "block", height: 0, opacity: 0})
+							//.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed)
+							//.siblings()
+							//.animate({'height': 0, 'opacity': 0}, animspeed);
+							//$(this).addClass(toggleClass).siblings().removeClass(toggleClass);
 					});
 				});
 		}
