@@ -2245,6 +2245,92 @@ input[type="button"].gui-btn-block {
   background: #ffe5b1 !important;
 }
 
+.carousel {
+  position: relative;
+}
+
+.carousel .carousel-inner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel .carousel-inner .item {
+  position: absolute;
+  top: 0;
+  display: none;
+}
+
+.carousel .carousel-inner .active {
+  position: relative;
+  left: 0;
+  display: block;
+}
+
+.carousel .carousel-inner .prev,
+.carousel .carousel-inner .next {
+  display: block;
+}
+
+.carousel .carousel-control-left,
+.carousel .carousel-control-right {
+  position: absolute;
+  top: 40%;
+  display: block;
+  width: 40px;
+  height: 40px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 60px;
+  line-height: 30px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  background: black;
+  border: 3px solid white;
+  border-radius: 25px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.carousel .carousel-control-left {
+  left: 10px;
+}
+
+.carousel .carousel-control-right {
+  right: 10px;
+}
+
+.carousel .carousel-control-left:hover,
+.carousel .carousel-control-right:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+
+.carousel .carousel-indicators {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.carousel .carousel-indicators li {
+  display: block;
+  float: left;
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  list-style-type: none;
+  background: white;
+  border-radius: 5px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+
+.carousel .carousel-indicators li.active {
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+}
+
 /*!
  * css hack for ie explorer
  */
