@@ -23,7 +23,7 @@
     var $ = window.jQuery,
         old = $.fn.guiAffix;
 
-    $.fn.guiAffix = function (options) {
+    $.fn.guiAffix = function (option) {
         this.each(function () {
             var $this = $(this),
                 data = $this.data();
@@ -38,18 +38,18 @@
             if (data.offsetLeft === 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
             if (data.offsetRight === 0 || data.offsetRight) data.offset.right = data.offsetRight;
 
-            if (options) {
-                if (typeof options.offset === "object") {
-                    $.extend(data, options);
-                } else if (options.offset === 0 || (typeof options.offset === "string" && options.offset)) {
-                    data.offset = {top: options.offset, left: options.offset};
+            if (option) {
+                if (typeof option.offset === "object") {
+                    $.extend(data, option);
+                } else if (option.offset === 0 || (typeof option.offset === "string" && option.offset)) {
+                    data.offset = {top: option.offset, left: option.offset};
                 }
             }
 
             $this.css(data.offset);
         });
 
-        return gui.plugin.patch($.fn.guiAffix, this, options);
+        return gui.plugin.patch($.fn.guiAffix, this, option);
     };
 
     // AFFIX NO CONFLICT

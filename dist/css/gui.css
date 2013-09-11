@@ -1509,7 +1509,7 @@ pre code {
 .gui-btn:active,
 .gui-btn.active {
   background-image: none;
-  outline: 0;
+  outline: none;
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
           box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
@@ -2257,6 +2257,10 @@ input[type="button"].gui-btn-block {
   *float: left;
 }
 
+.gui-nav a.active {
+  _background-color: transparent;
+}
+
 .gui-nav-vertical > li {
   *float: none;
 }
@@ -2281,9 +2285,54 @@ input[type="button"].gui-btn-block {
 }
 
 .gui-btn {
-  _padding: 3px 6px;
-  *padding-top: 3px;
-  *padding-bottom: 3px;
+  *padding: 4px 10px;
+}
+
+label.gui-btn {
+  *padding-top: 6px;
+  *padding-bottom: 6px;
+}
+
+button.gui-btn-default-active,
+label.gui-btn-default-active {
+  _z-index: 2;
+  _background-color: #ebebeb;
+  _border-color: #adadad;
+}
+
+button.gui-btn-primary-active,
+label.gui-btn-primary-active {
+  _z-index: 2;
+  _background-color: #3276b1;
+  _border-color: #285e8e;
+}
+
+button.gui-btn-warning-active,
+label.gui-btn-warning-active {
+  _z-index: 2;
+  _background-color: #ed9c28;
+  _border-color: #d58512;
+}
+
+button.gui-btn-danger-active,
+label.gui-btn-danger-active {
+  _z-index: 2;
+  _background-color: #d2322d;
+  _border-color: #ac2925;
+}
+
+button.gui-btn-success-active,
+label.gui-btn-success-active {
+  _z-index: 2;
+  _background-color: #47a447;
+  _border-color: #398439;
+}
+
+button.gui-btn-info-active,
+label.gui-btn-info-active {
+  _z-index: 2;
+  _background-color: #39b3d7;
+  _border-color: #269abc;
 }
 
 .gui-btn-bar {

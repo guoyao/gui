@@ -67,17 +67,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 })()
             },
             plugin = {
-                patch: function (plugin, $$elements, options) {
+                patch: function (plugin, $$elements, option) {
                     if (browserInfo.isIE && !!plugin && $.isFunction(plugin.iePatch)) {
-                        plugin.iePatch($$elements, options);
+                        plugin.iePatch($$elements, option);
                     }
                     return $$elements;
                 },
-                isPluginMethodCall: function (options) {
-                    return typeof options === "string";
+                isPluginMethodCall: function (option) {
+                    return typeof option === "string";
                 },
-                isPluginInitialize: function (options) {
-                    return options === undefined || options === null || typeof options === "object";
+                isPluginInitialize: function (option) {
+                    return option === undefined || option === null || typeof option === "object";
                 }
             };
 
@@ -190,7 +190,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         gui = window.gui,
         old = $.fn.guiNav;
 
-    $.fn.guiNav = function (options) {
+    $.fn.guiNav = function (option) {
 
         var defaults = {
             styleName: "",
@@ -198,27 +198,27 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             animationDuration: 500
         };
 
-        options = $.extend(defaults, options);
+        option = $.extend(defaults, option);
 
         this.each(function () {
             var $guiNav = $(this),
                 isVertical = $guiNav.hasClass("gui-nav-vertical");
 
-            if (options.styleName) {
-                $guiNav.addClass(options.styleName);
+            if (option.styleName) {
+                $guiNav.addClass(option.styleName);
             }
 
             $guiNav.find("li").mouseenter(function () {
                 var $navItem = $(this),
                     $$subMenu = $navItem.children("ul");
                 $$subMenu.css("left", (isVertical || !$navItem.parent().hasClass("gui-nav")) ? $navItem.width() : 0);
-                if (options.itemFadeIn) {
-                    $$subMenu.css("opacity", 0).animate({opacity: 1}, options.animationDuration);
+                if (option.itemFadeIn) {
+                    $$subMenu.css("opacity", 0).animate({opacity: 1}, option.animationDuration);
                 }
             });
         });
 
-        return gui.plugin.patch($.fn.guiNav, this, options);
+        return gui.plugin.patch($.fn.guiNav, this, option);
     };
 
     // NO CONFLICT
@@ -1108,11 +1108,15 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         var $parent = this.$element.closest('[data-toggle="buttons"]');
 
         if ($parent.length) {
-            var $input = this.$element.find('input')
-                .prop('checked', !this.$element.hasClass('active'))
-                .trigger('change');
-            if ($input.prop('type') === 'radio') {
+            var $input = this.$element.find('input');
+            if ($input.prop('type') === 'checkbox') {
+                $input.prop('checked', !this.$element.hasClass('active'))
+                    .trigger('change');
+            } else if ($input.prop('type') === 'radio') {
                 $parent.find('.active').removeClass('active');
+                if(!$input.prop('checked')) {
+                    $input.prop('checked', true).trigger('change');
+                }
             }
         }
 
@@ -1602,7 +1606,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     var $ = window.jQuery,
         old = $.fn.guiAffix;
 
-    $.fn.guiAffix = function (options) {
+    $.fn.guiAffix = function (option) {
         this.each(function () {
             var $this = $(this),
                 data = $this.data();
@@ -1617,18 +1621,18 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             if (data.offsetLeft === 0 || data.offsetLeft) data.offset.left = data.offsetLeft;
             if (data.offsetRight === 0 || data.offsetRight) data.offset.right = data.offsetRight;
 
-            if (options) {
-                if (typeof options.offset === "object") {
-                    $.extend(data, options);
-                } else if (options.offset === 0 || (typeof options.offset === "string" && options.offset)) {
-                    data.offset = {top: options.offset, left: options.offset};
+            if (option) {
+                if (typeof option.offset === "object") {
+                    $.extend(data, option);
+                } else if (option.offset === 0 || (typeof option.offset === "string" && option.offset)) {
+                    data.offset = {top: option.offset, left: option.offset};
                 }
             }
 
             $this.css(data.offset);
         });
 
-        return gui.plugin.patch($.fn.guiAffix, this, options);
+        return gui.plugin.patch($.fn.guiAffix, this, option);
     };
 
     // AFFIX NO CONFLICT
@@ -1667,7 +1671,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
  * limitations under the License.
  * ======================================================================== */
 
-(function (window) {
+(function (window, undefined) {
     "use strict";
 
     var console = window.console,
@@ -1696,7 +1700,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // --------------------------------------------------
 
     if (!!$.fn.guiNav) {
-        $.fn.guiNav.iePatch = function ($$guiNav, options) {
+        $.fn.guiNav.iePatch = function ($$guiNav, option) {
             if (gui.browserInfo.version <= 6) { // lte IE 6
                 $$guiNav.find("li").hover(function () {
                     $(this).children("ul").css("display", "block");
@@ -1759,8 +1763,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // --------------------------------------------------
 
     if (!!$.fn.guiTab) {
-        $.fn.guiTab.iePatch = function ($$guiTab, options) {
-            if (gui.plugin.isPluginInitialize(options)) {
+        $.fn.guiTab.iePatch = function ($$guiTab, option) {
+            if (gui.plugin.isPluginInitialize(option)) {
                 if (gui.browserInfo.version <= 7) { // lte IE 7
                     setMaxHeight($$guiTab.children(".tabs"), "li", -1);
                 }
@@ -1774,28 +1778,60 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // --------------------------------------------------
 
     if (!!$.fn.guiButton) {
-        $.fn.guiButton.iePatch = function ($$guiButton, options) {
-            if (gui.browserInfo.version <= 9) {
-                $("a.disabled").click(function () {
-                    return false;
-                });
-            }
-            if (gui.browserInfo.version <= 6) { // lte IE 6
-                $$guiButton.each(function () {
-                    var $this = $(this),
-                        buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
-                    if ($this.hasClass("disabled") || $this.attr("disabled")) {
-                        $this.css("cursor", "not-allowed");
-                    } else {
-                        $this.hover(function () {
-                            $this.addClass(buttonStyle + "-active");
-                        }, function () {
-                            if (!$this.attr("selected")) {
-                                $this.removeClass(buttonStyle + "-active");
-                            }
-                        });
+        if (gui.browserInfo.isIE && gui.browserInfo.version <= 6) {  // lte IE 6
+            var GuiButton = $.fn.guiButton.Constructor;
+            GuiButton.prototype.toggle = function () {
+                var $parent = this.$element.closest('[data-toggle="buttons"]');
+                if (this.$element.data("active") === undefined) {
+                    this.$element.data("active", false);
+                }
+                this.$element.data("active", !this.$element.data("active"));
+                if ($parent.length) {
+                    var buttonStyle = /gui\-btn\-[^\s]+/.exec(this.$element.attr("class"));
+                    var $input = this.$element.find('input');
+                    if ($input.prop('type') === 'checkbox') {
+                        $input.prop('checked', this.$element.data("active"))
+                            .trigger('change');
+                        if (this.$element.data("active")) {
+                            this.$element.addClass(buttonStyle + "-active");
+                        }
+                    } else if ($input.prop('type') === 'radio') {
+                        $parent.find("." + buttonStyle + "-active").removeClass(buttonStyle + "-active").data("active", false);
+                        this.$element.data("active", true);
+                        this.$element.addClass(buttonStyle + "-active");
+                        if(!$input.prop('checked')) {
+                            $input.prop('checked', true).trigger('change');
+                        }
                     }
-                });
+                }
+            }
+        }
+
+        $.fn.guiButton.iePatch = function ($$guiButton, option) {
+            if (gui.plugin.isPluginInitialize(option)) {
+                if (gui.browserInfo.version <= 9) {
+                    $("a.disabled").click(function () {
+                        return false;
+                    });
+                }
+                if (gui.browserInfo.version <= 6) { // lte IE 6
+                    $$guiButton.each(function () {
+                        var $this = $(this),
+                            buttonStyle;
+                        if ($this.hasClass("disabled") || $this.attr("disabled")) {
+                            $this.css("cursor", "not-allowed");
+                        } else {
+                            buttonStyle = /gui\-btn\-[^\s]+/.exec(this.className);
+                            $this.hover(function () {
+                                $this.addClass(buttonStyle + "-active");
+                            }, function () {
+                                if (!$this.data("active")) {
+                                    $this.removeClass(buttonStyle + "-active");
+                                }
+                            });
+                        }
+                    });
+                }
             }
             return $$guiButton;
         };
@@ -1806,9 +1842,16 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // --------------------------------------------------
 
     if (!!$.fn.guiButtonBar) {
-        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, options) {
+        $.fn.guiButtonBar.iePatch = function ($$guiButtonBar, option) {
             if (gui.browserInfo.version <= 6) { // lte IE 6
                 $$guiButtonBar.find(".gui-btn + .gui-btn").css("margin-left", "-1px");
+                $$guiButtonBar.each(function () {
+                    var $this = $(this);
+                    if ($this.data("toggle") == "buttons") {
+                        $this.find('> .gui-btn > input[type="radio"]').css("display", "none");
+                        $this.find('> .gui-btn > input[type="checkbox"]').css("display", "none");
+                    }
+                });
             }
             return $$guiButtonBar;
         };
@@ -1819,7 +1862,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // --------------------------------------------------
 
     if (!!$.fn.guiAffix) {
-        $.fn.guiAffix.iePatch = function ($$guiAffix, options) {
+        $.fn.guiAffix.iePatch = function ($$guiAffix, option) {
             if (gui.browserInfo.version <= 6) { // lte IE 6
                 var $window = $(window);
                 $$guiAffix.detach().appendTo($("body")).css("position", "absolute");

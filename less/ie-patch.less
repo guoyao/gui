@@ -11,6 +11,9 @@
   > li {
     *float: left;
   }
+  a.active {
+    _background-color: transparent;
+  }
 }
 
 .gui-nav-vertical {
@@ -52,10 +55,72 @@
 // Button
 // ---------------------------------------------------
 .gui-btn {
-  *padding-top: @padding-base-vertical / 2;
-  *padding-bottom: @padding-base-vertical / 2;
-  _padding: @padding-base-vertical/2 @padding-base-horizontal/2;
+  *padding: @padding-base-vertical - 2 @padding-base-horizontal - 2;
+  label& {
+    *padding-top: @padding-base-vertical;
+    *padding-bottom: @padding-base-vertical;
+  }
 }
+
+
+
+.gui-btn-default-active {
+  button&,
+  label& {
+    _background-color: darken(@btn-default-bg, 8%);
+    _border-color: darken(@btn-default-border, 12%);
+    _z-index: 2;
+  }
+}
+.gui-btn-primary-active {
+  button&,
+  label& {
+    _background-color: darken(@btn-primary-bg, 8%);
+    _border-color: darken(@btn-primary-border, 12%);
+    _z-index: 2;
+  }
+}
+.gui-btn-warning-active {
+  button&,
+  label& {
+    _background-color: darken(@btn-warning-bg, 8%);
+    _border-color: darken(@btn-warning-border, 12%);
+    _z-index: 2;
+  }
+}
+.gui-btn-danger-active {
+  button&,
+  label& {
+    _background-color: darken(@btn-danger-bg, 8%);
+    _border-color: darken(@btn-danger-border, 12%);
+    _z-index: 2;
+  }
+}
+.gui-btn-success-active {
+  button&,
+  label& {
+    _background-color: darken(@btn-success-bg, 8%);
+    _border-color: darken(@btn-success-border, 12%);
+    _z-index: 2;
+  }
+}
+.gui-btn-info-active {
+  button&,
+  label& {
+    _background-color: darken(@btn-info-bg, 8%);
+    _border-color: darken(@btn-info-border, 12%);
+    _z-index: 2;
+  }
+}
+
+// remove black border around buttons in IE 7
+//input[type=submit],
+//input[type=reset],
+//input[type=button],
+//button
+//{
+//  *filter:chroma(color=#000000);
+//}
 
 //
 // Button bar
