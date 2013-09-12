@@ -146,7 +146,22 @@ html {
 .carousel {
   .carousel-inner{
     .active {
-      _zoom:1;
+      zoom:1;
+    }
+  }
+  .carousel-control-left ,.carousel-control-right {
+    filter:alpha(opacity=50);
+  }
+  .carousel-control-left:hover ,.carousel-control-right:hover {
+    filter:alpha(opacity=80);
+  }
+  .carousel-indicators {
+    li {
+      filter:alpha(opacity=50);
+    }
+    li.active {
+      filter:alpha(opacity=90);
     }
   }
 }
+

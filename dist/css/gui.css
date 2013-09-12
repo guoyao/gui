@@ -2321,6 +2321,7 @@ input[type="button"].gui-btn-block {
   width: 10px;
   height: 10px;
   margin-left: 5px;
+  overflow: hidden;
   list-style-type: none;
   background: white;
   border-radius: 5px;
