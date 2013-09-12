@@ -2265,6 +2265,8 @@ input[type="button"].gui-btn-block {
   position: relative;
   left: 0;
   display: block;
+  background: none;
+  zoom: 1;
 }
 
 .carousel .carousel-inner .prev,
@@ -2431,4 +2433,8 @@ label.gui-btn-info-active {
 
 html {
   _background-image: url(about:blank);
+}
+
+.carousel .carousel-inner .active {
+  _zoom: 1;
 }

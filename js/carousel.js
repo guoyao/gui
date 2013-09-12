@@ -193,7 +193,7 @@
 			_autoSlide: function () {
 				if (this._autoAnim) {
 					$(this.obj)
-						.find('[data-slide=prev]')
+						.find('[data-slide=next]')
 						.trigger("click");
 				}
 			}
