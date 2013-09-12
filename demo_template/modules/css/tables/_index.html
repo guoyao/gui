@@ -1,0 +1,304 @@
+<div class="module-container">
+  <h1 id="tables">Tables</h1>
+
+  <hr/>
+
+  <h2 id="tables-example">Basic example</h2>
+
+  <p>For basic styling&mdash;light padding and only horizontal dividers&mdash;add the base class <code>.gui-table</code>
+    to any <code>&lt;table&gt;</code>.</p>
+  <table class="gui-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+    </tbody>
+  </table>
+  <pre class="prettyprint">
+&lt;table class="gui-table"&gt;
+  ...
+&lt;/table&gt;</pre>
+
+  <h2 id="tables-striped">Striped rows</h2>
+
+  <p>Use <code>.gui-table-striped</code> to add zebra-striping to any table row within the <code>&lt;tbody&gt;</code>.
+  </p>
+  <table class="gui-table gui-table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+    </tbody>
+  </table>
+    <pre class="prettyprint">
+&lt;table class="gui-table gui-table-striped"&gt;
+  ...
+&lt;/table&gt;</pre>
+
+  <h2 id="tables-bordered">Bordered table</h2>
+  <p>Add <code>.gui-table-bordered</code> for borders on all sides of the table and cells.</p>
+  <table class="gui-table gui-table-bordered">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td rowspan="2">1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@TwBootstrap</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td colspan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+    </tbody>
+  </table>
+  <pre class="prettyprint">
+&lt;table class="gui-table gui-table-bordered"&gt;
+  ...
+&lt;/table&gt;</pre>
+
+  <h2 id="tables-hover-rows">Hover rows</h2>
+  <p>Add <code>.gui-table-hover</code> to enable a hover state on table rows within a <code>&lt;tbody&gt;</code>.</p>
+  <table class="gui-table gui-table-hover">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td colspan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+    </tbody>
+  </table>
+    <pre class="prettyprint">
+&lt;table class="gui-table gui-table-hover"&gt;
+  ...
+&lt;/table&gt;</pre>
+
+  <h2 id="tables-condensed">Condensed table</h2>
+  <p>Add <code>.gui-table-condensed</code> to make tables more compact by cutting cell padding in half.</p>
+  <table class="gui-table gui-table-condensed">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td colspan="2">Larry the Bird</td>
+      <td>@twitter</td>
+    </tr>
+    </tbody>
+  </table>
+  <pre class="prettyprint">
+&lt;table class="gui-table gui-table-condensed"&gt;
+  ...
+&lt;/table&gt;</pre>
+
+  <h2 id="tables-contextual-classes">Contextual classes</h2>
+  <p>Use contextual classes to color table rows or individual cells.</p>
+  <table class="gui-table gui-table-bordered gui-table-striped">
+    <colgroup>
+      <col class="col-lg-1">
+      <col class="col-lg-7">
+    </colgroup>
+    <thead>
+    <tr>
+      <th>Class</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>
+        <code>.active</code>
+      </td>
+      <td>Applies the hover color to a particular row or cell</td>
+    </tr>
+    <tr>
+      <td>
+        <code>.success</code>
+      </td>
+      <td>Indicates a successful or positive action</td>
+    </tr>
+    <tr>
+      <td>
+        <code>.warning</code>
+      </td>
+      <td>Indicates a warning that might need attention</td>
+    </tr>
+    <tr>
+      <td>
+        <code>.danger</code>
+      </td>
+      <td>Indicates a dangerous or potentially negative action</td>
+    </tr>
+    </tbody>
+  </table>
+  <table class="gui-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Column heading</th>
+      <th>Column heading</th>
+      <th>Column heading</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="active">
+      <td>1</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="success">
+      <td>3</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="warning">
+      <td>5</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="danger">
+      <td>7</td>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    </tbody>
+  </table>
+  <pre class="prettyprint">
+&lt;!-- On rows --&gt;
+&lt;tr class="active"&gt;...&lt;/tr&gt;
+&lt;tr class="success"&gt;...&lt;/tr&gt;
+&lt;tr class="warning"&gt;...&lt;/tr&gt;
+&lt;tr class="danger"&gt;...&lt;/tr&gt;<br />
+&lt;!-- On cells (`td` or `th`) --&gt;
+&lt;tr&gt;
+  &lt;td class="active"&gt;...&lt;/td&gt;
+  &lt;td class="success"&gt;...&lt;/td&gt;
+  &lt;td class="warning"&gt;...&lt;/td&gt;
+  &lt;td class="danger"&gt;...&lt;/td&gt;
+&lt;/tr&gt;</pre>
+</div>

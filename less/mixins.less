@@ -43,7 +43,8 @@
 // Webkit-style focus
 .tab-focus() {
   // Default
-  outline: thin dotted #333;
+  outline: thin dotted #333
+;
   // Webkit
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
@@ -223,7 +224,7 @@
   border-color: @border;
 
   &:hover,
-//  &:focus,
+    //  &:focus,
   &:active,
   &.active {
     color: @color;
@@ -251,6 +252,36 @@
   font-size: @font-size;
   line-height: @line-height;
   border-radius: @border-radius;
+}
+
+// Tables
+// -------------------------
+.table-row-variant(@state, @background, @border) {
+  // Exact selectors below required to override `.gui-table-striped` and prevent
+  // inheritance to nested tables.
+  .gui-table > thead > tr,
+  .gui-table > tbody > tr,
+  .gui-table > tfoot > tr {
+    > td.@{state},
+    > th.@{state},
+    &.@{state} > td,
+    &.@{state} > th {
+      background-color: @background;
+      border-color: @border;
+    }
+  }
+
+  // Hover states for `.gui-table-hover`
+  // Note: this is not available for cells or rows within `thead` or `tfoot`.
+  .gui-table-hover > tbody > tr {
+    > td.@{state}:hover,
+    > th.@{state}:hover,
+    &.@{state}:hover > td,
+    &.@{state}:hover > th {
+      background-color: darken(@background, 5%);
+      border-color: darken(@border, 5%);
+    }
+  }
 }
 
 // OTHERS

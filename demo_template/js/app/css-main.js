@@ -10,7 +10,8 @@ define(["./demo"], function (demo) {
         new Module("Normalize", "normalize"),
         new Module("Grid System", "grid-system"),
         new Module("Typography", "typography"),
-        new Module("Buttons", "buttons")
+        new Module("Buttons", "buttons"),
+        new Module("Tables", "tables")
     ], {
         modulesDirectory: "modules/css"
     }).init();
