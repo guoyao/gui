@@ -87,8 +87,8 @@
 
 				var targetOffset = $(e.target).offset();
 
-				var tooltipOrgEleWidth = $(e.target).width();
-				var tooltipOrgEleHeight = $(e.target).height();
+				var tooltipOrgEleWidth = $(e.target).outerWidth();
+				var tooltipOrgEleHeight = $(e.target).outerHeight();
 
 				var w = tooltipEle.outerWidth();
 				var h = tooltipEle.outerHeight();

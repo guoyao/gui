@@ -42,44 +42,83 @@ $(function (undefined) {
 
 		}
 	});
-
-	//_judgeTooltipNode()  _eventHandler()
-	test("judge the tooltip element is exist or not", function () {
-
+	//_judgeTooltipNode()
+	test("test tooltip", function () {
 		var ifNodeExist;
 		//bind test event
 		$("[data-toggle=tooltip]").on("mouseover",function(e){
 			ifNodeExist = moduleDebug._judgeTooltipNode(e);
-			console.log(ifNodeExist)
-			//console.log(ifNodeExist)
+
 		});
 		//trigger mouseover event for test
 		$("[data-toggle=tooltip]").trigger("mouseover");
-
-		//console.log($(".tooltip-demo"))
-		//console.log($(".tooltip").length)
 
 		equal(ifNodeExist , true, "tooltip should not be exist!");
 	});
-	//_judgeTooltipNode()  _eventHandler()
-	test("judge the tooltip element is exist or not", function () {
+	//_judgeTooltipNode()  _appendTooltip()
+	test("test tooltip", function () {
+		var ifNodeExist
+			,pos
+			,localPos;
+		function calLocalPos(e,tooltipEle){
 
-		moduleDebug._eventHandler();
+				var parentOffset = $(".tooltip-demo").offset();
+				var targetOffset = $(e.target).offset();
 
-		var ifNodeExist;
+				var tooltipOrgEleWidth = $(e.target).outerWidth();
+				var tooltipOrgEleHeight = $(e.target).outerHeight();
+
+				var w = tooltipEle.outerWidth();
+				var h = tooltipEle.outerHeight();
+
+				var direction = $(e.target).attr('data-placement');
+
+				var calculatedLeft,
+					calculatedTop;
+
+				switch (direction) {
+					case "top":
+						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
+						break;
+					case "right":
+						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth;
+						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
+						break;
+					case "bottom":
+						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight;
+						break;
+					case "left":
+						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) - w;
+						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
+						break;
+					default:
+						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
+						break;
+				}
+				return {left: calculatedLeft, top: calculatedTop}
+			}
 		//bind test event
 		$("[data-toggle=tooltip]").on("mouseover",function(e){
-			//console.log($(e.target).next('.tooltip').length)
+
+			var $tooltip = moduleDebug._appendTooltip(e);
+
 			ifNodeExist = moduleDebug._judgeTooltipNode(e);
-			console.log(ifNodeExist)
+
+			var pos = moduleDebug._calTooltipPos(e, $tooltip);
+
+			var localPos = calLocalPos(e , $tooltip);
+
+			moduleDebug._setTooltipPos(e, $tooltip);
+			
 		});
 		//trigger mouseover event for test
 		$("[data-toggle=tooltip]").trigger("mouseover");
 
-		//console.log($(".tooltip").length)
-		//console.log($(".tooltip").length)
-
-		equal(ifNodeExist , false, "tooltip should not be exist!");
+		equal(ifNodeExist , false, "tooltip should be appended!");
+		deepEqual(pos , localPos , "position should be the same!");
 	});
 
 });
