@@ -52,7 +52,7 @@
 }
 
 //
-// Button
+// Buttons
 // ---------------------------------------------------
 .gui-btn {
   *padding: @padding-base-vertical - 2 @padding-base-horizontal - 2;
@@ -140,8 +140,133 @@ html {
 }
 
 //
+// Tables
+// --------------------------------------------------
+.gui-table {
+  width: 100%;
+  margin-bottom: @line-height-computed;
+  // Cells
+  thead,
+  tbody,
+  tfoot {
+    tr {
+      th, td {
+        _padding: @table-cell-padding;
+        _line-height: @line-height-base;
+        _vertical-align: top;
+        _border-top: 1px solid @table-border-color;
+      }
+    }
+  }
+  // Bottom align for column headings
+  thead tr th {
+    _vertical-align: bottom;
+    _border-bottom: 2px solid @table-border-color;
+  }
+}
+
+.gui-table-condensed {
+  thead,
+  tbody,
+  tfoot {
+    tr {
+      th, td {
+        _padding: @table-condensed-cell-padding;
+      }
+    }
+  }
+}
+
+.gui-table-bordered {
+  _border: 1px solid @table-border-color;
+  thead,
+  tbody,
+  tfoot {
+    tr {
+      th, td {
+        _border: 1px solid @table-border-color;
+      }
+    }
+  }
+  thead {
+    tr {
+      th, td {
+        _border-bottom-width: 2px;
+      }
+    }
+  }
+}
+
+.gui-table-striped {
+  tbody tr.nth-child-odd {
+    td, th {
+      background-color: @table-bg-accent; // lte IE 8
+    }
+  }
+}
+
+.gui-table-hover {
+  tbody tr.hover {
+    td, th {
+      _background-color: @table-bg-hover;
+    }
+  }
+}
+
+.gui-table {
+  thead, tbody, tfoot {
+    tr {
+      td.active,
+      th.active,
+      &.active td,
+      &.active th  {
+        _background-color: @table-bg-active;
+        _color: @text-color;
+      }
+    }
+  }
+}
+
+// Generate the contextual variants
+.table-row-variant-ie(success, @state-success-bg, @state-success-border);
+.table-row-variant-ie(danger, @state-danger-bg, @state-danger-border);
+.table-row-variant-ie(warning, @state-warning-bg, @state-warning-border);
+
+//
 // Other
 // --------------------------------------------------
 a.active {
   _color:  @link-color;
+}
+
+//
+// Mixin
+// --------------------------------------------------
+
+.table-row-variant-ie(@state, @background, @border) {
+  // Exact selectors below required to override `.gui-table-striped` and prevent
+  // inheritance to nested tables.
+  .gui-table {
+    thead, tbody, tfoot {
+      tr {
+        td.@{state},
+        th.@{state},
+        &.@{state} td,
+        &.@{state} th {
+          background-color: @background;
+          border-color: @border;
+        }
+      }
+    }
+  }
+
+  // Hover states for `.gui-table-hover`
+  // Note: this is not available for cells or rows within `thead` or `tfoot`.
+  .gui-table-hover tbody tr {
+    &.@{state}-hover td,
+    &.@{state}-hover th {
+      background-color: darken(@background, 5%);
+      border-color: darken(@border, 5%);
+    }
+  }
 }

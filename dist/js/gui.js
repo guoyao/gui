@@ -2014,6 +2014,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         $ = window.jQuery,
         gui = window.gui;
 
+    if (!gui.browserInfo.isIE)
+        return;
+
     function setMaxHeight($$elements, childSelector, modifiedValue) {
         $$elements.each(function () {
             var $element = $(this),
@@ -2114,7 +2117,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     // --------------------------------------------------
 
     if (!!$.fn.guiButton) {
-        if (gui.browserInfo.isIE && gui.browserInfo.version <= 6) {  // lte IE 6
+        if (gui.browserInfo.version <= 6) {  // lte IE 6
             var GuiButton = $.fn.guiButton.Constructor;
             GuiButton.prototype.toggle = function () {
                 var $parent = this.$element.closest('[data-toggle="buttons"]');
@@ -2226,5 +2229,35 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             return $$guiAffix;
         };
     }
+
+    //
+    // Table Plugin
+    // --------------------------------------------------
+    $.fn.guiTable = function () {
+        if (gui.browserInfo.version <= 6) { // lte IE 6
+            this.find("thead:first-child tr:first-child").find("th, td").css("border-top", 0);
+        }
+        if (gui.browserInfo.version <= 8) { // lte IE 8
+            this.each(function () {
+                var $this = $(this);
+                if ($this.hasClass("gui-table-striped")) {
+                    $this.find("> tbody > tr:nth-child(odd)").addClass("nth-child-odd");
+                }
+                if (gui.browserInfo.version <= 6) { // lte IE 6
+                    if ($this.hasClass("gui-table-hover")) {
+                        $this.find("> tbody > tr").hover(function () {
+                            var state = /success|danger|warning/.exec(this.className);
+                            $(this).addClass(state ? state + "-hover" : "hover");
+                        }, function () {
+                            var state = /success|danger|warning/.exec(this.className);
+                            $(this).removeClass(state ? state + "-hover" : "hover");
+                        });
+                    }
+                }
+            });
+        }
+
+        return this;
+    };
 
 })(window);

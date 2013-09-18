@@ -8,5 +8,11 @@ require(["jquery", "prettify", "gui"], function ($, prettify) {
     var root = window,
         gui = root.gui;
 
+    if (gui.browserInfo.isIE) {
+        if (gui.browserInfo.version <= 8) { // lte IE 8
+            $(".gui-table").guiTable();
+        }
+    }
+
     prettify.prettyPrint();
 });
