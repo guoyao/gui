@@ -294,8 +294,8 @@ a.active {
         th.@{state},
         &.@{state} td,
         &.@{state} th {
-          background-color: @background;
-          border-color: @border;
+          _background-color: @background;
+          _border-color: @border;
         }
       }
     }
@@ -306,8 +306,8 @@ a.active {
   .gui-table-hover tbody tr {
     &.@{state}-hover td,
     &.@{state}-hover th {
-      background-color: darken(@background, 5%);
-      border-color: darken(@border, 5%);
+      _background-color: darken(@background, 5%);
+      _border-color: darken(@border, 5%);
     }
   }
 }
