@@ -22,6 +22,7 @@
   }
 }
 
+
 //
 // Tabs
 // ---------------------------------------------------
@@ -51,9 +52,11 @@
   }
 }
 
+
 //
 // Buttons
 // ---------------------------------------------------
+
 .gui-btn {
   *padding: @padding-base-vertical - 2 @padding-base-horizontal - 2;
   label& {
@@ -122,9 +125,11 @@
 //  *filter:chroma(color=#000000);
 //}
 
+
 //
 // Button bar
 // ---------------------------------------------------
+
 .gui-btn-bar {
   *display: inline;
   .gui-btn {
@@ -132,16 +137,20 @@
   }
 }
 
+
 //
 // Affix.js
 // --------------------------------------------------
+
 html {
   _background-image: url(about:blank); // avoid flicker on ie6
 }
 
+
 //
 // Tables
 // --------------------------------------------------
+
 .gui-table {
   width: 100%;
   margin-bottom: @line-height-computed;
@@ -232,12 +241,44 @@ html {
 .table-row-variant-ie(danger, @state-danger-bg, @state-danger-border);
 .table-row-variant-ie(warning, @state-warning-bg, @state-warning-border);
 
+
+//
+// Panels
+// --------------------------------------------------
+
+.gui-panel {
+  .gui-table-beside-gui-panel-body { // hack for > .gui-panel-body + .gui-table
+    *border-top: 1px solid @table-border-color;
+  }
+}
+
+.gui-panel-default {
+  .panel-variant-ie(@panel-default-border, @panel-default-text, @panel-default-heading-bg, @panel-default-border);
+}
+.gui-panel-primary {
+  .panel-variant-ie(@panel-primary-border, @panel-primary-text, @panel-primary-heading-bg, @panel-primary-border);
+}
+.gui-panel-success {
+  .panel-variant-ie(@panel-success-border, @panel-success-text, @panel-success-heading-bg, @panel-success-border);
+}
+.gui-panel-warning {
+  .panel-variant-ie(@panel-warning-border, @panel-warning-text, @panel-warning-heading-bg, @panel-warning-border);
+}
+.gui-panel-danger {
+  .panel-variant-ie(@panel-danger-border, @panel-danger-text, @panel-danger-heading-bg, @panel-danger-border);
+}
+.gui-panel-info {
+  .panel-variant-ie(@panel-info-border, @panel-info-text, @panel-info-heading-bg, @panel-info-border);
+}
+
 //
 // Other
 // --------------------------------------------------
+
 a.active {
   _color:  @link-color;
 }
+
 
 //
 // Mixin
@@ -268,5 +309,14 @@ a.active {
       background-color: darken(@background, 5%);
       border-color: darken(@border, 5%);
     }
+  }
+}
+
+.panel-variant-ie(@border, @heading-text-color, @heading-bg-color, @heading-border) {
+  _border-color: @border;
+  & .gui-panel-heading {
+    _color: @heading-text-color;
+    _background-color: @heading-bg-color;
+    _border-color: @heading-border;
   }
 }

@@ -266,8 +266,17 @@
                 }
             });
         }
-
         return this;
     };
+
+    //
+    // Panels
+    // --------------------------------------------------
+    $.fn.guiPanel = function () {
+        if (gui.browserInfo.version <= 7) { // lte IE 7
+            this.find("> .gui-panel-body + .gui-table").addClass("gui-table-beside-gui-panel-body");
+        }
+        return  this;
+    }
 
 })(window);
