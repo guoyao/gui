@@ -2695,6 +2695,75 @@ th {
   opacity: 0.7;
 }
 
+.tooltip {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  padding: 5px;
+}
+
+.tooltip .tooltip-inner {
+  max-width: 200px;
+  padding: 8px;
+  color: white;
+  background: black;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+}
+
+.tooltip .tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.tooltip .top {
+  bottom: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-color: white;
+  border-color: transparent;
+  border-top-color: black;
+  border-style: solid;
+  border-width: 5px 5px 0;
+}
+
+.tooltip .right {
+  top: 50%;
+  left: 0;
+  margin-top: -5px;
+  border-color: white;
+  border-color: transparent;
+  border-right-color: black;
+  border-style: solid;
+  border-width: 5px 5px 5px 0;
+}
+
+.tooltip .bottom {
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-color: white;
+  border-color: transparent;
+  border-bottom-color: black;
+  border-style: solid;
+  border-width: 0 5px 5px;
+}
+
+.tooltip .left {
+  top: 50%;
+  right: 0;
+  margin-top: -5px;
+  border-color: white;
+  border-color: transparent;
+  border-left-color: black;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+}
+
 /*!
  * css hack for ie explorer
  */
