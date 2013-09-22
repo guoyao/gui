@@ -2349,8 +2349,7 @@ input[type="button"].gui-btn-block {
 .gui-popup-window .gui-popup-content {
   position: relative;
   z-index: 10000;
-  max-width: 1000px;
-  min-width: 500px;
+  min-width: 1000px;
   min-height: 500px;
   padding: 20px;
   margin: 5% auto 0;
@@ -2507,4 +2506,13 @@ html {
 
 .carousel .carousel-indicators li.active {
   filter: alpha(opacity=90);
+}
+
+.gui-popup-window .gui-popup-content {
+  _width: 1000px;
+  _height: 500px;
+}
+
+.gui-popup-window .gui-popup-bg {
+  filter: alpha(opacity=70);
 }
