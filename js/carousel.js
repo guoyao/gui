@@ -140,7 +140,7 @@
 					switch (dir) {
 						case "next":
 
-							$otherObj.eq(num).addClass("next").css({"left": "100%"});
+							//$otherObj.eq(num).addClass("next").css({"left": "100%"});
 
 							$activeObj.stop(false, true).animate(
 								{"left": "-100%"}
@@ -148,13 +148,13 @@
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).stop(false, true).animate({
+							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(false, true).animate({
 								"left": "0"
-							}, "linear", function () {
+								}, "linear", function () {
 								$otherObj.eq(num)
 									.removeClass("next")
 									.addClass("active");
-							});
+								});
 
 							break;
 						case "prev":
@@ -167,9 +167,9 @@
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).stop(false, true).animate({
-								"left": "0"
-							}, "linear", function () {
+							$otherObj.eq(num).stop(false, true).animate(
+								{"left": "0"}
+								, "linear", function () {
 								$otherObj.eq(num)
 									.removeClass("prev")
 									.addClass("active");
@@ -193,7 +193,7 @@
 			_autoSlide: function () {
 				if (this._autoAnim) {
 					$(this.obj)
-						.find('[data-slide=prev]')
+						.find('[data-slide=next]')
 						.trigger("click");
 				}
 			}

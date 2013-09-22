@@ -11,46 +11,6 @@
 		gui = window.gui,
 		old = $.fn.guiCollapse;
 
-	/*$.fn.guiCollapse = function (options) {
-
-	var defaults = {
-	switchBtnClass:'.tab-btn',
-	switchBtnToggleClass:'tab-btn-closed',
-	switchTabClass:'.tab-content',
-	animationDuration: 500
-	};
-
-	options = $.extend({}, defaults, options);
-
-	function initEach() {
-	var $guiCollapse = $(this);
-
-	$guiCollapse.find(options.switchBtnClass).each(function(){
-	var tabContent = $(this).siblings(options.switchTabClass);
-	var orgHeight;
-	if(!tabContent.is(":visible")){
-	tabContent.show();
-	orgHeight = tabContent.height();
-	tabContent.hide();
-	}else{
-	orgHeight = tabContent.height();
-	}
-	$(this).click(function(){
-	var curHeight = $(this).siblings(options.switchTabClass).height();
-	if(curHeight <= 0 || tabContent.is(":hidden")){
-	tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
-	$(this).removeClass(options.switchBtnToggleClass);
-	}else{
-	tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
-	$(this).addClass(options.switchBtnToggleClass);
-	}
-	});
-	});
-	}
-
-	return this.each(initEach);
-	};*/
-
 	var module = {
 		_init: function (obj, option) {
 			this.obj = obj;
@@ -59,7 +19,7 @@
 			this._eventHandler();
 		},
 		orgHeight: [],
-		//good
+		//
 		_initOptions: function (option) {
 			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
 		},
@@ -102,12 +62,6 @@
 								.animate({'height': 0, 'opacity': 0}, animspeed);
 							$(this).addClass(toggleClass);
 						}
-						//tabContent
-							//.css({display: "block", height: 0, opacity: 0})
-							//.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed)
-							//.siblings()
-							//.animate({'height': 0, 'opacity': 0}, animspeed);
-							//$(this).addClass(toggleClass).siblings().removeClass(toggleClass);
 					});
 				});
 		}
