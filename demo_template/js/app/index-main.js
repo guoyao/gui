@@ -11,7 +11,7 @@ define(["./demo"], function (demo) {
         new Module("Tab Navigator", "tab-navigator"),
         new Module("Collapse Menu", "collapse-menu"),
         new Module("Popup Window", "popup-window"),
-        new Module("Panel Navigator", "panel-navigator"),
+        new Module("Panel", "panel"),
         new Module("Place Holder", "place-holder"),
         new Module("Slider", "slider"),
         new Module("Date Picker", "date-picker"),
