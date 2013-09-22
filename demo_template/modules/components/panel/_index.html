@@ -1,0 +1,209 @@
+<div class="module-container">
+  <h1 id="panels">Panels</h1>
+  <p class="lead">While not always necessary, sometimes you need to put your DOM in a box. For those situations, try the panel component.</p>
+
+  <h3 id="panels-basic">Basic example</h3>
+  <p>By default, all the <code>.gui-panel</code> does is apply some basic border and padding to contain some content.</p>
+  <div class="gui-panel gui-panel-default">
+    <div class="gui-panel-body">
+      Basic panel example
+    </div>
+  </div>
+  <pre class="prettyprint">
+&lt;div class="gui-panel gui-panel-default"&gt;
+  &lt;div class="gui-panel-body"&gt;
+    Basic panel example
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+  <h3 id="panels-heading">Panel with heading</h3>
+  <p>Easily add a heading container to your panel with <code>.gui-panel-heading</code>. You may also include any <code>&lt;h1&gt;</code>-
+    <code>&lt;h6&gt;</code> with a <code>.gui-panel-title</code> class to add a pre-styled heading.</p>
+  <div class="gui-panel gui-panel-default">
+    <div class="gui-panel-heading">Panel heading without title</div>
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+  </div>
+  <div class="gui-panel gui-panel-default">
+    <div class="gui-panel-heading">
+      <h3 class="gui-panel-title">Panel title</h3>
+    </div>
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+  </div>
+  <pre class="prettyprint">
+&lt;div class="gui-panel gui-panel-default"&gt;
+  &lt;div class="gui-panel-heading"&gt;Panel heading without title&lt;/div&gt;
+  &lt;div class="gui-panel-body"&gt;
+    Panel content
+  &lt;/div&gt;
+&lt;/div&gt;<br />
+&lt;div class="gui-panel gui-panel-default"&gt;
+  &lt;div class="gui-panel-heading"&gt;
+    &lt;h3 class="gui-panel-title"&gt;Panel title&lt;/h3&gt;
+  &lt;/div&gt;
+  &lt;div class="gui-panel-body"&gt;
+    Panel content
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+  <h3 id="panels-footer">Panel with footer</h3>
+  <p>Wrap buttons or secondary text in <code>.gui-panel-footer</code>. Note that panel footers <strong>do not</strong>
+    inherit colors and borders when using contextual variations as they are not meant to be in the foreground.</p>
+  <div class="gui-panel gui-panel-default">
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+    <div class="gui-panel-footer">Panel footer</div>
+  </div>
+  <pre class="prettyprint">
+&lt;div class="gui-panel gui-panel-default"&gt;
+  &lt;div class="gui-panel-body"&gt;
+    Panel content
+  &lt;/div&gt;
+  &lt;div class="gui-panel-footer"&gt;Panel footer&lt;/div&gt;
+&lt;/div&gt;</pre>
+
+  <h3 id="panels-alternatives">Contextual alternatives</h3>
+  <p>Like other components, easily make a panel more meaningful to a particular context by adding any of the contextual state classes.</p>
+  <div class="gui-panel gui-panel-primary">
+    <div class="gui-panel-heading">
+      <h3 class="gui-panel-title">Panel title</h3>
+    </div>
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+  </div>
+  <div class="gui-panel gui-panel-success">
+    <div class="gui-panel-heading">
+      <h3 class="gui-panel-title">Panel title</h3>
+    </div>
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+  </div>
+  <div class="gui-panel gui-panel-info">
+    <div class="gui-panel-heading">
+      <h3 class="gui-panel-title">Panel title</h3>
+    </div>
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+  </div>
+  <div class="gui-panel gui-panel-warning">
+    <div class="gui-panel-heading">
+      <h3 class="gui-panel-title">Panel title</h3>
+    </div>
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+  </div>
+  <div class="gui-panel gui-panel-danger">
+    <div class="gui-panel-heading">
+      <h3 class="gui-panel-title">Panel title</h3>
+    </div>
+    <div class="gui-panel-body">
+      Panel content
+    </div>
+  </div>
+  <pre class="prettyprint">
+&lt;div class="gui-panel gui-panel-primary"&gt;...&lt;/div&gt;
+&lt;div class="gui-panel gui-panel-success"&gt;...&lt;/div&gt;
+&lt;div class="gui-panel gui-panel-info"&gt;...&lt;/div&gt;
+&lt;div class="gui-panel gui-panel-warning"&gt;...&lt;/div&gt;
+&lt;div class="gui-panel gui-panel-danger"&gt;...&lt;/div&gt;</pre>
+
+  <h3 id="panels-tables">With tables</h3>
+  <p>Add any non-bordered <code>.gui-table</code> within a panel for a seamless design. If there is a <code>.gui-panel-body</code>,
+    we add an extra border to the top of the table for separation.</p>
+  <div class="gui-panel gui-panel-default">
+    <!-- Default panel contents -->
+    <div class="gui-panel-heading">Panel heading</div>
+    <div class="gui-panel-body">
+      <p>Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur.
+        Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+    </div>
+    <!-- Table -->
+    <table class="gui-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Username</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <pre class="prettyprint">
+&lt;div class="gui-panel gui-panel-default"&gt;
+  &lt;!-- Default panel contents --&gt;
+  &lt;div class="gui-panel-heading"&gt;Panel heading&lt;/div&gt;
+  &lt;div class="gui-panel-body"&gt;
+    &lt;p&gt;...&lt;/p&gt;
+  &lt;/div&gt;<br />
+  &lt;!-- Table --&gt;
+  &lt;table class="gui-table"&gt;
+    ...
+  &lt;/table&gt;
+&lt;/div&gt;</pre>
+  <p>If there is no panel body, the component moves from panel header to table without interruption.</p>
+  <div class="gui-panel gui-panel-default">
+    <!-- Default panel contents -->
+    <div class="gui-panel-heading">Panel heading</div>
+
+    <!-- Table -->
+    <table class="gui-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Username</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>1</td>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

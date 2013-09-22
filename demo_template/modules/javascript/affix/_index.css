@@ -1,16 +1,3 @@
-table {
-    border: 1px solid #d1d1d1;
-}
-
-th, td {
-    border: 1px solid #d1d1d1;
-    padding: 6px;
-}
-
-tr:nth-child(odd) > td {
-    background-color: #eee;
-}
-
 .bottom-affix-dialog {
     width: 220px;
     height: 100px;

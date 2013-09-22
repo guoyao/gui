@@ -95,7 +95,6 @@
                 }
                 return false;
             });
-
         }
 
         this.each(function () {
