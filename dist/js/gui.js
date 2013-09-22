@@ -487,7 +487,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					$guiPopupWindowBg = $('.' + this.defaults.mainBgClass);
 
 				var visibleBody = document.documentElement.clientHeight;
-				var bodyHeight = document.body.scrollHeight//document.body.clientHeight;
+				var bodyHeight = document.body.scrollHeight;//document.body.clientHeight;
 				var popWindowHeight = bodyHeight;
 
 				if(visibleBody > bodyHeight){
@@ -504,7 +504,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					'height': popWindowHeight
 				});
 
-				$guiPopupCloseBtn.text(this.defaults.closeBtn.value);
+				$guiPopupCloseBtn.text(this.defaults.closeBtn.text);
 			},
 			_eventHandler : function(){
 
@@ -516,12 +516,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				var $regetGuiPopupCloseBtn = $('.' + this.defaults.closeBtnWrapperClass);
 				var $guiPopupContentNode = $('.' + this.defaults.contentNodeClass);
 
-				$(this.obj).click(function (e) {
-					console.log($(e.target))
+				$(this.obj).click(function () {
 					that._setAttributes();
 					//var dataurl = $guiPopupBtn.attr('data-url');
 					$guiPopupWindow.fadeIn(that.defaults.animationDuration);
-					$guiPopupContentNode.html(that.defaults.contentNodes.text);
+					//$guiPopupContentNode.html(that.defaults.contentNodes.text);
+					$guiPopupContentNode[that.defaults.contentNodes.html ? 'html' : 'text'](that.defaults.contentNodes.contents);
 
 				});
 				$regetGuiPopupCloseBtn.click(function () {
@@ -624,19 +624,18 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	$.fn.guiPopup.defaults = {
 		animationDuration: 500,
-		bgcolor: 'rgba(0,0,0,0.7)',
 		mainWrapperClass: 'gui-popup-window',
 		contentWrapperClass: 'gui-popup-content',
 		contentNodeClass: 'gui-popup-content-node',
 		closeBtnWrapperClass: 'gui-popup-closebtn',
 		mainBgClass: 'gui-popup-bg',
-		selector: '.',
 		wrapper:'body',
 		contentNodes: {
-			text: 'JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by wrapping the expression with back-ticks:'
+			html:false,
+			contents: 'JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by wrapping the expression with back-ticks:'
 		},
 		closeBtn: {
-			value: 'X'
+			text: 'X'
 		}
 	};
 
