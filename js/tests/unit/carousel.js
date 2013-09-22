@@ -101,8 +101,6 @@ $(function (undefined) {
         //get local direct index
         var getLocalPrevIndex = $(moduleDebug.obj).find('.carousel-indicators li').eq(2).index();
 
-        console.log(directItemIndex)
-
         equal(directItemIndex.num, getLocalPrevIndex, "should be the same index");
         equal(directItemIndex.dir, 'next', "should be the next direction");
     });

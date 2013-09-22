@@ -110,14 +110,14 @@
 		},
 		_eventCapture: function () {
 			var slider = this;
-			$("." + this.defaults.btnWrapperClass).mousedown(function (e) {
+			$("." + this.defaults.btnWrapperClass).on("mousedown",function (e) {
 				e.preventDefault();
 				slider._saveTarget(e);
 			});
-			$(document).mousemove(function (e) {
+			$(document).on("mousemove",function (e) {
 				slider._refreshPosition(e);
 			});
-			$(document).mouseup(function (e) {
+			$(document).on("mouseup",function (e) {
 				slider._destroyTarget();
 			});
 		},

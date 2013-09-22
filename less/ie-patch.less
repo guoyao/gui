@@ -146,7 +146,6 @@ html {
   _background-image: url(about:blank); // avoid flicker on ie6
 }
 
-
 //
 // Tables
 // --------------------------------------------------
@@ -241,6 +240,31 @@ html {
 .table-row-variant-ie(danger, @state-danger-bg, @state-danger-border);
 .table-row-variant-ie(warning, @state-warning-bg, @state-warning-border);
 
+//
+// Carousel.js
+// --------------------------------------------------
+
+.carousel {
+  .carousel-inner{
+    .active {
+      zoom:1;
+    }
+  }
+  .carousel-control-left ,.carousel-control-right {
+    filter:alpha(opacity=50);
+  }
+  .carousel-control-left:hover ,.carousel-control-right:hover {
+    filter:alpha(opacity=80);
+  }
+  .carousel-indicators {
+    li {
+      filter:alpha(opacity=50);
+    }
+    li.active {
+      filter:alpha(opacity=90);
+    }
+  }
+}
 
 //
 // Panels
@@ -269,6 +293,20 @@ html {
 }
 .gui-panel-info {
   .panel-variant-ie(@panel-info-border, @panel-info-text, @panel-info-heading-bg, @panel-info-border);
+}
+
+//
+// Popup.js
+// --------------------------------------------------
+
+.gui-popup-window {
+  .gui-popup-content {
+    _width: 1000px;
+    _height: 500px;
+  }
+  .gui-popup-bg {
+    filter:alpha(opacity=70);
+  }
 }
 
 //

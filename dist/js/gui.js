@@ -369,46 +369,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiCollapse;
 
-	/*$.fn.guiCollapse = function (options) {
-
-	var defaults = {
-	switchBtnClass:'.tab-btn',
-	switchBtnToggleClass:'tab-btn-closed',
-	switchTabClass:'.tab-content',
-	animationDuration: 500
-	};
-
-	options = $.extend({}, defaults, options);
-
-	function initEach() {
-	var $guiCollapse = $(this);
-
-	$guiCollapse.find(options.switchBtnClass).each(function(){
-	var tabContent = $(this).siblings(options.switchTabClass);
-	var orgHeight;
-	if(!tabContent.is(":visible")){
-	tabContent.show();
-	orgHeight = tabContent.height();
-	tabContent.hide();
-	}else{
-	orgHeight = tabContent.height();
-	}
-	$(this).click(function(){
-	var curHeight = $(this).siblings(options.switchTabClass).height();
-	if(curHeight <= 0 || tabContent.is(":hidden")){
-	tabContent.css({display:"block", height:0,opacity:0}).animate({'height': orgHeight,'opacity': 1},options.animationDuration);
-	$(this).removeClass(options.switchBtnToggleClass);
-	}else{
-	tabContent.animate({'height':0,'opacity': 0},options.animationDuration);
-	$(this).addClass(options.switchBtnToggleClass);
-	}
-	});
-	});
-	}
-
-	return this.each(initEach);
-	};*/
-
 	var module = {
 		_init: function (obj, option) {
 			this.obj = obj;
@@ -417,7 +377,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this._eventHandler();
 		},
 		orgHeight: [],
-		//good
+		//
 		_initOptions: function (option) {
 			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
 		},
@@ -460,12 +420,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 								.animate({'height': 0, 'opacity': 0}, animspeed);
 							$(this).addClass(toggleClass);
 						}
-						//tabContent
-							//.css({display: "block", height: 0, opacity: 0})
-							//.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed)
-							//.siblings()
-							//.animate({'height': 0, 'opacity': 0}, animspeed);
-							//$(this).addClass(toggleClass).siblings().removeClass(toggleClass);
 					});
 				});
 		}
@@ -497,91 +451,159 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 (function (window) {
 	"use strict";
 
-	var document = window.document,
-		console = window.console,
+	var console = window.console,
 		$ = window.jQuery,
-		gui = window.gui;
+		gui = window.gui,
+		old = $.fn.guiPopup;
 
-	$.fn.guiPopup = function (options) {
+	$.fn.guiPopup = function (option) {
 
-		var defaults = {
+		var module = {
+			_init : function(obj,option){
+				this.obj = obj;
+				this._initOptions(option);
+				this._appendPopup();
+				this._eventHandler();
+			},
+			_initOptions: function (option) {
+				this.defaults = $.extend({}, $.fn.guiPopup.defaults, option);
+			},
+			_appendPopup : function(){
+				if($('.' + this.defaults.mainWrapperClass).length === 0){
+					$('<div class="' + this.defaults.mainWrapperClass + '">' +
+					'<div class="' + this.defaults.contentWrapperClass + '">' +
+					'<b class="' + this.defaults.closeBtnWrapperClass + '"></b>' +
+					'<div class="' + this.defaults.contentNodeClass + '"></div>' +
+					'</div>' +
+					'<div class="'+ this.defaults.mainBgClass +'"></div>' +
+					'</div>').appendTo(this.defaults.wrapper);
+				}
+			},
+			_setAttributes : function(){
+				$guiPopupWindow = $('.' + this.defaults.mainWrapperClass);
+				var $guiPopupContent = $('.' + this.defaults.contentWrapperClass),
+					$guiPopupCloseBtn = $('.' + this.defaults.closeBtnWrapperClass),
+					$guiPopupWindowBg = $('.' + this.defaults.mainBgClass);
+
+				var visibleBody = document.documentElement.clientHeight;
+				var bodyHeight = document.body.scrollHeight;//document.body.clientHeight;
+				var popWindowHeight = bodyHeight;
+
+				if(visibleBody > bodyHeight){
+					popWindowHeight = visibleBody;
+				}
+				//alert(document.body.scrollHeight)
+				//console.log(visibleBody , bodyHeight , document.body.scrollHeight)
+
+				$guiPopupWindow.css({
+					'height': popWindowHeight
+				});
+
+				$guiPopupWindowBg.css({
+					'height': popWindowHeight
+				});
+
+				$guiPopupCloseBtn.text(this.defaults.closeBtn.text);
+			},
+			_eventHandler : function(){
+
+				var that = this;
+				var $guiPopupCloseBtn = $('.' + this.defaults.closeBtnWrapperClass);
+
+				var $guiPopupWindow = $('.' + this.defaults.mainWrapperClass);
+				var $guiPopupContent = $('.' + this.defaults.contentWrapperClass);
+				var $regetGuiPopupCloseBtn = $('.' + this.defaults.closeBtnWrapperClass);
+				var $guiPopupContentNode = $('.' + this.defaults.contentNodeClass);
+
+				$(this.obj).click(function () {
+					that._setAttributes();
+					//var dataurl = $guiPopupBtn.attr('data-url');
+					$guiPopupWindow.fadeIn(that.defaults.animationDuration);
+					//$guiPopupContentNode.html(that.defaults.contentNodes.text);
+					$guiPopupContentNode[that.defaults.contentNodes.html ? 'html' : 'text'](that.defaults.contentNodes.contents);
+
+				});
+				$regetGuiPopupCloseBtn.click(function () {
+					$guiPopupWindow.fadeOut();
+				});
+			}
+		}
+		if (option == 'debug') {
+			//for debug
+			return module;
+		}
+		return this.each(function () {
+			module._init(this, option);
+		});
+	}
+
+		/*var defaults = {
 			animationDuration: 500,
 			bgcolor: 'rgba(0,0,0,0.7)',
-			bgWrapperClass: 'gui-popup-window',
+			mainWrapperClass: 'gui-popup-window',
 			contentWrapperClass: 'gui-popup-content',
 			contentNodeClass: 'gui-popup-content-node',
 			closeBtnWrapperClass: 'gui-popup-closebtn',
+			mainBgClass: 'gui-popup-bg',
 			selector: '.',
 			contentNodes: {
 				text: 'JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by wrapping the expression with back-ticks:'
 			},
 			closeBtn: {
 				value: 'X',
-				background: 'gray',
-				fontColor: 'white',
-				lineHeight: '100px',
-				fontSize: 40,
-				border: '1px solid #eee',
-				width: 100,
-				height: 100,
-				position: 'absolute',
-				top: -100,
-				right: -100,
-				cursor: 'pointer'
 			}
 		};
 
-		options = $.extend({}, defaults, options);
+		//options = $.extend({}, defaults, options);
 
 		function initEach() {
 			var $guiPopupBtn = $(this);
 
-			var $guiPopupWindow = $(options.selector + options.bgWrapperClass);
+			var $guiPopupWindow = $(options.selector + options.mainWrapperClass);
 
-			if ($guiPopupWindow.length < 1) {
-				$('<div class="' + options.bgWrapperClass + '" style="display:none;">' +
+			//$("body").css({"position":"relative"});
+
+			if ($guiPopupWindow.length === 0) {
+				$('<div class="' + options.mainWrapperClass + '">' +
 					'<div class="' + options.contentWrapperClass + '">' +
 					'<b class="' + options.closeBtnWrapperClass + '"></b>' +
 					'<div class="' + options.contentNodeClass + '"></div>' +
 					'</div>' +
+					'<div class="'+ options.mainBgClass +'"></div>' +
 					'</div>').appendTo($('body'));
 
-				$guiPopupWindow = $(options.selector + options.bgWrapperClass);
+				$guiPopupWindow = $(options.selector + options.mainWrapperClass);
 				var $guiPopupContent = $(options.selector + options.contentWrapperClass),
-					$guiPopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
+					$guiPopupCloseBtn = $(options.selector + options.closeBtnWrapperClass),
+					$guiPopupWindowBg = $(options.selector + options.mainBgClass);
 
-				$guiPopupWindow.css({'background': options.bgcolor,
-					'width': '100%',
-					'height': 1000,
-					'z-index': 9999,
-					'position': 'absolute',
-					'top': 0,
-					'left': 0
+				var visibleBody = document.documentElement.clientHeight;
+				var bodyHeight = document.body.clientHeight;
+				var popWindowHeight = bodyHeight;
+
+				if(visibleBody > bodyHeight){
+					popWindowHeight = visibleBody;
+				}
+
+				$guiPopupWindow.css({
+					'height': popWindowHeight//$("body")[0].scrollHeight,//document.documentElement.scrollTop
 				});
-				$guiPopupContent.css({'min-width': 500,
-					'max-width': 1000,
-					'min-height': 500,
-					'background': 'white',
-					'margin': '5% auto 0',
-					'position': 'relative'
+				
+				$guiPopupContent.css({
+
 				});
-				$guiPopupCloseBtn.css({'width': options.closeBtn.width,
-					'height': options.closeBtn.height,
-					'display': 'block',
-					'position': options.closeBtn.position,
-					'top': options.closeBtn.top,
-					'right': options.closeBtn.right,
-					'background': options.closeBtn.background,
-					'color': options.closeBtn.fontColor,
-					'font-size': options.closeBtn.fontSize,
-					'line-height': options.closeBtn.lineHeight,
-					'cursor': options.closeBtn.cursor,
-					'text-align':'center'
+				//$(".gui-popup-bg").css('height',$("body")[0].scrollHeight)
+				$guiPopupWindowBg.css({
+					'height': popWindowHeight
+				});
+
+				$guiPopupCloseBtn.css({
+					
 				})
 					.text(options.closeBtn.value);
 			}
 
-			$guiPopupWindow = $(options.selector + options.bgWrapperClass);
+			$guiPopupWindow = $(options.selector + options.mainWrapperClass);
 			//$guiPopupContent = $(options.selector + options.contentWrapperClass),
 			var $regetGuiPopupCloseBtn = $(options.selector + options.closeBtnWrapperClass);
 			var $guiPopupContentNode = $(options.selector + options.contentNodeClass);
@@ -590,13 +612,35 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				//var dataurl = $guiPopupBtn.attr('data-url');
 				$guiPopupWindow.fadeIn(options.animationDuration);
 				$guiPopupContentNode.html(options.contentNodes.text);
+
 			});
 			$regetGuiPopupCloseBtn.click(function () {
 				$guiPopupWindow.fadeOut();
 			});
 		}
-
 		return this.each(initEach);
+	};*/
+
+	$.fn.guiPopup.defaults = {
+		animationDuration: 500,
+		mainWrapperClass: 'gui-popup-window',
+		contentWrapperClass: 'gui-popup-content',
+		contentNodeClass: 'gui-popup-content-node',
+		closeBtnWrapperClass: 'gui-popup-closebtn',
+		mainBgClass: 'gui-popup-bg',
+		wrapper:'body',
+		contentNodes: {
+			html:false,
+			contents: 'JavaScript expressions can be evaluated as values inside .less files. We recommend using caution with this feature as the LESS will not be compilable by ports and it makes the LESS harder to maintain. If possible, try to think of a function that can be added to achieve the same purpose and ask for it on github. We have plans to allow expanding the default functions available. However, if you still want to use JavaScript in .less, this is done by wrapping the expression with back-ticks:'
+		},
+		closeBtn: {
+			text: 'X'
+		}
+	};
+
+	$.fn.guiPopup.noConflict = function () {
+		$.fn.guiPopup = old;
+		return this;
 	};
 
 })(window);
@@ -713,14 +757,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		_eventCapture: function () {
 			var slider = this;
-			$("." + this.defaults.btnWrapperClass).mousedown(function (e) {
+			$("." + this.defaults.btnWrapperClass).on("mousedown",function (e) {
 				e.preventDefault();
 				slider._saveTarget(e);
 			});
-			$(document).mousemove(function (e) {
+			$(document).on("mousemove",function (e) {
 				slider._refreshPosition(e);
 			});
-			$(document).mouseup(function (e) {
+			$(document).on("mouseup",function (e) {
 				slider._destroyTarget();
 			});
 		},
@@ -1773,7 +1817,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					switch (dir) {
 						case "next":
 
-							$otherObj.eq(num).addClass("next").css({"left": "100%"});
+							//$otherObj.eq(num).addClass("next").css({"left": "100%"});
 
 							$activeObj.stop(false, true).animate(
 								{"left": "-100%"}
@@ -1781,13 +1825,13 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).stop(false, true).animate({
+							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(false, true).animate({
 								"left": "0"
-							}, "linear", function () {
+								}, "linear", function () {
 								$otherObj.eq(num)
 									.removeClass("next")
 									.addClass("active");
-							});
+								});
 
 							break;
 						case "prev":
@@ -1800,9 +1844,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).stop(false, true).animate({
-								"left": "0"
-							}, "linear", function () {
+							$otherObj.eq(num).stop(false, true).animate(
+								{"left": "0"}
+								, "linear", function () {
 								$otherObj.eq(num)
 									.removeClass("prev")
 									.addClass("active");
@@ -1826,7 +1870,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			_autoSlide: function () {
 				if (this._autoAnim) {
 					$(this.obj)
-						.find('[data-slide=prev]')
+						.find('[data-slide=next]')
 						.trigger("click");
 				}
 			}

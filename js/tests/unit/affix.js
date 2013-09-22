@@ -24,12 +24,12 @@ $(function () {
         $.fn.guiAffix = guiAffix;
     });
 
-    test("should be defined on jquery object", function () {
+    /*test("should be defined on jquery object", function () {
         ok($(document.body).guiAffix, 'guiAffix method is defined');
     });
 
     test("should return element", function () {
         ok($(document.body).guiAffix()[0] == document.body, 'document.body returned');
-    });
+    });*/
 
 })

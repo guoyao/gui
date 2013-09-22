@@ -2576,11 +2576,20 @@ th {
   position: relative;
   left: 0;
   display: block;
+  background: none;
 }
 
 .carousel .carousel-inner .prev,
 .carousel .carousel-inner .next {
   display: block;
+}
+
+.carousel .carousel-inner .next {
+  left: 100%;
+}
+
+.carousel .carousel-inner .prev {
+  left: -100%;
 }
 
 .carousel .carousel-control-left,
@@ -2600,7 +2609,6 @@ th {
   border: 3px solid white;
   border-radius: 25px;
   opacity: 0.5;
-  filter: alpha(opacity=50);
 }
 
 .carousel .carousel-control-left {
@@ -2614,7 +2622,6 @@ th {
 .carousel .carousel-control-left:hover,
 .carousel .carousel-control-right:hover {
   opacity: 0.8;
-  filter: alpha(opacity=80);
 }
 
 .carousel .carousel-indicators {
@@ -2630,16 +2637,62 @@ th {
   width: 10px;
   height: 10px;
   margin-left: 5px;
+  overflow: hidden;
   list-style-type: none;
   background: white;
   border-radius: 5px;
   opacity: 0.5;
-  filter: alpha(opacity=50);
 }
 
 .carousel .carousel-indicators li.active {
   opacity: 0.9;
-  filter: alpha(opacity=90);
+}
+
+.gui-popup-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: none;
+  width: 100%;
+}
+
+.gui-popup-window .gui-popup-content {
+  position: relative;
+  z-index: 10000;
+  min-width: 1000px;
+  min-height: 500px;
+  padding: 20px;
+  margin: 5% auto 0;
+  background: white;
+  border-radius: 5px;
+}
+
+.gui-popup-window .gui-popup-content .gui-popup-closebtn {
+  position: absolute;
+  top: -100px;
+  top: 0;
+  right: -100px;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  background: gray;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+.gui-popup-window .gui-popup-bg {
+  position: absolute;
+  top: 0;
+  z-index: 9998;
+  width: 100%;
+  background: black;
+  opacity: 0.7;
 }
 
 /*!
@@ -2885,6 +2938,28 @@ html {
   _border-color: #f8e5be;
 }
 
+.carousel .carousel-inner .active {
+  zoom: 1;
+}
+
+.carousel .carousel-control-left,
+.carousel .carousel-control-right {
+  filter: alpha(opacity=50);
+}
+
+.carousel .carousel-control-left:hover,
+.carousel .carousel-control-right:hover {
+  filter: alpha(opacity=80);
+}
+
+.carousel .carousel-indicators li {
+  filter: alpha(opacity=50);
+}
+
+.carousel .carousel-indicators li.active {
+  filter: alpha(opacity=90);
+}
+
 .gui-panel .gui-table-beside-gui-panel-body {
   *border-top: 1px solid #dddddd;
 }
@@ -2947,6 +3022,15 @@ html {
   _color: #3a87ad;
   _background-color: #d9edf7;
   _border-color: #bce8f1;
+}
+
+.gui-popup-window .gui-popup-content {
+  _width: 1000px;
+  _height: 500px;
+}
+
+.gui-popup-window .gui-popup-bg {
+  filter: alpha(opacity=70);
 }
 
 a.active {
