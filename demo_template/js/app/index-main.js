@@ -18,7 +18,8 @@ define(["./demo"], function (demo) {
         new Module("Button", "button"),
         new Module("Button Bar", "button-bar"),
         new Module("Carousel", "carousel"),
-        new Module("Tooltip", "tooltip")
+        new Module("Tooltip", "tooltip"),
+        new Module("Pagination", "pagination")
     ], {
         modulesDirectory: "modules/components"
     }).init();
