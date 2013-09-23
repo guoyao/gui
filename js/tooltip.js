@@ -20,6 +20,11 @@
 				//var $tooltipEle = $(this.obj).find("[data-toggle=tooltip]");
 				//return $tooltipEle;
 			//},
+			_setTooltipCssPos : function(){
+				if($(this.obj).css("position") == "static"){
+					$(this.obj).css("position","relative");
+				}
+			},
 			_eventHandler: function () {
 				var that = this;
 
@@ -31,6 +36,8 @@
 
 						that._setTooltipPos(e, $TooltipWp);
 					}
+
+					that._setTooltipCssPos();
 
 					$(e.target)
 						.next(".tooltip")
