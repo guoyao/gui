@@ -53,7 +53,13 @@
                 }
             }
             if(selector) {
-                gui.showHide($(selector), show);
+                var $selector = $(selector);
+                if (show) {
+                    $selector.slideDown();
+                }
+                else {
+                    $selector.hide();
+                }
             }
         }
 

@@ -9,7 +9,6 @@ define(["./demo"], function (demo) {
     new demo.Initializer([
         new Module("Dropdown Menu", "dropdown-menu"),
         new Module("Tab Navigator", "tab-navigator"),
-        new Module("Collapse Menu", "collapse-menu"),
         new Module("Popup Window", "popup-window"),
         new Module("Panel", "panel"),
         new Module("Place Holder", "place-holder"),
