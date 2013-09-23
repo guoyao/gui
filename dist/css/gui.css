@@ -2767,7 +2767,6 @@ th {
 .pagination {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
-  border-radius: 5px;
 }
 
 .pagination ul {
@@ -2782,11 +2781,11 @@ th {
 }
 
 .pagination ul li {
-  float: left;
+  display: inline;
 }
 
 .pagination ul li a {
-  display: block;
+  float: left;
   padding: 4px 12px;
   cursor: pointer;
   border: 1px solid #ddd;
@@ -2815,7 +2814,7 @@ th {
   text-align: right;
 }
 
-.pagination-center {
+.pagination-centered {
   text-align: center;
 }
 
@@ -2829,6 +2828,29 @@ th {
 
 .pagination-mini ul li a {
   padding: 0 6px;
+}
+
+.pager {
+  display: block;
+  list-style-type: none;
+}
+
+.pager .next {
+  float: right;
+}
+
+.pager .previous {
+  float: left;
+}
+
+.pager li {
+  display: inline;
+}
+
+.pager li a {
+  padding: 5px 14px;
+  border: 1px solid #dddddd;
+  border-radius: 15px;
 }
 
 /*!

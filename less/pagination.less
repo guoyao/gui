@@ -3,7 +3,6 @@
 .pagination {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:14px;
-	border-radius: 5px;
 	ul {
 		list-style-type: none;
 		display:inline-block;
@@ -15,13 +14,13 @@
 			}
 		}
 		li {
-			float:left;
+			display: inline;
 			a {
 				padding: @pagination-top-bottom-padding @pagination-left-right-padding;
 				border-left-width: 0;
 				border:1px solid #ddd;
-				display: block;
 				cursor:pointer;
+				float:left;
 				&:hover {
 					background:#f5f5f5;
 				}
@@ -74,6 +73,24 @@
 			a {
 				padding: @pagination-mini-top-bottom-padding @pagination-mini-left-right-padding;
 			}
+		}
+	}
+}
+.pager {
+	display: block;
+	list-style-type: none;
+	.next {
+		float: right;
+	}
+	.previous {
+		float: left;
+	}
+	li {
+		display: inline;
+		a {
+			border-radius: @pager-border-radius;
+			border:@pager-border;
+			padding:@pager-padding;
 		}
 	}
 }
