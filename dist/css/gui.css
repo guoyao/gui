@@ -2972,6 +2972,18 @@ html {
   *border-top: 1px solid #dddddd;
 }
 
+.gui-panel-group .gui-panel-beside-gui-panel {
+  _margin-top: 5px;
+}
+
+.gui-panel-group .gui-panel-collapse-beside-heading .gui-panel-body {
+  _border-top: 1px solid #dddddd;
+}
+
+.gui-panel-group .gui-panel-collapse-beside-footer .gui-panel-body {
+  _border-bottom: 1px solid #dddddd;
+}
+
 .gui-panel-default {
   _border-color: #dddddd;
 }
