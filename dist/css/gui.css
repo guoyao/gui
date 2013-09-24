@@ -2848,9 +2848,23 @@ th {
 }
 
 .pager li a {
+  display: inline-block;
   padding: 5px 14px;
   border: 1px solid #dddddd;
   border-radius: 15px;
+}
+
+.autocomplete {
+  display: none;
+  overflow: hidden;
+  list-style-type: none;
+  opacity: 0;
+}
+
+.autocomplete li.active a {
+  display: inline-block;
+  width: 100%;
+  background: #eee;
 }
 
 /*!
@@ -2949,6 +2963,10 @@ label.gui-btn-info-active {
 
 .gui-btn-bar .gui-btn {
   *margin-right: 0;
+}
+
+.pagination ul li.first a {
+  border-width: 1px;
 }
 
 html {
