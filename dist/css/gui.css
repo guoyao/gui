@@ -2695,7 +2695,11 @@ th {
   opacity: 0.7;
 }
 
-.gui-collapsed {
+.gui-collapsible {
+  display: block;
+}
+
+.gui-collapsible.gui-collapsed {
   display: none;
 }
 

@@ -379,6 +379,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
     var GuiCollapse = function (element, options) {
         this.$element = $(element);
+        this.options = options;
         if (options.parent) {
             this.$parent = $(options.parent);
         }
@@ -406,9 +407,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
         this.transitioning = true;
         var that = this;
+        if (that.options.testing) {
+            that.$element.height('auto');
+        }
         that.$element.slideDown(400, function () {
-            that.$element.removeClass('gui-collapsed');
             that.transitioning = false;
+            that.$element.removeClass('gui-collapsed');
             that.$element.trigger('shown.gui.collapse');
         });
     };
@@ -427,8 +431,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         this.transitioning = true;
         var that = this;
         that.$element.slideUp(400, function () {
-            that.$element.addClass('gui-collapsed');
             that.transitioning = false;
+            that.$element.addClass('gui-collapsed');
+            if (that.options.testing) {
+                that.$element.height(0);
+            }
             that.$element.trigger('hidden.gui.collapse');
         });
     };
@@ -446,16 +453,19 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     $.fn.guiCollapse = function (option) {
         return this.each(function () {
             var $this = $(this),
-                data = $this.data('gui.collapse'),
-                options = $.extend({}, $this.data(), typeof option == 'object' && option);
+                data = $this.data('gui.collapse');
 
             if (!data) {
-                $this.data('gui.collapse', (data = new GuiCollapse(this, options)));
+                $this.data('gui.collapse', (data = new GuiCollapse(this, $.extend({}, $.fn.guiCollapse.defaults, $this.data(), typeof option == 'object' && option))));
             }
             if (gui.plugin.isPluginMethodCall(option)) {
                 data[option]();
             }
         })
+    };
+
+    $.fn.guiCollapse.defaults = {
+        toggle: false
     };
 
     $.fn.guiCollapse.Constructor = GuiCollapse;

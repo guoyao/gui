@@ -38,6 +38,7 @@
 
     var GuiCollapse = function (element, options) {
         this.$element = $(element);
+        this.options = options;
         if (options.parent) {
             this.$parent = $(options.parent);
         }
@@ -66,8 +67,8 @@
         this.transitioning = true;
         var that = this;
         that.$element.slideDown(400, function () {
-            that.$element.removeClass('gui-collapsed');
             that.transitioning = false;
+            that.$element.removeClass('gui-collapsed');
             that.$element.trigger('shown.gui.collapse');
         });
     };
@@ -86,8 +87,8 @@
         this.transitioning = true;
         var that = this;
         that.$element.slideUp(400, function () {
-            that.$element.addClass('gui-collapsed');
             that.transitioning = false;
+            that.$element.addClass('gui-collapsed');
             that.$element.trigger('hidden.gui.collapse');
         });
     };
@@ -105,16 +106,19 @@
     $.fn.guiCollapse = function (option) {
         return this.each(function () {
             var $this = $(this),
-                data = $this.data('gui.collapse'),
-                options = $.extend({}, $this.data(), typeof option == 'object' && option);
+                data = $this.data('gui.collapse');
 
             if (!data) {
-                $this.data('gui.collapse', (data = new GuiCollapse(this, options)));
+                $this.data('gui.collapse', (data = new GuiCollapse(this, $.extend({}, $.fn.guiCollapse.defaults, $this.data(), typeof option == 'object' && option))));
             }
             if (gui.plugin.isPluginMethodCall(option)) {
                 data[option]();
             }
         })
+    };
+
+    $.fn.guiCollapse.defaults = {
+        toggle: false
     };
 
     $.fn.guiCollapse.Constructor = GuiCollapse;
