@@ -1,4 +1,3 @@
-
 $(function (undefined) {
 
 	var $ = window.jQuery,
