@@ -67,34 +67,31 @@
 								$(this).css({"display":"none"})});
 					});
 
+				$(this.obj).on("input",function(e){
+					var orgval = $(e.target).val();
+					$(e.target).data("orgval",orgval);
 
+					var input = $(e.target).val();
+
+					for(var i = 0; i < that.defaults.data.length; i++){
+						if(that.defaults.data[i].indexOf(input) < 0){
+							$(e.target)
+								.next('.autocomplete')
+								.find('li')
+								.eq(i)
+								.css({"display":"none"});
+						}else{
+							$(e.target)
+								.next('.autocomplete')
+								.find('li')
+								.eq(i)
+								.css({"display":"block"});
+						};
+					}
+				})
 				
 				$(this.obj)
-					.on("keydown",function(e){
-						//console.log(e)
-						//if(e.keyCode == 40){
-							//console.log('ok')
-						//}
-						console.log(e.keyCode)
-
-						//
-						var input = $(e.target).val();
-
-						for(var i = 0; i < that.defaults.data.length; i++){
-							if(that.defaults.data[i].indexOf(input) < 0){
-								$(e.target)
-									.next('.autocomplete')
-									.find('li')
-									.eq(i)
-									.css({"display":"none"});
-							}else{
-								$(e.target)
-									.next('.autocomplete')
-									.find('li')
-									.eq(i)
-									.css({"display":"block"});
-							};
-						}
+					.on("keyup",function(e){
 
 						switch(e.keyCode){
 							case 40:
@@ -115,6 +112,12 @@
 									.removeClass("active");
 
 								nextVisible.addClass("active");
+
+								if(nextVisible.length === 0){
+									$(e.target).val($(e.target).data("orgval"));
+								}else{
+									$(e.target).val(nextVisible.text());
+								}
 
 								break;
 
@@ -137,15 +140,23 @@
 
 								prevVisible.addClass("active");
 
+								if(prevVisible.length === 0){
+									$(e.target).val($(e.target).data("orgval"));
+								}else{
+									$(e.target).val(prevVisible.text());
+								}
+
 								break;
 
 							case 13:
 								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 && inputValue != $(e.target).val()){
-									var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+								//if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 && inputValue != $(e.target).val()){
+									//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
 									
-									$(e.target).val(inputValue);
-								}
+									//$(e.target).val(inputValue);
+									console.log(inputValue)
+									$(e.target).data("orgval",inputValue);
+								//}
 								break;
 
  							case 37:
@@ -165,9 +176,7 @@
 									$(e.target).val(inputValue);
 								}
 								break;
-
 						}
-						
 					});
 
 				$(this.obj)

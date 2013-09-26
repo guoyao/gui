@@ -2131,18 +2131,13 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 								$(this).css({"display":"none"})});
 					});
 
+				$(this.obj).on("input",function(e){
+					var orgval = $(e.target).val();
+					$(e.target).data("orgval",orgval);
 
-				
-				$(this.obj)
-					.on("keydown",function(e){
-						//console.log(e)
-						//if(e.keyCode == 40){
-							//console.log('ok')
-						//}
-						console.log(e.keyCode)
+					var input = $(e.target).val();
 
-						//
-						var input = $(e.target).val();
+						//console.log($(e.target).data("orgval"))
 
 						for(var i = 0; i < that.defaults.data.length; i++){
 							if(that.defaults.data[i].indexOf(input) < 0){
@@ -2159,6 +2154,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									.css({"display":"block"});
 							};
 						}
+				})
+				
+				$(this.obj)
+					.on("keyup",function(e){
 
 						switch(e.keyCode){
 							case 40:
@@ -2179,6 +2178,16 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									.removeClass("active");
 
 								nextVisible.addClass("active");
+
+								//console.log(nextVisible.length)
+								if(nextVisible.length === 0){
+									$(e.target).val($(e.target).data("orgval"));
+									console.log($(e.target).data("orgval"))
+								}else{
+									$(e.target).val(nextVisible.text());
+								}
+
+								//$(e.target).val(nextVisible.text());
 
 								break;
 
@@ -2201,15 +2210,24 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 								prevVisible.addClass("active");
 
+								if(prevVisible.length === 0){
+									$(e.target).val($(e.target).data("orgval"));
+								}else{
+									$(e.target).val(prevVisible.text());
+								}
+								//console.log(prevVisible.length)
+
 								break;
 
 							case 13:
 								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 && inputValue != $(e.target).val()){
-									var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+								//if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 && inputValue != $(e.target).val()){
+									//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
 									
-									$(e.target).val(inputValue);
-								}
+									//$(e.target).val(inputValue);
+									console.log(inputValue)
+									$(e.target).data("orgval",inputValue);
+								//}
 								break;
 
  							case 37:
