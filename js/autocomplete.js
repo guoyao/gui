@@ -67,12 +67,15 @@
 								$(this).css({"display":"none"})});
 					});
 
+
+				
 				$(this.obj)
 					.on("keydown",function(e){
 						//console.log(e)
 						//if(e.keyCode == 40){
 							//console.log('ok')
 						//}
+						console.log(e.keyCode)
 
 						//
 						var input = $(e.target).val();
@@ -95,49 +98,74 @@
 
 						switch(e.keyCode){
 							case 40:
-								//console.log($(e.target).next('.autocomplete').find('li.active').next())
-								//var x = ? $(e.target).next('.autocomplete').find('li.active').next() : $(e.target).next('.autocomplete').find('li').eq(0);
-								//if($(e.target).next('.autocomplete').find('li.active:visible').length === 0){
-									//var index = $(e.target).next('.autocomplete').find('li:visible').eq(0);
-								//}else{
-									//$(e.target).next('.autocomplete').find('li:visible').find(".active")
-									
-									var index = $(e.target).next('.autocomplete').find('li.active:visible').nextAll().eq(0);
 
-									var x = $(e.target).next('.autocomplete').find('li').eq(index);
+								if($(e.target).next('.autocomplete').find('li.active:visible').length === 0){	
 
-									console.log($(e.target).next('.autocomplete').find('li.active:visible').index())
+									var nextVisible = $(e.target).next('.autocomplete').find('li:visible').eq(0);
 
-									//console.log($(e.target).next('.autocomplete').find('li:visible').filter(".active").index() + 1);
-									//console.log($(e.target).next('.autocomplete').find('li:visible').eq($(e.target).next('.autocomplete').find('li:visible').filter(".active").index() + 1).index())
-								//}
-								//console.log($(e.target).next('.autocomplete').find('li.active:visible').length)
-								//console.log($(e.target).next('.autocomplete').find('li:visible').filter(".active"))
-									$(e.target)
-										.next('.autocomplete')
-										.find('li')
-										.removeClass("active");
-										index.addClass("active");
-								break;
-							case 38:
-								if($(e.target).next('.autocomplete').find('li.active:visible').length === 0){
-									var x = $(e.target).next('.autocomplete').find('li:visible').last();
 								}else{
-									var x = $(e.target).next('.autocomplete').find('li.active:visible').prev();
+
+									var nextVisible = $(e.target).next('.autocomplete').find('li:visible').filter('.active').nextAll("li:visible").eq(0);
+
 								}
-									$(e.target)
+
+								$(e.target)
 									.next('.autocomplete')
 									.find('li')
 									.removeClass("active");
-									x.addClass("active");
+
+								nextVisible.addClass("active");
+
 								break;
+
+							case 38:
+								e.preventDefault();
+								if($(e.target).next('.autocomplete').find('li.active:visible').length === 0){	
+
+									var prevVisible = $(e.target).next('.autocomplete').find('li:visible').last();
+
+								}else{
+
+									var prevVisible = $(e.target).next('.autocomplete').find('li:visible').filter('.active').prevAll("li:visible").eq(0);
+
+								}
+
+								$(e.target)
+									.next('.autocomplete')
+									.find('li')
+									.removeClass("active");
+
+								prevVisible.addClass("active");
+
+								break;
+
 							case 13:
-								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0){
+								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 && inputValue != $(e.target).val()){
 									var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-									//console.log(inputValue)
+									
 									$(e.target).val(inputValue);
 								}
 								break;
+
+ 							case 37:
+ 								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 && inputValue != $(e.target).val()){
+									var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+									
+									$(e.target).val(inputValue);
+								}
+								break;
+
+							case 39:
+								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 && inputValue != $(e.target).val()){
+									var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+									
+									$(e.target).val(inputValue);
+								}
+								break;
+
 						}
 						
 					});
