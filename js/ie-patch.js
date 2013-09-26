@@ -292,4 +292,23 @@
         return  this;
     };
 
+    //
+    // Breadcrumbs
+    // --------------------------------------------------
+    if (!!$.fn.guiBreadcrumb) {
+        if (gui.browserInfo.version <= 7) { // lte IE 7
+            var GuiBreadcrumb = $.fn.guiBreadcrumb.Constructor;
+            GuiBreadcrumb.prototype.init = function () {
+                var seperator = this.options.seperator;
+                this.$element.find("> li:not(:first-child)").each(function () {
+                    var $this = $(this);
+                    if ($this.find(".gui-breadcrumb-sperator").length === 0) {
+                        $('<span class="gui-breadcrumb-sperator">' + (seperator || '/') + '</span>').prependTo($this);
+                    }
+                });
+                this.update();
+            };
+        }
+    }
+
 })(window);

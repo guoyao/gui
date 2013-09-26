@@ -1,0 +1,70 @@
+<div class="module-container">
+  <h1 id="breadcrumbs">Breadcrumbs</h1>
+
+  <hr/>
+
+  <p class="lead">Indicate the current page's location within a navigational hierarchy.</p>
+  <p>For Modern browser (not ie6, 7), Separators are automatically added in CSS through <code>:before</code> and <code>content</code>.</p>
+
+  <h4>Default Breadcrumb</h4>
+  <ol class="gui-breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Item 1</a></li>
+    <li><a href="#">Item 2</a></li>
+    <li><a href="#">Item 3</a></li>
+    <li><a href="#">Item 4</a></li>
+    <li class="active">Item 5</li>
+  </ol>
+    <pre class="prettyprint">
+&lt;ol class="gui-breadcrumb"&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 4&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="active"&gt;Item 5&lt;/li&gt;
+ &lt;/ol&gt;</pre>
+
+  <h4>Breadcrumb With Custom Seperator</h4>
+  <ol class="gui-breadcrumb" data-seperator=">">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Item 1</a></li>
+    <li><a href="#">Item 2</a></li>
+    <li><a href="#">Item 3</a></li>
+    <li><a href="#">Item 4</a></li>
+    <li class="active">Item 5</li>
+  </ol>
+    <pre class="prettyprint">
+&lt;ol class="gui-breadcrumb" data-seperator="&gt;"&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 4&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="active"&gt;Item 5&lt;/li&gt;
+ &lt;/ol&gt;</pre>
+
+  <h4>Breadcrumb With Custom Seperator And Behavior</h4>
+  <ol class="gui-breadcrumb" data-seperator=">" data-require-selection="false">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Item 1</a></li>
+    <li><a href="#">Item 2</a></li>
+    <li><a href="#">Item 3</a></li>
+    <li><a href="#">Item 4</a></li>
+    <li class="active">Item 5</li>
+  </ol>
+  <pre class="prettyprint">
+&lt;ol class="gui-breadcrumb" data-seperator="&gt;" data-require-selection="false"&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="#"&gt;Item 4&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="active"&gt;Item 5&lt;/li&gt;
+ &lt;/ol&gt;</pre>
+
+  <div class="gui-callout gui-callout-danger">
+    <p>If you want it works on ie6, 7 or you need the behavior (remove siblings when click event triggered). use following codes.</p>
+    <pre class="prettyprint" style="margin-bottom: 0;">$(".gui-breadcrumb").guiBreadcrumb();</pre>
+  </div>
+</div>

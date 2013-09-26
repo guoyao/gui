@@ -16,7 +16,8 @@ define(["./demo"], function (demo) {
         new Module("Date Picker", "date-picker"),
         new Module("Button", "button"),
         new Module("Button Bar", "button-bar"),
-        new Module("Carousel", "carousel")
+        new Module("Carousel", "carousel"),
+        new Module("Breadcrumb", "breadcrumb")
     ], {
         modulesDirectory: "modules/components"
     }).init();

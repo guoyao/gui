@@ -138,11 +138,11 @@
      $(document).on('click.gui.collapse.data-api', '[data-toggle=collapse]', function (e) {
          var $this = $(this),
              href,
-             target  = $this.attr('data-target') || e.preventDefault() || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, ''); //strip for ie7
+             target  = $this.attr('data-target') || e.preventDefault() || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]*$)/, ''); //strip for ie6, 7
 
          if (target) {
              $(target).guiCollapse("toggle");
          }
          return false;
-     })
+     });
 })(window);

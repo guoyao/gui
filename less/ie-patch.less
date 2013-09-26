@@ -327,6 +327,23 @@ html {
 }
 
 //
+// Breadcrumbs
+// --------------------------------------------------
+
+.gui-breadcrumb {
+  > li {
+    *display: inline;
+  }
+  li {
+    _display: inline;
+    &.active {
+      _color: @breadcrumb-active-color;
+      _background-color: transparent;
+    }
+  }
+}
+
+//
 // Other
 // --------------------------------------------------
 

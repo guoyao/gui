@@ -116,10 +116,31 @@
             return color;
         }
 
+        function removeChildAfter($$children, childOrIndex) {
+            if (typeof childOrIndex !== "number")  {
+                childOrIndex = $$children.index(childOrIndex);
+            }
+            $$children.each(function (index, child) {
+                if (index > childOrIndex) {
+                    $(child).remove();
+                }
+            });
+        }
+
+        /**
+         * href strip for ie6, 7
+         * @param href
+         */
+        function stripHref(href) {
+            return href && href.replace(/.*(?=#[^\s]*$)/, "");
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
-            darken: darken
+            darken: darken,
+            removeChildAfter: removeChildAfter,
+            stripHref: stripHref
         }
     })();
 

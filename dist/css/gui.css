@@ -2695,6 +2695,52 @@ th {
   opacity: 0.7;
 }
 
+/*!
+ * Bootstrap v3.0.0
+ *
+ * Copyright 2013 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+
+/*!
+ * We imported some codes of bootstrap, and added our own's
+ */
+
+.gui-breadcrumb {
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  list-style: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.gui-breadcrumb > li {
+  display: inline-block;
+}
+
+.gui-breadcrumb > li + li:before {
+  padding: 0 5px;
+  color: #cccccc;
+  content: "/\00a0";
+}
+
+.gui-breadcrumb > li + li.gui-with-seperator:before {
+  padding: 0;
+  content: none;
+}
+
+.gui-breadcrumb > .active {
+  color: #999999;
+}
+
+.gui-breadcrumb .gui-breadcrumb-sperator {
+  padding: 0 5px;
+  color: #cccccc;
+}
+
 .gui-collapsible {
   display: block;
 }
@@ -3055,6 +3101,19 @@ html {
 
 .gui-popup-window .gui-popup-bg {
   filter: alpha(opacity=70);
+}
+
+.gui-breadcrumb > li {
+  *display: inline;
+}
+
+.gui-breadcrumb li {
+  _display: inline;
+}
+
+.gui-breadcrumb li.active {
+  _color: #999999;
+  _background-color: transparent;
 }
 
 a.active {
