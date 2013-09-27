@@ -2855,6 +2855,7 @@ th {
 }
 
 .autocomplete {
+  position: absolute;
   display: none;
   overflow: hidden;
   list-style-type: none;
@@ -2862,9 +2863,12 @@ th {
 }
 
 .autocomplete li.active a {
+  background: #eee;
+}
+
+.autocomplete li a {
   display: inline-block;
   width: 100%;
-  background: #eee;
 }
 
 /*!
