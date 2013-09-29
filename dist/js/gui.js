@@ -2075,9 +2075,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiAutocomplete;
 
-	
+	var module = function(obj,option){
+		this._init(obj,option);
+	}
 
-	var module = {
+	module.prototype = {
 			_init : function(obj,option){
 				this.obj = obj;
 				this._initOptions(option);
@@ -2094,9 +2096,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				$autocompleteNode
 					.insertAfter($(this.obj));
 
-				for(var i = 0; i < this.defaults.data.length; i++){
-					$('<li><a>' + this.defaults.data[i] + '</a></li>').appendTo($autocompleteNode)
-				}
+				//for(var i = 0; i < this.defaults.data.length; i++){
+				//	$('<li><a>' + this.defaults.data[i] + '</a></li>').appendTo($autocompleteNode)
+				//}
 
 				$autocompleteNode.css({"width":"300px","height":"200px"});
 
@@ -2108,20 +2110,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 				var eH = $(e.target).outerHeight() - parseInt($(e.target).css("margin-bottom"),10);
 
-				console.log($(e.target).css("margin-top"))
-
 				$(e.target)
 					.next('.autocomplete')
-					.css({"left":ePos.left - parentPos.left,"top":ePos.top - parentPos.top + eH})
-
-				//console.log(parentPos,ePos)
+					.css({"left":ePos.left - parentPos.left,"top":ePos.top - parentPos.top + eH});
 			},
-			_getData : function(){
+			_getData : function(callback){
 				$.ajax({
 					url:'localhost:3000/',
 					data:11,
 					dataType : "json",
 					success : function(data){
+						//callback();
 						console.log(data);
 					},
 					error : function(){
@@ -2129,32 +2128,88 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					}
 				})
 			},
+			//get input value
+			_getInputVal : function(){
+				var inputVal = $(this.obj).val();
+				return inputVal;
+			},
+			//query option of data
+			_switchOption : function(){
+
+				var orgval = this._getInputVal();
+
+				this._clearList();
+
+				if(orgval.length > 0){
+
+					for(var i = 0; i < this.defaults.data.length; i++){
+
+						if(this.defaults.data[i].indexOf(orgval.toLowerCase()) >= 0 ){
+
+							this._appendList(this.defaults.data[i]);
+
+						}
+					}
+				}
+				//console.log($(this.obj).next('.autocomplete').find("li").length)
+				if($(this.obj).next('.autocomplete').find("li").length > 0){
+					this._showList();
+				}else{
+					this._hideList();
+				}
+			},
+			_clearList : function(){
+				$(this.obj)
+					.next('.autocomplete')
+					.html('');
+			},
+			_showList : function(){
+				$(this.obj)
+					.next('.autocomplete')
+					.css({"display":"block"})
+					.stop(true,true)
+					.animate({"opacity":1});
+			},
+			_hideList : function(){
+				$(this.obj)
+					.next('.autocomplete')
+					.stop(true,true)
+					.css({"display":"none","opacity":0});
+			},
+			_highLightOption : function(index){
+				$(this.obj)
+					.next('.autocomplete')
+					.css({"display":"none"});
+			},
+			//
+			_appendList : function(text){
+				$(this.obj)
+					.next('.autocomplete')
+					.append('<li><a>' + text + '</a></li>');
+			},
+			//
 			_eventHandler : function(){
 
 				var that = this;
 
 				$(this.obj)
 					.on("focus",function(e){
-						//that._getData();
-						$(e.target)
-							.next('.autocomplete')
-							.css({"display":"block"})
-							.animate({"opacity":1});
-						that._calculatePos(e)
+						that._switchOption();
+						that._calculatePos(e);
 					});
 				$(this.obj)
 					.on("keydown",function(e){
 						if(e.keyCode === 38){
 							e.preventDefault();
 						}
-						
 					});
 				$(this.obj)
 					.on("blur",function(e){
 						$(e.target)
 							.next('.autocomplete')
 							.animate({"opacity":0},function(){
-								$(this).css({"display":"none"})});
+								$(this).css({"display":"none"})
+							});
 					});
 
 				var orgval;
@@ -2164,66 +2219,33 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						orgval = $(e.target).val();
 						//$(e.target).data("orgval",orgval);
 
-						//var input = $(e.target).val();
-
-						var display = false;
-
-						for(var i = 0; i < that.defaults.data.length; i++){
-							if(that.defaults.data[i].indexOf(orgval.toLowerCase()) < 0){
-								$(e.target)
-									.next('.autocomplete')
-									.find('li')
-									.eq(i)
-									.css({"display":"none"});
-							}else{
-								$(e.target)
-									.next('.autocomplete')
-									.find('li')
-									.eq(i)
-									.css({"display":"block"});
-							};
-						}
-						//console.log($(e.target)
-							//.next('.autocomplete')
-							//.find('li[style="display:block"]').length)
-
-						//if(display){
-							//$(e.target)
-								//.next('.autocomplete')
-								//.css({"display":"block"})
-								//.animate({"opacity":1});
-						//}
+						that._switchOption();
 						
 					})
-				
+
 				$(this.obj)
 					.on("keyup",function(e){
-						console.log(e.keyCode)
-
 						switch(e.keyCode){
 							case 40:
+							//console.log(1)
+								if($(this).next('.autocomplete').find("li").length > 0){
+									console.log($(this).next('.autocomplete').find("li.active").length)
+									if($(this).next('.autocomplete').find("li.active").length === 0){
+										console.log(2.1)
+										var nextVisible = $(e.target).next('.autocomplete').find('li').eq(0);
+									}else{
+										console.log(2.2)
+										var nextVisible = $(e.target).next('.autocomplete').find('li.active').next();
+									}
 
-								if($(e.target).next('.autocomplete').find('li.active:visible').length === 0){	
+									$(this)
+										.next('.autocomplete')
+										.find('li')
+										.removeClass("active");
 
-									var nextVisible = $(e.target).next('.autocomplete').find('li:visible').eq(0);
+									nextVisible.addClass("active");
 
-								}else{
-
-									var nextVisible = $(e.target).next('.autocomplete').find('li:visible').filter('.active').nextAll("li:visible").eq(0);
-
-								}
-
-								$(e.target)
-									.next('.autocomplete')
-									.find('li')
-									.removeClass("active");
-
-								nextVisible.addClass("active");
-
-								if(nextVisible.length === 0){
-									$(e.target).val(orgval);
-								}else{
-									$(e.target).val(nextVisible.text());
+									$(this).val(nextVisible.text())
 								}
 
 								break;
@@ -2279,32 +2301,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									$(e.target).data("orgval",inputValue);
 								}
 						}
-						//console.log($(e.target).next('.autocomplete').find('li:visible').length)
-						//if($(e.target).next('.autocomplete').find('li:visible').length === 0){
-							//$(e.target)
-								//.next('.autocomplete')
-								//.animate({"opacity":0},function(){
-									//$(this).css({"display":"none"})});
-						//}else{
-							//$(e.target)
-								//.next('.autocomplete')
-								//.css({"display":"block"})
-								//.animate({"opacity":1});
-						//}
 					});
 
 				$(this.obj)
 					.next('.autocomplete')
 					.on("mouseover","a",function(e){
-						//console.log(e.target)
 						that._selectOption(e);
 					});
 
 				$(this.obj)
 					.next('.autocomplete')
 					.on("click","a",function(e){
-						//console.log(e.target)
-						console.log(1)
 						$(that.obj).val($(this).text())
 					});
 			},
@@ -2319,32 +2326,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	$.fn.guiAutocomplete = function (option) {
 
-		//if (option == 'debug') {
-			//for debug
-			//return module;
-		//}
-		
-		//var m = new module(this,option);
-		//$.fn.guiAutocomplete._init(this,option);
-		//console.log($.fn.guiAutocomplete.fn)
-
-		//$.fn.guiAutocomplete.module 
-
-		//$.fn.guiAutocomplete.fn._init(this,option)
-
-		//xdule._init(this,option);
-		//module._init(this, option);
-		
 		return this.each(function () {
-			//$.fn.guiAutocomplete.module._init(this,option)
-			new module._init(this,option);
+
+			new module(this,option);
+
 		});
 	};
 
-	$.fn.guiAutocomplete.module = module;
-
-		
-
+	$.fn.guiAutocomplete.Constructor = module;
 	
 	$.fn.guiAutocomplete.defaults = {
 		data:['111','222','333','444','555','666','777','888','999','000','111','222','333','444','555','666','777','888','999']
