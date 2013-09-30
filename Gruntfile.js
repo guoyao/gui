@@ -31,7 +31,7 @@ module.exports = function (grunt) {
             },
             gui: {
                 src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/button.js',
-                    'js/datepicker.js', 'js/button-bar.js', 'js/affix.js', 'js/carousel.js', 'js/breadcrumb.js', 'js/ie-patch.js'],
+                    'js/datepicker.js', 'js/button-bar.js', 'js/affix.js', 'js/carousel.js', 'js/breadcrumb.js', 'js/splitter.js', 'js/ie-patch.js'],
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
         },
