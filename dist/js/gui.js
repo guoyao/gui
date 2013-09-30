@@ -2129,22 +2129,27 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				})
 			},
 			//get input value
-			_getInputVal : function(){
-				var inputVal = $(this.obj).val();
-				return inputVal;
+			//_getInputVal : function(){
+				//this.inputVal = $(this.obj).val();
+			//},
+			_setInputVal : function(text){
+				this.inputVal = text;
+			},
+			_tempInputVal : function(text){
+				$(this.obj).val(text);
 			},
 			//query option of data
 			_switchOption : function(){
 
-				var orgval = this._getInputVal();
+				var inputCurVal = $(this.obj).val();
 
 				this._clearList();
 
-				if(orgval.length > 0){
+				if(inputCurVal.length > 0){
 
 					for(var i = 0; i < this.defaults.data.length; i++){
 
-						if(this.defaults.data[i].indexOf(orgval.toLowerCase()) >= 0 ){
+						if(this.defaults.data[i].indexOf(inputCurVal.toLowerCase()) >= 0 ){
 
 							this._appendList(this.defaults.data[i]);
 
@@ -2176,10 +2181,43 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					.stop(true,true)
 					.css({"display":"none","opacity":0});
 			},
-			_highLightOption : function(index){
+			_highLightOption : function($element){
 				$(this.obj)
 					.next('.autocomplete')
-					.css({"display":"none"});
+					.find("li")
+					.removeClass("active");
+					
+				$element.addClass("active");
+			},
+			_getNextIndex : function(){
+				var nextVisible;
+									
+				if($(this.obj).next('.autocomplete').find("li.active").length === 0){
+
+					nextVisible = $(this.obj).next('.autocomplete').find('li').eq(0);
+
+				}else{
+
+					nextVisible = $(this.obj).next('.autocomplete').find('li.active').next();
+
+				}
+
+				return nextVisible;
+			},
+			_getPrevIndex : function(){
+				var prevVisible;
+									
+				if($(this.obj).next('.autocomplete').find("li.active").length === 0){
+
+					prevVisible = $(this.obj).next('.autocomplete').find('li').last();
+
+				}else{
+
+					prevVisible = $(this.obj).next('.autocomplete').find('li.active').prev();
+
+				}
+				
+				return prevVisible;
 			},
 			//
 			_appendList : function(text){
@@ -2212,12 +2250,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 							});
 					});
 
-				var orgval;
+				//var orgval;
 
 				$(this.obj)
 					.on("input",function(e){
-						orgval = $(e.target).val();
+						//orgval = $(e.target).val();
 						//$(e.target).data("orgval",orgval);
+						//console.log(e.target)
+						that._setInputVal($(this).val());
 
 						that._switchOption();
 						
@@ -2227,78 +2267,75 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					.on("keyup",function(e){
 						switch(e.keyCode){
 							case 40:
-							//console.log(1)
+							
 								if($(this).next('.autocomplete').find("li").length > 0){
-									console.log($(this).next('.autocomplete').find("li.active").length)
+
+									var $nextEle = that._getNextIndex();
+
+									var $nextEleTxt = $nextEle.text();
+
+									that._highLightOption($nextEle);
+
 									if($(this).next('.autocomplete').find("li.active").length === 0){
-										console.log(2.1)
-										var nextVisible = $(e.target).next('.autocomplete').find('li').eq(0);
+
+										that._tempInputVal(that.inputVal);
+
 									}else{
-										console.log(2.2)
-										var nextVisible = $(e.target).next('.autocomplete').find('li.active').next();
+
+										that._tempInputVal($nextEleTxt);
+
 									}
-
-									$(this)
-										.next('.autocomplete')
-										.find('li')
-										.removeClass("active");
-
-									nextVisible.addClass("active");
-
-									$(this).val(nextVisible.text())
 								}
-
 								break;
 
 							case 38:
-								//e.preventDefault();
-								if($(e.target).next('.autocomplete').find('li.active:visible').length === 0){	
+								
+								if($(this).next('.autocomplete').find("li").length > 0){
 
-									var prevVisible = $(e.target).next('.autocomplete').find('li:visible').last();
+									var $prevEle = that._getPrevIndex();
 
-								}else{
+									var $prevEleTxt = $prevEle.text();
 
-									var prevVisible = $(e.target).next('.autocomplete').find('li:visible').filter('.active').prevAll("li:visible").eq(0);
+									that._highLightOption($prevEle);
 
+									if($(this).next('.autocomplete').find("li.active").length === 0){
+
+										that._tempInputVal(that.inputVal);
+
+									}else{
+
+										that._tempInputVal($prevEleTxt);
+
+									}								
 								}
-
-								$(e.target)
-									.next('.autocomplete')
-									.find('li')
-									.removeClass("active");
-
-								prevVisible.addClass("active");
-
-								if(prevVisible.length === 0){
-									$(e.target).val(orgval);
-								}else{
-									$(e.target).val(prevVisible.text());
-								}
-
 								break;
 
 							case 13:
-								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 ){//&& inputValue != $(e.target).val()
+								//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+								if($(this).next('.autocomplete').find('li.active').length !== 0 ){//&& inputValue != $(e.target).val()
 									//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+
+									var txt = $(this).next('.autocomplete').find('li.active').text();
 									
 									//$(e.target).val(inputValue);
 									//console.log(inputValue)
-									$(e.target).data("orgval",inputValue);
+									that._setInputVal(txt);
 								}
 								break;
 
  							case 37:
- 								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 ){
-									$(e.target).data("orgval",inputValue);
+ 								//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
+ 								//console.log($(this).next('.autocomplete').find('li.active').text() , $(this).val())
+								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
+									var txt = $(this).next('.autocomplete').find('li.active').text();
+									that._setInputVal(txt);
 								}
 								break;
 
 							case 39:
-								var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-								if($(e.target).next('.autocomplete').find('li.active:visible').length !== 0 ){
-									$(e.target).data("orgval",inputValue);
+								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
+									var txt = $(this).next('.autocomplete').find('li.active').text();
+									that._setInputVal(txt);
 								}
 						}
 					});
