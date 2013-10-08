@@ -369,7 +369,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiCollapse;
 
-	var module = {
+	var module = function(obj,option){
+		this._init(obj,option);
+	}
+
+	module.prototype = {
 		_init: function (obj, option) {
 			this.obj = obj;
 			this._initOptions(option);
@@ -428,7 +432,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	$.fn.guiCollapse = function (option) {
 
 		return this.each(function () {
-			module._init(this, option);
+			new module(this,option);
+			//module._init(this, option);
 		});
 	}
 
@@ -440,7 +445,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	};
 
 	//for debug
-	$.fn.guiCollapse.debug = module;
+	$.fn.guiCollapse.Constructor = module;
 
 	$.fn.guiCollapse.noConflict = function () {
 		$.fn.guiCollapse = old;
@@ -2096,10 +2101,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				$autocompleteNode
 					.insertAfter($(this.obj));
 
-				//for(var i = 0; i < this.defaults.data.length; i++){
-				//	$('<li><a>' + this.defaults.data[i] + '</a></li>').appendTo($autocompleteNode)
-				//}
-
 				$autocompleteNode.css({"width":"300px","height":"200px"});
 
 				$autocompleteNode.addClass("autocomplete");
@@ -2128,17 +2129,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					}
 				})
 			},
-			//get input value
-			//_getInputVal : function(){
-				//this.inputVal = $(this.obj).val();
-			//},
 			_setInputVal : function(text){
 				this.inputVal = text;
 			},
 			_tempInputVal : function(text){
 				$(this.obj).val(text);
 			},
-			//query option of data
 			_switchOption : function(){
 
 				var inputCurVal = $(this.obj).val();
@@ -2156,7 +2152,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						}
 					}
 				}
-				//console.log($(this.obj).next('.autocomplete').find("li").length)
 				if($(this.obj).next('.autocomplete').find("li").length > 0){
 					this._showList();
 				}else{
@@ -2219,13 +2214,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				
 				return prevVisible;
 			},
-			//
 			_appendList : function(text){
 				$(this.obj)
 					.next('.autocomplete')
 					.append('<li><a>' + text + '</a></li>');
 			},
-			//
 			_eventHandler : function(){
 
 				var that = this;
@@ -2235,12 +2228,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						that._switchOption();
 						that._calculatePos(e);
 					});
+
 				$(this.obj)
 					.on("keydown",function(e){
 						if(e.keyCode === 38){
 							e.preventDefault();
 						}
 					});
+
 				$(this.obj)
 					.on("blur",function(e){
 						$(e.target)
@@ -2250,13 +2245,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 							});
 					});
 
-				//var orgval;
-
 				$(this.obj)
 					.on("input",function(e){
-						//orgval = $(e.target).val();
-						//$(e.target).data("orgval",orgval);
-						//console.log(e.target)
+
 						that._setInputVal($(this).val());
 
 						that._switchOption();
@@ -2267,7 +2258,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					.on("keyup",function(e){
 						switch(e.keyCode){
 							case 40:
-							
 								if($(this).next('.autocomplete').find("li").length > 0){
 
 									var $nextEle = that._getNextIndex();
@@ -2277,19 +2267,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									that._highLightOption($nextEle);
 
 									if($(this).next('.autocomplete').find("li.active").length === 0){
-
 										that._tempInputVal(that.inputVal);
-
 									}else{
-
 										that._tempInputVal($nextEleTxt);
-
 									}
 								}
 								break;
 
 							case 38:
-								
 								if($(this).next('.autocomplete').find("li").length > 0){
 
 									var $prevEle = that._getPrevIndex();
@@ -2299,33 +2284,21 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									that._highLightOption($prevEle);
 
 									if($(this).next('.autocomplete').find("li.active").length === 0){
-
 										that._tempInputVal(that.inputVal);
-
 									}else{
-
 										that._tempInputVal($prevEleTxt);
-
 									}								
 								}
 								break;
 
 							case 13:
-								//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-								if($(this).next('.autocomplete').find('li.active').length !== 0 ){//&& inputValue != $(e.target).val()
-									//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
-
+								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
 									var txt = $(this).next('.autocomplete').find('li.active').text();
-									
-									//$(e.target).val(inputValue);
-									//console.log(inputValue)
 									that._setInputVal(txt);
 								}
 								break;
 
  							case 37:
- 								//var inputValue = $(e.target).next('.autocomplete').find('li.active:visible a').text();
- 								//console.log($(this).next('.autocomplete').find('li.active').text() , $(this).val())
 								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
 									var txt = $(this).next('.autocomplete').find('li.active').text();
 									that._setInputVal(txt);
@@ -2337,6 +2310,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 									var txt = $(this).next('.autocomplete').find('li.active').text();
 									that._setInputVal(txt);
 								}
+								break;
 						}
 					});
 

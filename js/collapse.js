@@ -11,7 +11,11 @@
 		gui = window.gui,
 		old = $.fn.guiCollapse;
 
-	var module = {
+	var module = function(obj,option){
+		this._init(obj,option);
+	}
+
+	module.prototype = {
 		_init: function (obj, option) {
 			this.obj = obj;
 			this._initOptions(option);
@@ -70,7 +74,8 @@
 	$.fn.guiCollapse = function (option) {
 
 		return this.each(function () {
-			module._init(this, option);
+			new module(this,option);
+			//module._init(this, option);
 		});
 	}
 
@@ -82,7 +87,7 @@
 	};
 
 	//for debug
-	$.fn.guiCollapse.debug = module;
+	$.fn.guiCollapse.Constructor = module;
 
 	$.fn.guiCollapse.noConflict = function () {
 		$.fn.guiCollapse = old;
