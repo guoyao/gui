@@ -9,8 +9,8 @@ require(["jquery", "prettify", "gui"], function ($, prettify) {
         gui = root.gui;
 
     $(".module-container .gui-splitter").guiSplitter({
-        minWidth: 50,
-        maxWidth: 200
+        minSize: 50,
+        maxSize: 200
     });
 
     prettify.prettyPrint();
