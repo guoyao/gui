@@ -2342,51 +2342,51 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiTooltip;
 
-	$.fn.guiTooltip = function (option) {
+	var module = function(obj,option){
+		this._init(obj,option);
+	}
 
-		var module = {
-			_init: function (obj, option) {
-				this.obj = obj;
-				this._eventHandler();
-			},
-			_initOptions: function (option) {
-				this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
-			},
+	module.prototype = {
+		_init: function (obj, option) {
+			this.obj = obj;
+			this._eventHandler();
+		},
+		_initOptions: function (option) {
+			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
+		},
 			//_findTooltipEle: function () {
 				//var $tooltipEle = $(this.obj).find("[data-toggle=tooltip]");
 				//return $tooltipEle;
 			//},
-			_setTooltipCssPos : function(){
-				if($(this.obj).css("position") == "static"){
-					$(this.obj).css("position","relative");
+		_setTooltipCssPos : function(){
+			if($(this.obj).css("position") == "static"){
+				$(this.obj).css("position","relative");
+			}
+		},
+		_eventHandler: function () {
+			var that = this;
+
+			$(this.obj).on("mouseover", function (e) {
+
+				if(that._judgeTooltipNode(e)){
+
+					var $TooltipWp = that._appendTooltip(e);
+
+					that._setTooltipPos(e, $TooltipWp);
 				}
-			},
-			_eventHandler: function () {
-				var that = this;
 
-				$(this.obj).on("mouseover", "[data-toggle=tooltip]", function (e) {
+				//that._setTooltipCssPos();
 
-					if(that._judgeTooltipNode(e)){
+				$(this)
+					.next(".tooltip")
+					.stop()
+					.fadeIn();
+			});
 
-						var $TooltipWp = that._appendTooltip(e);
-
-						that._setTooltipPos(e, $TooltipWp);
-					}
-
-					that._setTooltipCssPos();
-
-					$(e.target)
+				$(this.obj).on("mouseout", function (e) {
+					$(this)
 						.next(".tooltip")
-						.stop()
-						.animate({"opacity": 1});
-				});
-
-				$(this.obj).on("mouseout", "[data-toggle=tooltip]", function (e) {
-					$(e.target)
-						.next(".tooltip")
-						.animate({"opacity": 0}, function () {
-							$(this).remove()
-						});
+						.fadeOut()
 				});
 			},
 			_judgeTooltipNode : function(e){
@@ -2426,7 +2426,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			},
 			_calTooltipPos: function (e, tooltipEle) {
-				var parentOffset = $(this.obj).offset();
+				var parentOffset = $(this.obj).offsetParent().offset();
 
 				var targetOffset = $(e.target).offset();
 
@@ -2466,13 +2466,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				return {left: calculatedLeft, top: calculatedTop}
 			}
 		}
-		if (option == 'debug') {
-			//for debug
-			return module;
-		}
+
+	$.fn.guiTooltip = function (option) {
 
 		return this.each(function () {
-			module._init(this, option);
+			new module(this,option);
 		});
 	}
 
@@ -2480,8 +2478,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	};
 
-	//for debug
-	//$.fn.guiTooltip.debug = module;
+	$.fn.guiTooltip.Constructor = module;
 
 	$.fn.guiTooltip.noConflict = function () {
 		$.fn.guiTooltip = old;
@@ -2764,7 +2761,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	$.fn.guiAutocomplete.Constructor = module;
 	
 	$.fn.guiAutocomplete.defaults = {
-		data:['111','222','333','444','555','666','777','888','999','000','111','222','333','444','555','666','777','888','999']
+		data:[]
 	};
 
 	$.fn.guiAutocomplete.noConflict = function () {

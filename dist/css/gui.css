@@ -2699,6 +2699,7 @@ th {
   position: absolute;
   top: 80px;
   left: 20px;
+  display: none;
   padding: 5px;
 }
 

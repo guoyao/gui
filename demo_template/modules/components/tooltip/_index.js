@@ -1,4 +1,4 @@
 require(["jquery", "prettify", "gui"], function ($, prettify) {
-    $(".tooltip-demo").guiTooltip();
+    $("[data-toggle=tooltip]").guiTooltip();
     prettify.prettyPrint();
 });

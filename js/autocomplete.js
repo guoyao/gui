@@ -273,7 +273,7 @@
 	$.fn.guiAutocomplete.Constructor = module;
 	
 	$.fn.guiAutocomplete.defaults = {
-		data:['111','222','333','444','555','666','777','888','999','000','111','222','333','444','555','666','777','888','999']
+		data:[]
 	};
 
 	$.fn.guiAutocomplete.noConflict = function () {
