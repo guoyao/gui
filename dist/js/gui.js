@@ -2805,17 +2805,27 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			}
 		},
 		_toggleList : function(e){
+
 			var $parent = $(e.target).parent(".dropdown").find(".dropdown-list");
-			if($parent.is(":hidden")){
-				$parent.show();
-			}else{
+
+			$parent.addClass("focus");
+
+			$(".dropdown-list").not(".dropdown-list.focus").hide();
+
+			if($parent.is(":visible")){
 				$parent.hide();
+			}else{
+				$parent.show();
 			}
+			$parent.removeClass("focus");
 		},
 		_hideList : function(){
+
 			$(".dropdown-list").hide();
+
 		},
 		_changeCurList : function(e){
+
 			var txt = $(e.target).text();
 
 			$(this.obj).find(".dropdown-toggle").text(txt);
@@ -2830,10 +2840,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		_eventHandler : function(){
 			var that = this;
 
-			$(document)
-				.on('click.gui.dropdown.data-api',this._hideList)
-				.on('click.gui.dropdown.data-api',".dropdown",function(e){e.stopPropagation()})
-				.on('click.gui.dropdown.data-api',".dropdown",function(e){that._toggleList(e);})
+			$(this.obj)
+				.on('click.gui.dropdown.data-api',function(e){e.stopPropagation();})
+				.on('click.gui.dropdown.data-api',function(e){that._toggleList(e);})
 				.on('click.gui.dropdown.data-api',".dropdown-list a",function(e){that._changeCurList(e);})
 		}
 	}
@@ -2842,9 +2851,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 		return this.each(function () {
 			new module(this,option);
-			//module._init(this, option);
 		});
 	}
+
+	$(document).on('click.gui.dropdown.data-api',function(){module.prototype._hideList();})
 
 	$.fn.guiDropdown.defaults = {
 		caret : true
