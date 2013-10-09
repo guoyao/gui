@@ -2810,7 +2810,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			$parent.addClass("focus");
 
-			$(".dropdown-list").not(".dropdown-list.focus").hide();
+			$(".dropdown-list").not(".focus").hide();
 
 			if($parent.is(":visible")){
 				$parent.hide();
