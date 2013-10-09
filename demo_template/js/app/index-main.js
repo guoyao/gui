@@ -20,7 +20,8 @@ define(["./demo"], function (demo) {
         new Module("Carousel", "carousel"),
         new Module("Tooltip", "tooltip"),
         new Module("Pagination", "pagination"),
-        new Module("Autocomplete", "autocomplete")
+        new Module("Autocomplete", "autocomplete"),
+        new Module("Dropdown", "dropdown")
     ], {
         modulesDirectory: "modules/components"
     }).init();
