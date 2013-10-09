@@ -1,0 +1,44 @@
+/*!
+ * Bootstrap v3.0.0
+ *
+ * Copyright 2013 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+
+/*!
+ * We imported some codes of bootstrap, and added our own's
+ */
+
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+.gui-breadcrumb {
+  padding: 8px 15px;
+  margin-bottom: @line-height-computed;
+  list-style: none;
+  background-color: @breadcrumb-bg;
+  border-radius: @border-radius-base;
+  > li {
+    display: inline-block;
+    &+li:before {
+      content: "/\00a0"; // Unicode space added since inline-block means non-collapsing white-space
+      padding: 0 5px;
+      color: @breadcrumb-color;
+    }
+    &+li.gui-with-seperator:before {
+      content: none;
+      padding: 0;
+    }
+  }
+  > .active {
+    color: @breadcrumb-active-color;
+  }
+  .gui-breadcrumb-sperator {
+    color: @breadcrumb-color;
+    padding: 0 5px;
+  }
+}

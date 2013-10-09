@@ -1,17 +1,3 @@
-/*!
- * Bootstrap v3.0.0
- *
- * Copyright 2013 Twitter, Inc
- * Licensed under the Apache License v2.0
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Designed and built with all the love in the world by @mdo and @fat.
- */
-
-/*!
- * We imported some codes of bootstrap, and added added our own's
- */
-
 $(function () {
 
     var $ = window.jQuery;
@@ -24,12 +10,13 @@ $(function () {
         $.fn.guiAffix = guiAffix;
     });
 
-    /*test("should be defined on jquery object", function () {
-        ok($(document.body).guiAffix, 'guiAffix method is defined');
+    test("should be defined on jquery object", function () {
+        ok($('<div></div>').guiAffix, 'guiAffix method is defined');
     });
 
     test("should return element", function () {
-        ok($(document.body).guiAffix()[0] == document.body, 'document.body returned');
-    });*/
+        var div = document.createElement("div");
+        ok($(div).guiAffix()[0] === div, 'div returned');
+    });
 
 })

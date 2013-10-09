@@ -276,7 +276,39 @@
         if (gui.browserInfo.version <= 7) { // lte IE 7
             this.find("> .gui-panel-body + .gui-table").addClass("gui-table-beside-gui-panel-body");
         }
+        if (gui.browserInfo.version <= 6) { // lte IE 6
+            this.find("[data-toggle=collapse]").css("cursor", "pointer");
+            this.each(function () {
+                var $this = $(this),
+                    $parent = $this.parent(),
+                    inPanelGroup = $parent.hasClass("gui-panel-group");
+                if (inPanelGroup) {
+                    $parent.find(".gui-panel + .gui-panel").addClass("gui-panel-beside-gui-panel");
+                    $this.find(".gui-panel-heading + .gui-panel-collapse").addClass("gui-panel-collapse-beside-heading");
+                    $this.find(".gui-panel-footer + .gui-panel-collapse").addClass("gui-panel-collapse-beside-footer");
+                }
+            });
+        }
         return  this;
+    };
+
+    //
+    // Breadcrumbs
+    // --------------------------------------------------
+    if (!!$.fn.guiBreadcrumb) {
+        if (gui.browserInfo.version <= 7) { // lte IE 7
+            var GuiBreadcrumb = $.fn.guiBreadcrumb.Constructor;
+            GuiBreadcrumb.prototype.init = function () {
+                var seperator = this.options.seperator;
+                this.$element.find("> li:not(:first-child)").each(function () {
+                    var $this = $(this);
+                    if ($this.find(".gui-breadcrumb-sperator").length === 0) {
+                        $('<span class="gui-breadcrumb-sperator">' + (seperator || '/') + '</span>').prependTo($this);
+                    }
+                });
+                this.update();
+            };
+        }
     }
 
 })(window);

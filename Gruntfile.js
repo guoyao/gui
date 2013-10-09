@@ -30,7 +30,7 @@ module.exports = function (grunt) {
                 stripBanners: false
             },
             gui: {
-                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/button.js', 'js/datepicker.js', 'js/button-bar.js', 'js/affix.js', 'js/carousel.js' , 'js/tooltip.js','js/autocomplete.js', 'js/dropdown.js','js/ie-patch.js'],
+                src: ['js/helper.js', 'js/nav.js', 'js/tab.js', 'js/collapse.js', 'js/popup.js', 'js/slider.js', 'js/placeholder.js', 'js/button.js', 'js/datepicker.js', 'js/button-bar.js', 'js/affix.js', 'js/carousel.js', 'js/breadcrumb.js', 'js/splitter.js', 'js/tooltip.js','js/autocomplete.js', 'js/dropdown.js', 'js/ie-patch.js'],
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
         },
@@ -84,7 +84,8 @@ module.exports = function (grunt) {
                 files: {
                     'js/tests/vendor/lib/jquery.js': 'bower_components/jquery/jquery.js',
                     'js/tests/vendor/lib/qunit.js': 'bower_components/qunit/qunit//qunit.js',
-                    'js/tests/vendor/lib/qunit.css': 'bower_components/qunit/qunit/qunit.css'
+                    'js/tests/vendor/lib/qunit.css': 'bower_components/qunit/qunit/qunit.css',
+                    'js/tests/vendor/lib/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.min.css'
                 }
             },
             dist_assets: {
@@ -198,7 +199,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Test task.
-    grunt.registerTask('test', ['bower:install', 'copy:test', 'jshint', 'qunit', 'shell:coverall']);
+    grunt.registerTask('test', ['bower:install', 'recess:min', 'copy:test', 'jshint', 'qunit', 'shell:coverall']);
 
     // generate coverage report after tests
 //    grunt.event.on('qunit.done', function () {

@@ -49,11 +49,17 @@
                 var linkItem = $tabItem.children("a");
                 if (linkItem && linkItem.length > 0) {
                     selector = linkItem[0].getAttribute("href");
-                    selector = selector && selector.replace(/.*(?=#[^\s]*$)/, ""); //strip for ie6, 7
+                    selector = gui.stripHref(selector); //strip for ie6, 7
                 }
             }
             if(selector) {
-                gui.showHide($(selector), show);
+                var $selector = $(selector);
+                if (show) {
+                    $selector.slideDown();
+                }
+                else {
+                    $selector.hide();
+                }
             }
         }
 

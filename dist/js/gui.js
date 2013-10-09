@@ -81,26 +81,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 }
             };
 
-        function showHide($element, show, speed, callback) {
-            if (show) {
-                $element.slideDown(speed, callback);
-            } else {
-                $element.hide(speed, callback);
-            }
-        }
-
-        function htmlEncode(str) {
-            var div = document.createElement("div");
-            div.appendChild(document.createTextNode(str));
-            return div.innerHTML;
-        }
-
-        function htmlDecode(str) {
-            var div = document.createElement("div");
-            div.innerHTML = str;
-            return div.innerHTML;
-        }
-
         // ratio should be 0..1
         function darken(color, ratio) {
             var red, green, blue, alpha, rgb, hex, dotIndex = -1;
@@ -145,13 +125,31 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             return color;
         }
 
+        function removeChildAfter($$children, childOrIndex) {
+            if (typeof childOrIndex !== "number")  {
+                childOrIndex = $$children.index(childOrIndex);
+            }
+            $$children.each(function (index, child) {
+                if (index > childOrIndex) {
+                    $(child).remove();
+                }
+            });
+        }
+
+        /**
+         * href strip for ie6, 7
+         * @param href
+         */
+        function stripHref(href) {
+            return href && href.replace(/.*(?=#[^\s]*$)/, "");
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
-            showHide: showHide,
-            htmlEncode: htmlEncode,
-            htmlDecode: htmlDecode,
-            darken: darken
+            darken: darken,
+            removeChildAfter: removeChildAfter,
+            stripHref: stripHref
         }
     })();
 
@@ -282,11 +280,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 var linkItem = $tabItem.children("a");
                 if (linkItem && linkItem.length > 0) {
                     selector = linkItem[0].getAttribute("href");
-                    selector = selector && selector.replace(/.*(?=#[^\s]*$)/, ""); //strip for ie6, 7
+                    selector = gui.stripHref(selector); //strip for ie6, 7
                 }
             }
             if(selector) {
-                gui.showHide($(selector), show);
+                var $selector = $(selector);
+                if (show) {
+                    $selector.slideDown();
+                }
+                else {
+                    $selector.hide();
+                }
             }
         }
 
@@ -356,19 +360,42 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         return this;
     };
 })(window);
-/**
- * Author: alfredzh
- * Time: 08-13-2013 10:38
- */
+/* ========================================================================
+ * Bootstrap: collapse.js v3.0.0
+ * http://twbs.github.com/bootstrap/javascript.html#collapse
+ * ========================================================================
+ * Copyright 2012 Twitter, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
 
-(function (window) {
+/* ========================================================================
+ * GUI: collapse.js v0.1.0
+ * http://www.gui.guoyao.me/
+ * ========================================================================
+ * Copyright 2013 Guoyao Wu
+ * ======================================================================== */
+
+ (function (window) {
 	"use strict";
 
-	var console = window.console,
+	var document = window.document,
+        console = window.console,
 		$ = window.jQuery,
 		gui = window.gui,
 		old = $.fn.guiCollapse;
-
+/*
+<<<<<<< HEAD
 	var module = function(obj,option){
 		this._init(obj,option);
 	}
@@ -446,11 +473,121 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	//for debug
 	$.fn.guiCollapse.Constructor = module;
+=======
+*/
+    // COLLAPSE PUBLIC CLASS DEFINITION
+    // ================================
+
+    var GuiCollapse = function (element, options) {
+        this.$element = $(element);
+        this.options = options;
+        if (options.parent) {
+            this.$parent = $(options.parent);
+        }
+        this.transitioning = false;
+        if (options.toggle) {
+            this.toggle();
+        }
+    };
+
+    GuiCollapse.prototype.show = function () {
+        if (this.transitioning || !this.$element.hasClass('gui-collapsed')) {
+            return;
+        }
+
+        var startEvent = $.Event('show.gui.collapse');
+        this.$element.trigger(startEvent);
+        if (startEvent.isDefaultPrevented()) {
+            return;
+        }
+
+        var actives = this.$parent && this.$parent.find('.gui-collapsible:not(.gui-collapsed)');
+        if (actives && actives.length) {
+            actives.guiCollapse('hide');
+        }
+
+        this.transitioning = true;
+        var that = this;
+        that.$element.slideDown(400, function () {
+            that.transitioning = false;
+            that.$element.removeClass('gui-collapsed');
+            that.$element.trigger('shown.gui.collapse');
+        });
+    };
+
+    GuiCollapse.prototype.hide = function () {
+        if (this.transitioning || this.$element.hasClass('gui-collapsed')) {
+            return;
+        }
+
+        var startEvent = $.Event('hide.gui.collapse');
+        this.$element.trigger(startEvent);
+        if (startEvent.isDefaultPrevented()) {
+            return;
+        }
+
+        this.transitioning = true;
+        var that = this;
+        that.$element.slideUp(400, function () {
+            that.transitioning = false;
+            that.$element.addClass('gui-collapsed');
+            that.$element.trigger('hidden.gui.collapse');
+        });
+    };
+
+    GuiCollapse.prototype.toggle = function () {
+        if (!this.transitioning) {
+            this[this.$element.hasClass('gui-collapsed') ? 'show' : 'hide']();
+        }
+    };
+
+
+    // COLLAPSE PLUGIN DEFINITION
+    // ==========================
+
+    $.fn.guiCollapse = function (option) {
+        return this.each(function () {
+            var $this = $(this),
+                data = $this.data('gui.collapse');
+
+            if (!data) {
+                $this.data('gui.collapse', (data = new GuiCollapse(this, $.extend({}, $.fn.guiCollapse.defaults, $this.data(), typeof option == 'object' && option))));
+            }
+            if (gui.plugin.isPluginMethodCall(option)) {
+                data[option]();
+            }
+        })
+    };
+
+    $.fn.guiCollapse.defaults = {
+        toggle: false
+    };
+
+    $.fn.guiCollapse.Constructor = GuiCollapse;
+
+
+    // COLLAPSE NO CONFLICT
+    // ====================
+//>>>>>>> 8aa611db3915f048d66ffccb306b541812b2d917
 
 	$.fn.guiCollapse.noConflict = function () {
 		$.fn.guiCollapse = old;
 		return this;
 	};
+
+     // COLLAPSE DATA-API
+     // =================
+
+     $(document).on('click.gui.collapse.data-api', '[data-toggle=collapse]', function (e) {
+         var $this = $(this),
+             href,
+             target  = $this.attr('data-target') || e.preventDefault() || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]*$)/, ''); //strip for ie6, 7
+
+         if (target) {
+             $(target).guiCollapse("toggle");
+         }
+         return false;
+     });
 })(window);
 
 (function (window) {
@@ -1917,6 +2054,286 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	//$.fn.guiCarousel.debug = module;
 
 })(window);
+/* ========================================================================
+ * GUI: breadcrumb.js v0.1.0
+ * http://www.gui.guoyao.me/
+ * ========================================================================
+ * Copyright 2013 Guoyao Wu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+(function (window) {
+    "use strict";
+
+    var document = window.document,
+        console = window.console,
+        $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiBreadcrumb;
+
+    // COLLAPSE PUBLIC CLASS DEFINITION
+    // ================================
+
+    var GuiBreadcrumb = function (element, options) {
+        this.$element = $(element);
+        this.options = options;
+    };
+
+    GuiBreadcrumb.prototype.init = function () {
+        if (this.options.seperator) {
+            var seperator = this.options.seperator;
+            this.$element.find("> li:not(:first-child)").each(function () {
+                var $this = $(this);
+                $this.addClass("gui-with-seperator");
+                if ($this.find(".gui-breadcrumb-sperator").length === 0) {
+                    $('<span class="gui-breadcrumb-sperator">' + seperator + '</span>').prependTo($this);
+                }
+            });
+        }
+        this.update();
+    };
+
+    GuiBreadcrumb.prototype.update = function () {
+        var $lastChild = this.$element.children("li:last-child");
+        if ($lastChild) {
+            $lastChild.addClass("active");
+            var $link = $lastChild.children("a");
+            if ($link) {
+                $link.replaceWith($link.text());
+            }
+        }
+    };
+
+    /**
+     * remove child after param childOrIndex
+     * @param childOrIndex
+     */
+    GuiBreadcrumb.prototype.removeAfter = function (childOrIndex) {
+        var $$children = this.$element.children("li");
+        if (typeof childOrIndex !== "number")  {
+            childOrIndex = $$children.index(childOrIndex);
+        }
+        gui.removeChildAfter($$children, childOrIndex);
+        if (childOrIndex === 0 && !this.options.requireSelection) {
+            this.$element.empty();
+        }
+        this.update();
+    };
+
+    // COLLAPSE PLUGIN DEFINITION
+    // ==========================
+
+    $.fn.guiBreadcrumb = function (option) {
+        this.each(function () {
+            var $this = $(this),
+                data = $this.data('gui.breadcrumb');
+
+            if (!data) {
+                $this.data('gui.breadcrumb', (data = new GuiBreadcrumb(this, $.extend({}, $.fn.guiBreadcrumb.defaults, $this.data(), typeof option == 'object' && option))));
+            }
+            data.init();
+        });
+        return gui.plugin.patch($.fn.guiBreadcrumb, this, option);
+    };
+
+    $.fn.guiBreadcrumb.defaults = {
+        requireSelection: true
+    };
+
+    $.fn.guiBreadcrumb.Constructor = GuiBreadcrumb;
+
+
+    // COLLAPSE NO CONFLICT
+    // ====================
+
+    $.fn.guiBreadcrumb.noConflict = function () {
+        $.fn.guiBreadcrumb = old;
+        return this;
+    };
+
+    // BREADCRUMB DATA-API
+    // =================
+
+    $(document).on('click.gui.breadcrumb.data-api', '.gui-breadcrumb > li a', function () {
+        var $this = $(this),
+            href = $this.attr('href');
+
+        if (href) {
+            href = gui.stripHref(href); //strip for ie6, 7
+        }
+        if (!href || href == "#" || href.indexOf("javascript") === 0) {
+            var $li = $this.closest("li"),
+                $breadcrumb = $li.closest(".gui-breadcrumb");
+
+            $breadcrumb.data("gui.breadcrumb").removeAfter($li);
+            return false;
+        }
+    });
+
+})(window);
+/* ========================================================================
+ * GUI: tab.js v0.1.0
+ * http://www.gui.guoyao.me/
+ * ========================================================================
+ * Copyright 2013 Guoyao Wu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ======================================================================== */
+
+(function (window, undefined) {
+    "use strict";
+
+    var console = window.console,
+        document = window.document,
+        $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiSplitter;
+
+    var GuiSplitter = function (element, options) {
+        this.$element = $(element);
+        this.$firstPart = this.$element.find("> .gui-splitter-part-first");
+        this.$secondPart = this.$element.find("> .gui-splitter-part-second");
+        this.$splitBar = $('<div class="gui-splitter-control-bar"></div>');
+        this.$ghostSplitBar = undefined; // splitbar ghosted element
+        this.options = options;
+        this.transitioning = false;
+        this.splitPosition = 0; // current split position
+        this.savedSplitPosition = 0; // saved split position
+        this.minWidth = Math.max(options.minWidth ? parseInt(options.minWidth, 10) : 0); // min width of first part
+        this.maxWidth = Math.min(options.maxWidth ? parseInt(options.maxWidth, 10) : this.$element.width());
+        this.padding = this.$element.css(options.vertical ? "padding-top" : "padding-left");
+        this.padding = this.padding ? parseInt(this.padding, 10) : 0;
+    };
+
+    GuiSplitter.prototype.init = function () {
+        this.$firstPart.after(this.$splitBar);
+        this.splitPosition = this.$firstPart.width() - this.$splitBar.outerWidth(true);
+        this.$firstPart.width(this.splitPosition);
+        var that = this;
+        if (this.options.closeable) {
+            this.$closeButton = $('<div class="gui-splitter-close-btn"></div>');
+            this.$splitBar.append(this.$closeButton);
+            this.maxWidth = Math.max(this.maxWidth - this.$splitBar.outerWidth(true), 0);
+            this.$closeButton.mousedown(function () {
+                that.$closeButton.toggleClass("gui-splitter-close-btn-inverse").hide();
+                that.splitTo();
+            });
+        }
+        this.$splitBar.on("mousedown", function (e) {
+            if (e.target == this) {
+                that.startDrag(e.pageX);
+            }
+        });
+    };
+
+    GuiSplitter.prototype.startDrag = function (mousePosition) {
+        this.$ghostSplitBar = this.$ghostSplitBar || this.$splitBar.clone(false).insertAfter(this.$firstPart);
+        this.$ghostSplitBar.addClass("gui-splitter-control-bar-ghost").css({
+            width: this.$splitBar.width(),
+            height: this.$splitBar.height()
+        });
+        var that = this,
+            startPosition = this.splitPosition + this.padding;
+        this.$ghostSplitBar.css("left", startPosition);
+        this.$ghostSplitBar.show();
+        $(document).on("mousemove.gui.splitter", function (e) {
+            that.performDrag(startPosition, e.pageX - mousePosition);
+        }).on("mouseup.gui.splitter", function () {
+                that.endDrag();
+            });
+    };
+
+    GuiSplitter.prototype.performDrag = function (startPosition, increment) {
+        var position = Math.min(this.maxWidth + this.padding, Math.max(this.minWidth + this.padding, startPosition + increment));
+        this.$ghostSplitBar.css("left", position);
+    };
+
+    GuiSplitter.prototype.endDrag = function () {
+        $(document).off(".gui.splitter");
+        this.splitTo(parseInt(this.$ghostSplitBar.css("left")) - this.padding);
+    };
+
+    GuiSplitter.prototype.splitTo = function (position) {
+        if (this.transitioning) {
+            return;
+        }
+        this.transitioning = true;
+        var that = this;
+        if (position || position == 0) {
+            this.$firstPart.animate({width: position}, this.options.animationDuration, function () {
+                that.transitioning = false;
+                that.splitPosition = position;
+                that.$closeButton.fadeIn("fast");
+                that.$ghostSplitBar.hide();
+            });
+            this.$secondPart.animate({width: this.$element.width() - this.$splitBar.outerWidth(true) - position}, this.options.animationDuration);
+        } else {
+            if (this.splitPosition > 0) {
+                this.savedSplitPosition = this.splitPosition;
+                position = 0;
+            } else {
+                position = this.savedSplitPosition;
+            }
+            this.$firstPart.animate({width: position}, this.options.animationDuration, function () {
+                that.transitioning = false;
+                that.splitPosition = position;
+                that.$closeButton.fadeIn("fast");
+            });
+            this.$secondPart.animate({width: this.$element.width() - this.$splitBar.outerWidth(true) - position}, this.options.animationDuration);
+        }
+    };
+
+    $.fn.guiSplitter = function (option) {
+        return this.each(function () {
+            var $this = $(this),
+                data = $this.data("gui.splitter");
+
+            if (!data) {
+                $this.data("gui.splitter", (data = new GuiSplitter(this, $.extend({}, $.fn.guiSplitter.defaults, $this.data(), typeof option == 'object' && option))));
+                data.init();
+            }
+            if (gui.plugin.isPluginMethodCall(option)) {
+                data[option]();
+            }
+        });
+    };
+
+    $.fn.guiSplitter.defaults = {
+        closeable: true,
+        animationDuration: "fast"
+    };
+
+    $.fn.guiSplitter.Constructor = GuiSplitter;
+
+    // NO CONFLICT
+    // ===============
+
+    $.fn.guiSplitter.noConflict = function () {
+        $.fn.guiSplitter = old;
+        return this;
+    };
+})(window);
 (function (window) {
 	"use strict";
 
@@ -2414,10 +2831,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			var that = this;
 
 			$(document)
-				.on('click',this._hideList)
-				.on('click',".dropdown",function(e){e.stopPropagation()})
-				.on('click',".dropdown",function(e){that._toggleList(e);})
-				.on('click',".dropdown-list a",function(e){that._changeCurList(e);})
+				.on('click.gui.dropdown.data-api',this._hideList)
+				.on('click.gui.dropdown.data-api',".dropdown",function(e){e.stopPropagation()})
+				.on('click.gui.dropdown.data-api',".dropdown",function(e){that._toggleList(e);})
+				.on('click.gui.dropdown.data-api',".dropdown-list a",function(e){that._changeCurList(e);})
 		}
 	}
 
@@ -2718,7 +3135,39 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         if (gui.browserInfo.version <= 7) { // lte IE 7
             this.find("> .gui-panel-body + .gui-table").addClass("gui-table-beside-gui-panel-body");
         }
+        if (gui.browserInfo.version <= 6) { // lte IE 6
+            this.find("[data-toggle=collapse]").css("cursor", "pointer");
+            this.each(function () {
+                var $this = $(this),
+                    $parent = $this.parent(),
+                    inPanelGroup = $parent.hasClass("gui-panel-group");
+                if (inPanelGroup) {
+                    $parent.find(".gui-panel + .gui-panel").addClass("gui-panel-beside-gui-panel");
+                    $this.find(".gui-panel-heading + .gui-panel-collapse").addClass("gui-panel-collapse-beside-heading");
+                    $this.find(".gui-panel-footer + .gui-panel-collapse").addClass("gui-panel-collapse-beside-footer");
+                }
+            });
+        }
         return  this;
+    };
+
+    //
+    // Breadcrumbs
+    // --------------------------------------------------
+    if (!!$.fn.guiBreadcrumb) {
+        if (gui.browserInfo.version <= 7) { // lte IE 7
+            var GuiBreadcrumb = $.fn.guiBreadcrumb.Constructor;
+            GuiBreadcrumb.prototype.init = function () {
+                var seperator = this.options.seperator;
+                this.$element.find("> li:not(:first-child)").each(function () {
+                    var $this = $(this);
+                    if ($this.find(".gui-breadcrumb-sperator").length === 0) {
+                        $('<span class="gui-breadcrumb-sperator">' + (seperator || '/') + '</span>').prependTo($this);
+                    }
+                });
+                this.update();
+            };
+        }
     }
 
 })(window);

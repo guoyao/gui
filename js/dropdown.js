@@ -56,10 +56,10 @@
 			var that = this;
 
 			$(document)
-				.on('click',this._hideList)
-				.on('click',".dropdown",function(e){e.stopPropagation()})
-				.on('click',".dropdown",function(e){that._toggleList(e);})
-				.on('click',".dropdown-list a",function(e){that._changeCurList(e);})
+				.on('click.gui.dropdown.data-api',this._hideList)
+				.on('click.gui.dropdown.data-api',".dropdown",function(e){e.stopPropagation()})
+				.on('click.gui.dropdown.data-api',".dropdown",function(e){that._toggleList(e);})
+				.on('click.gui.dropdown.data-api',".dropdown-list a",function(e){that._changeCurList(e);})
 		}
 	}
 

@@ -7,7 +7,8 @@
 define(["./demo"], function (demo) {
     var Module = demo.Module;
     new demo.Initializer([
-        new Module("Affix", "affix")
+        new Module("Affix", "affix"),
+        new Module("Collapse", "collapse")
     ], {
         modulesDirectory: "modules/javascript"
     }).init();

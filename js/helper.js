@@ -72,26 +72,6 @@
                 }
             };
 
-        function showHide($element, show, speed, callback) {
-            if (show) {
-                $element.slideDown(speed, callback);
-            } else {
-                $element.hide(speed, callback);
-            }
-        }
-
-        function htmlEncode(str) {
-            var div = document.createElement("div");
-            div.appendChild(document.createTextNode(str));
-            return div.innerHTML;
-        }
-
-        function htmlDecode(str) {
-            var div = document.createElement("div");
-            div.innerHTML = str;
-            return div.innerHTML;
-        }
-
         // ratio should be 0..1
         function darken(color, ratio) {
             var red, green, blue, alpha, rgb, hex, dotIndex = -1;
@@ -136,13 +116,31 @@
             return color;
         }
 
+        function removeChildAfter($$children, childOrIndex) {
+            if (typeof childOrIndex !== "number")  {
+                childOrIndex = $$children.index(childOrIndex);
+            }
+            $$children.each(function (index, child) {
+                if (index > childOrIndex) {
+                    $(child).remove();
+                }
+            });
+        }
+
+        /**
+         * href strip for ie6, 7
+         * @param href
+         */
+        function stripHref(href) {
+            return href && href.replace(/.*(?=#[^\s]*$)/, "");
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
-            showHide: showHide,
-            htmlEncode: htmlEncode,
-            htmlDecode: htmlDecode,
-            darken: darken
+            darken: darken,
+            removeChildAfter: removeChildAfter,
+            stripHref: stripHref
         }
     })();
 

@@ -289,6 +289,23 @@ html {
   }
 }
 
+.gui-panel-group {
+  // Tighten up margin so it's only between panels
+  .gui-panel-beside-gui-panel {
+    _margin-top: 5px;
+  }
+  .gui-panel-collapse-beside-heading {
+    .gui-panel-body {
+      _border-top: 1px solid @panel-inner-border;
+    }
+  }
+  .gui-panel-collapse-beside-footer {
+    .gui-panel-body {
+      _border-bottom: 1px solid @panel-inner-border;
+    }
+  }
+}
+
 .gui-panel-default {
   .panel-variant-ie(@panel-default-border, @panel-default-text, @panel-default-heading-bg, @panel-default-border);
 }
@@ -319,6 +336,23 @@ html {
   }
   .gui-popup-bg {
     filter:alpha(opacity=70);
+  }
+}
+
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+.gui-breadcrumb {
+  > li {
+    *display: inline;
+  }
+  li {
+    _display: inline;
+    &.active {
+      _color: @breadcrumb-active-color;
+      _background-color: transparent;
+    }
   }
 }
 
