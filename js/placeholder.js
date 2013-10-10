@@ -76,7 +76,7 @@
 					.stop(true, true)
 					.fadeOut(that.defaults.animateSpeed);
 			});
-			
+
 			$(this.obj).on("blur",function(){
 				if($(this).val() === ''){
 					$(this)

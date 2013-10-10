@@ -1139,9 +1139,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					.next("label")
 					.stop(true, true)
 					.fadeOut(that.defaults.animateSpeed);
-
-				console.log(this)
 			});
+			
 			$(this.obj).on("blur",function(){
 				if($(this).val() === ''){
 					$(this)

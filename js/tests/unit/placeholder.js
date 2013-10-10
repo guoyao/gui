@@ -1,28 +1,11 @@
 $(function () {
 
-	//var $ = window.jQuery;
-	//var moduleDebug;
-
 	var $ = window.jQuery,
         $testWrapper = $("#qunit-fixture");
 
-	option = {
-		labelTextAlign: 'right',
-		labelOffset: {'top': 5, 'left': 10},
-		labelTextIndent: '2em',
-		animateSpeed: 800
-	};
-
 	module("placeholder",{
 		setup : function(){
-			//set test environment
-			//moduleDebug = $.fn.guiPlaceholder.debug;
-			//moduleDebug._initOptions(option);
-			//append test input node
-			$testWrapper.append('<div class="test-div"><input class="test-input" id="test-id" type="test"/></div>');
-			//console.log($(".test-input").offset().left - 2 );
-			//moduleDebug.obj = $(".test-div");
-			//console.log($("#qunit-fixture").html())
+			$testWrapper.append('<div class="test-div"><input class="test-input" id="test-id" type="text" data-default-text="please input 1"/></div>');
 		}
 	});
 
@@ -33,54 +16,83 @@ $(function () {
 	});
 
 	test("should be defined on jquery object", function () {
-		ok($(document.body).guiPlaceholder, 'guiTab method is defined');
+		ok($(".test-input").guiPlaceholder, 'guiTab method is defined');
 	});
 
 	test("should return element", function () {
-		ok($(document.body).guiPlaceholder()[0] == document.body, 'document.body returned');
+		equal($(".test-input").guiPlaceholder()[0] , $(".test-input")[0], 'document.body returned');
 	});
 
-	test("")
+	test("should insert lable after target input",function(){
 
-	/* inputTextObj() _getInputId()
-	test("should get input node",function(){
+		$(".test-input").guiPlaceholder();
 
-		//get input class
-		moduleDebug._getInputEle();
-		var input = moduleDebug.inputTextObj.eq(0);
-		var inputClass = input.css("class");
+		var $label = $(".test-input").next("label");
 
-		//get input id
-		moduleDebug._getInputId(0);
-		var inputId = input.attr("id");
+		equal($label.length , 1 , "Label appended");
 
-		//get input size
-		moduleDebug._getInputSize(0);
-		var inputSize = moduleDebug._inputSize;
-
-		//get input parent position
-		moduleDebug._getParentPostion();
-		var parentPos = moduleDebug._wrapperPosition;
-
-		//calculate the label position
-		moduleDebug._calculateLabelPostion(0);
-		var labelPosition = moduleDebug._labelPosition;
-		var locallablePosLeft = Math.abs(parentPos.left - input.eq(0).offset().left + parseInt(input.eq(0).css('margin-left'), 10));
-		var locallablePosTop = Math.abs(parentPos.top - input.eq(0).offset().top + parseInt(input.eq(0).css('margin-top'), 10));
-
-		//append label
-		moduleDebug._addPlaceHolderElem();
-
-		equal($(moduleDebug.obj).find("input").eq(0).css("class") , inputClass , 'Should get same class!');
-		equal($(moduleDebug.obj).find("input").eq(0).attr("id") , inputId , 'Should get same id!');
-		equal($(moduleDebug.obj).find("input").eq(0).outerHeight() , inputSize.height , 'Should get same height!');
-		equal($(moduleDebug.obj).find("input").eq(0).outerWidth() , inputSize.width , 'Should get same width!');
-		equal($(moduleDebug.obj).find("input").eq(0).css("margin") , inputSize.margin , 'Should get same margin!');
-		equal($(".test-div").offset().left , parentPos.left , 'Should be the same left offset!');
-		equal($(".test-div").offset().top , parentPos.top , 'Should be the same top offset!');
-		equal(locallablePosLeft , labelPosition.left , 'Label left position should be the same');
-		equal(locallablePosTop , labelPosition.top , 'Label top position should be the same');
-		equal($(".test-div label").length , 1 , 'Label should be append!');
 	});
-	*/
+
+	test("should set text of label",function(){
+
+		$(".test-input").guiPlaceholder();
+
+		var $label = $(".test-input").next("label");
+
+		var inputPlaceTxt = $(".test-input").attr("data-default-text");
+
+		var labelTxt = $label.text();
+
+		equal(inputPlaceTxt , labelTxt , "text should be the same");
+
+	});
+
+	test("should fade out when focus on input" , function(){
+
+		$(".test-input").guiPlaceholder();
+
+		$(".test-input").trigger("focus");
+
+		stop();
+
+		setTimeout(function() {
+		    equal( $(".test-input").next("label").is(":visible") , false , "label should fade out" );
+		    start();
+		}, 500 );
+	});
+
+	test("should fade in when blur on input" , function(){
+
+		$(".test-input").guiPlaceholder();
+
+		$(".test-input").trigger("blur");
+
+		stop();
+
+		setTimeout(function() {
+		    equal( $(".test-input").next("label").is(":visible") , true , "label should fade in" );
+		    start();
+		}, 500 );
+
+	});
+
+	test("should fade in when blur on input" , function(){
+
+		$(".test-input").guiPlaceholder();
+
+		$(".test-input").trigger("focus");
+
+		$(".test-input").val("test");
+
+		$(".test-input").trigger("blur");
+
+		stop();
+
+		setTimeout(function() {
+		    equal( $(".test-input").next("label").is(":visible") , false , "label should fade in" );
+		    start();
+		}, 500 );
+
+	});
+
 });
