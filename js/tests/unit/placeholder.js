@@ -1,7 +1,10 @@
 $(function () {
 
-	var $ = window.jQuery;
-	var moduleDebug;
+	//var $ = window.jQuery;
+	//var moduleDebug;
+
+	var $ = window.jQuery,
+        $testWrapper = $("#qunit-fixture");
 
 	option = {
 		labelTextAlign: 'right',
@@ -13,12 +16,12 @@ $(function () {
 	module("placeholder",{
 		setup : function(){
 			//set test environment
-			moduleDebug = $.fn.guiPlaceholder.debug;
-			moduleDebug._initOptions(option);
+			//moduleDebug = $.fn.guiPlaceholder.debug;
+			//moduleDebug._initOptions(option);
 			//append test input node
-			$("#qunit-fixture").append('<div class="test-div"><input class="test-input" id="test-id" type="test"/></div>');
+			$testWrapper.append('<div class="test-div"><input class="test-input" id="test-id" type="test"/></div>');
 			//console.log($(".test-input").offset().left - 2 );
-			moduleDebug.obj = $(".test-div");
+			//moduleDebug.obj = $(".test-div");
 			//console.log($("#qunit-fixture").html())
 		}
 	});
@@ -37,7 +40,9 @@ $(function () {
 		ok($(document.body).guiPlaceholder()[0] == document.body, 'document.body returned');
 	});
 
-	/* inputTextObj() _getInputId() */
+	test("")
+
+	/* inputTextObj() _getInputId()
 	test("should get input node",function(){
 
 		//get input class
@@ -77,4 +82,5 @@ $(function () {
 		equal(locallablePosTop , labelPosition.top , 'Label top position should be the same');
 		equal($(".test-div label").length , 1 , 'Label should be append!');
 	});
+	*/
 });
