@@ -12,21 +12,12 @@
 
 	module.prototype = {
 		_init: function (obj, option) {
-			this.obj = obj;
+				this.obj = obj;
 			this._eventHandler();
 		},
 		_initOptions: function (option) {
 			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
 		},
-		//_findTooltipEle: function () {
-		//var $tooltipEle = $(this.obj).find("[data-toggle=tooltip]");
-		//return $tooltipEle;
-		//},
-		//_setTooltipCssPos: function () {
-		//	if ($(this.obj).css("position") == "static") {
-		//		$(this.obj).css("position", "relative");
-		//	}
-		//},
 		_eventHandler: function () {
 			var that = this;
 
@@ -38,8 +29,6 @@
 
 					that._setTooltipPos(e, $TooltipWp);
 				}
-
-				//that._setTooltipCssPos();
 
 				$(this)
 					.next(".tooltip")
@@ -57,7 +46,6 @@
 			return $(e.target).next('.tooltip').length === 0;
 		},
 		_appendTooltip: function (e) {
-			//if (this._judgeTooltipNode(e)) {
 
 			var direction;
 
@@ -77,10 +65,8 @@
 
 			$TooltipWp.insertAfter($(e.target));
 
-			//this._setTooltipPos(e, $TooltipWp);
-
 			return $TooltipWp;
-			//}
+
 		},
 		_setTooltipPos: function (e, tooltipEle) {
 
@@ -132,7 +118,6 @@
 	}
 
 	$.fn.guiTooltip = function (option) {
-
 		return this.each(function () {
 			new module(this, option);
 		});

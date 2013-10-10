@@ -15,6 +15,7 @@
 				this.obj = obj;
 				this._initOptions(option);
 				this._appendListWrapper();
+				this._setAutocompletePos();
 				this._eventHandler();
 			},
 			_initOptions : function (option) {
@@ -22,24 +23,45 @@
 			},
 			_appendListWrapper : function(){
 
-				var $autocompleteNode = $("<ul>");
+				var $autocompleteNode = $('<ul class="autocomplete">');
 
 				$autocompleteNode
 					.insertAfter($(this.obj));
 
-				$autocompleteNode.css({"width":"300px","height":"200px"});
-
-				$autocompleteNode.addClass("autocomplete");
+				$autocompleteNode
+					.css({
+						"width":this.defaults.width,
+						"height":this.defaults.height
+					});
 			},
-			_calculatePos : function(e){
-				var parentPos = $(e.target).offsetParent().offset();
-				var ePos = $(e.target).offset();
+			_setAutocompletePos : function(){
 
-				var eH = $(e.target).outerHeight() - parseInt($(e.target).css("margin-bottom"),10);
+				var left,
+					top;
 
-				$(e.target)
+				if($(this.obj).offsetParent()[0] == $("body")[0]){
+
+					left = $(this.obj).offset().left;
+					top = $(this.obj).offset().top + $(this.obj).outerHeight();
+
+				}else{
+
+					var parentPos = $(this.obj).offsetParent().offset();
+					var ePos = $(this.obj).offset();
+
+					var eH = $(this.obj).outerHeight() - parseInt($(this.obj).css("margin-bottom"),10);
+
+					left = ePos.left - parentPos.left;
+					top = ePos.top - parentPos.top + eH;
+
+				}
+
+				$(this.obj)
 					.next('.autocomplete')
-					.css({"left":ePos.left - parentPos.left,"top":ePos.top - parentPos.top + eH});
+					.css({
+						"left":left,
+						"top":top
+					});
 			},
 			_getData : function(callback){
 				$.ajax({
@@ -48,10 +70,10 @@
 					dataType : "json",
 					success : function(data){
 						//callback();
-						console.log(data);
+						//console.log(data);
 					},
 					error : function(){
-						console.log(11);
+						//console.log(11);
 					}
 				})
 			},
@@ -152,7 +174,7 @@
 				$(this.obj)
 					.on("focus",function(e){
 						that._switchOption();
-						that._calculatePos(e);
+						//that._calculatePos(e);
 					});
 
 				$(this.obj)
@@ -262,18 +284,17 @@
 		}
 
 	$.fn.guiAutocomplete = function (option) {
-
 		return this.each(function () {
-
 			new module(this,option);
-
 		});
 	};
 
 	$.fn.guiAutocomplete.Constructor = module;
 	
 	$.fn.guiAutocomplete.defaults = {
-		data:[]
+		data:[],
+		width:'300px',
+		height:'200px',
 	};
 
 	$.fn.guiAutocomplete.noConflict = function () {

@@ -1,5 +1,4 @@
 require(["jquery", "prettify", "gui"], function ($, prettify) {
-    $("#autocomplete-input").guiAutocomplete();
-    console.log($(".autocomplete-input2").guiAutocomplete());
+    $("#autocomplete-input").guiAutocomplete({data:['111','222','333','444']});
     prettify.prettyPrint();
 });
