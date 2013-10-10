@@ -14,23 +14,23 @@
     width: 30%;
     height: 100%;
     overflow: hidden;
-    background-color: @gray-lighter;
+//    background-color: @gray-lighter;
   }
   > .gui-splitter-part-second {
     float: right;
     width: 70%;
     height: 100%;
     overflow: hidden;
-    background-color: @gray-light;
+//    background-color: @gray-light;
   }
   > .gui-splitter-control-bar {
     float: left;
     width: 6px;
     height: 100%;
     cursor: e-resize;
-    border-left: 1px solid #9cbdff;
-    border-right: 1px solid #9cbdff;
-    background: #cbe1fb url(../assets/gui/images/splitter-track-horizontal.gif) left center;
+    border-left: @border-weight @border-type @splitter-control-bar-border;
+    border-right: @border-weight @border-type @splitter-control-bar-border;
+    background: url(../assets/gui/images/splitter-track-horizontal.gif) left center;
     &.gui-splitter-control-bar-ghost {
       position: absolute;
       z-index: 100;
@@ -74,9 +74,9 @@
     clear: right;
     cursor: s-resize;
     border: 0;
-    border-top: 1px solid #9cbdff;
-    border-bottom: 1px solid #9cbdff;
-    background: #cbe1fb url(../assets/gui/images/splitter-track-vertical.gif) center top;
+    border-top: @border-weight @border-type @splitter-control-bar-border;
+    border-bottom: @border-weight @border-type @splitter-control-bar-border;
+    background: url(../assets/gui/images/splitter-track-vertical.gif) center top;
     .gui-splitter-close-btn {
       margin-top: -3px;
       margin-left: -41px;
@@ -87,6 +87,7 @@
       background: transparent url(../assets/gui/images/splitter-btn-vertical.gif) 50% -10px;
       &.gui-splitter-close-btn-inverse {
         margin-top: 0;
+        margin-left: -41px;
         background-position: 50% 0;
       }
     }

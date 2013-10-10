@@ -32,8 +32,8 @@
         this.$secondPart = this.$element.find("> .gui-splitter-part-second");
         this.$splitBar = $('<div class="gui-splitter-control-bar"></div>');
         this.$ghostSplitBar = undefined; // splitbar ghosted element
-        var isVertical = this.$element.hasClass("gui-splitter-vertical");
-        if (isVertical) {
+        this.isVertical = this.$element.hasClass("gui-splitter-vertical");
+        if (this.isVertical) {
             options.sizing = "height";
             options.moving = "top";
             options.eventPosition = "pageY";
@@ -51,7 +51,7 @@
         this.totalSize = this.$element[options.sizing]();
         this.minSize = Math.min(Math.max(options.minSize ? parseInt(options.minSize, 10) : 0, 0), this.totalSize); // min width/height of first part
         this.maxSize = Math.max(Math.min(options.maxSize ? parseInt(options.maxSize, 10) : this.totalSize, this.totalSize), 0);
-        this.padding = this.$element.css(isVertical ? "padding-top" : "padding-left");
+        this.padding = this.$element.css(this.isVertical ? "padding-top" : "padding-left");
         this.padding = this.padding ? parseInt(this.padding, 10) : 0;
     };
 
@@ -62,6 +62,14 @@
             this.maxSize -= splitBarSize;
         }
         this.splitPosition = Math.min(parseInt(this.$firstPart[this.options.sizing](), 10), this.maxSize);
+        if (this.options.splitPosition) {
+            if (gui.isPercentage(this.options.splitPosition)) {
+                this.splitPosition = this.totalSize * parseInt(this.options.splitPosition, 10) / 100;
+            } else if (typeof this.options.splitPosition === "number" || typeof this.options.splitPosition === "string") {
+                this.splitPosition = parseInt(this.options.splitPosition, 10);
+            }
+            this.splitPosition = parseInt(Math.min(this.splitPosition, this.maxSize), 10);
+        }
         this.$firstPart[this.options.sizing](this.splitPosition);
         this.$secondPart[this.options.sizing](this.totalSize - this.splitPosition - splitBarSize);
         var that = this;
@@ -78,6 +86,22 @@
                 that.startDrag(e[that.options.eventPosition]);
             }
         });
+        this.$element.on("resize", function () {
+            that.$secondPart[that.options.sizing](that.$element[that.options.sizing]() - that.$firstPart[that.options.sizing]() - splitBarSize);
+        });
+    };
+
+    GuiSplitter.prototype.update = function () {
+        this.totalSize = this.$element[this.options.sizing]();
+        this.minSize = Math.min(Math.max(this.options.minSize ? parseInt(this.options.minSize, 10) : 0, 0), this.totalSize); // min width/height of first part
+        this.maxSize = Math.max(Math.min(this.options.maxSize ? parseInt(this.options.maxSize, 10) : this.totalSize, this.totalSize), 0);
+        var splitBarSize = this.$splitBar[this.options.outerSize](true);
+        if (this.maxSize + splitBarSize > this.totalSize) {
+            this.maxSize -= splitBarSize;
+        }
+        this.splitPosition = Math.min(parseInt(this.$firstPart[this.options.sizing](), 10), this.maxSize);
+        this.$firstPart[this.options.sizing](this.splitPosition);
+        this.$secondPart[this.options.sizing](this.totalSize - this.splitPosition - splitBarSize);
     };
 
     GuiSplitter.prototype.startDrag = function (mousePosition) {
@@ -127,13 +151,21 @@
             secondPartAnimateProperties = {};
         if (position || position === 0) {
             animateProperties[this.options.sizing] = position;
-            this.$firstPart.animate(animateProperties, this.options.animationDuration, function () {
-                that.transitioning = false;
-                that.splitPosition = position;
-                that.$ghostSplitBar.hide();
-                that.$closeButton.toggleClass("gui-splitter-close-btn-inverse", position === 0);
-                that.$closeButton.fadeIn("fast");
-            });
+            this.$firstPart.animate(animateProperties, {
+                duration: this.options.animationDuration,
+                progress: function () {
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").trigger("resize");
+                },
+                complete: function () {
+                    that.transitioning = false;
+                    that.splitPosition = position;
+                    that.$ghostSplitBar.hide();
+                    that.$closeButton.toggleClass("gui-splitter-close-btn-inverse", position === 0);
+                    that.$closeButton.fadeIn("fast");
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").each(function () {
+                        $(this).data("gui.splitter").update();
+                    });
+                }});
         } else {
             if (this.splitPosition > 0) {
                 this.savedSplitPosition = this.splitPosition;
@@ -142,10 +174,19 @@
                 position = this.savedSplitPosition;
             }
             animateProperties[this.options.sizing] = position;
-            this.$firstPart.animate(animateProperties, this.options.animationDuration, function () {
-                that.transitioning = false;
-                that.splitPosition = position;
-                that.$closeButton.fadeIn("fast");
+            this.$firstPart.animate(animateProperties, {
+                duration: this.options.animationDuration,
+                progress: function () {
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").trigger("resize");
+                },
+                complete: function () {
+                    that.transitioning = false;
+                    that.splitPosition = position;
+                    that.$closeButton.fadeIn("fast");
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").each(function () {
+                        $(this).data("gui.splitter").update();
+                    });
+                }
             });
         }
         secondPartAnimateProperties[this.options.sizing] = this.totalSize - this.$splitBar[this.options.outerSize](true) - position;

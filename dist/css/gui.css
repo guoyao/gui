@@ -2756,7 +2756,6 @@ th {
   width: 30%;
   height: 100%;
   overflow: hidden;
-  background-color: #eeeeee;
 }
 
 .gui-splitter > .gui-splitter-part-second {
@@ -2764,7 +2763,6 @@ th {
   width: 70%;
   height: 100%;
   overflow: hidden;
-  background-color: #999999;
 }
 
 .gui-splitter > .gui-splitter-control-bar {
@@ -2772,7 +2770,7 @@ th {
   width: 6px;
   height: 100%;
   cursor: e-resize;
-  background: #cbe1fb url(../assets/gui/images/splitter-track-horizontal.gif) left center;
+  background: url(../assets/gui/images/splitter-track-horizontal.gif) left center;
   border-right: 1px solid #9cbdff;
   border-left: 1px solid #9cbdff;
 }
@@ -2822,7 +2820,7 @@ th {
   height: 6px;
   clear: right;
   cursor: s-resize;
-  background: #cbe1fb url(../assets/gui/images/splitter-track-vertical.gif) center top;
+  background: url(../assets/gui/images/splitter-track-vertical.gif) center top;
   border: 0;
   border-top: 1px solid #9cbdff;
   border-bottom: 1px solid #9cbdff;
@@ -2840,6 +2838,7 @@ th {
 
 .gui-splitter-vertical > .gui-splitter-control-bar .gui-splitter-close-btn.gui-splitter-close-btn-inverse {
   margin-top: 0;
+  margin-left: -41px;
   background-position: 50% 0;
 }
 
@@ -3216,6 +3215,18 @@ html {
 .gui-breadcrumb li.active {
   _color: #999999;
   _background-color: transparent;
+}
+
+.gui-splitter-vertical > .gui-splitter-part-first {
+  *float: none;
+}
+
+.gui-splitter-vertical > .gui-splitter-part-second {
+  *float: none;
+}
+
+.gui-splitter-vertical > .gui-splitter-control-bar {
+  *float: none;
 }
 
 a.active {

@@ -10,7 +10,8 @@ require(["jquery", "prettify", "gui"], function ($, prettify) {
 
     $(".module-container .gui-splitter").guiSplitter({
         minSize: 50,
-        maxSize: 200
+        maxSize: 200,
+        splitPosition: "50%"
     });
 
     prettify.prettyPrint();
