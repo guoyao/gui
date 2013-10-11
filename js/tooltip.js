@@ -6,17 +6,17 @@
 		gui = window.gui,
 		old = $.fn.guiTooltip;
 
-	var module = function (obj, option) {
+	var Module = function (obj, option) {
 		this._init(obj, option);
 	}
 
-	module.prototype = {
+	Module.prototype = {
 		_init: function (obj, option) {
 				this.obj = obj;
 			this._eventHandler();
 		},
 		_initOptions: function (option) {
-			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
+			this.defaults = $.extend({}, $.fn.guiTooltip.defaults, option);
 		},
 		_eventHandler: function () {
 			var that = this;
@@ -119,7 +119,7 @@
 
 	$.fn.guiTooltip = function (option) {
 		return this.each(function () {
-			new module(this, option);
+			new Module(this, option);
 		});
 	}
 
@@ -127,7 +127,7 @@
 
 	};
 
-	$.fn.guiTooltip.Constructor = module;
+	$.fn.guiTooltip.Constructor = Module;
 
 	$.fn.guiTooltip.noConflict = function () {
 		$.fn.guiTooltip = old;

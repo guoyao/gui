@@ -6,11 +6,11 @@
 		gui = window.gui,
 		old = $.fn.guiDropdown;
 
-	var module = function(obj,option){
+	var Module = function(obj,option){
 		this._init(obj,option);
 	}
 
-	module.prototype = {
+	Module.prototype = {
 		_init : function(obj,option){
 			this.obj = obj;
 			this._initOptions(option);
@@ -75,7 +75,7 @@
 	$.fn.guiDropdown = function (option) {
 
 		return this.each(function () {
-			new module(this,option);
+			new Module(this,option);
 		});
 	}
 
@@ -85,7 +85,7 @@
 		caret : true
 	};
 
-	$.fn.guiDropdown.Constructor = module;
+	$.fn.guiDropdown.Constructor = Module;
 
 	$.fn.guiDropdown.noConflict = function () {
 		$.fn.guiDropdown = old;

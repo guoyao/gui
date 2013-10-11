@@ -6,11 +6,11 @@
 		gui = window.gui,
 		old = $.fn.guiPlaceholder;
 
-	var module = function(obj,option){
+	var Module = function(obj,option){
 		this._init(obj,option);
 	}
 
-	module.prototype = {
+	Module.prototype = {
 		_inputSize: {},
 		_wrapperPosition: {},
 		_labelPosition: {},
@@ -90,7 +90,7 @@
 
 	$.fn.guiPlaceholder = function (option) {
 		return this.each(function(){
-			new module(this,option);
+			new Module(this,option);
 		});
 	};
 
@@ -101,7 +101,7 @@
 		animateSpeed: 300
 	};
 
-	$.fn.guiPlaceholder.Constructor = module;
+	$.fn.guiPlaceholder.Constructor = Module;
 
 	$.fn.guiPlaceholder.noConflict = function () {
 		$.fn.guiPlaceholder = old;

@@ -2536,17 +2536,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			_showList : function(){
 				$(this.obj)
 					.next('.autocomplete')
-					.fadeIn()
-					/*.css({"display":"block"})
-					.stop(true,true)
-					.animate({"opacity":1});*/
+					.fadeIn();
 			},
 			_hideList : function(){
 				$(this.obj)
 					.next('.autocomplete')
-					.fadeOut()
-					/*.stop(true,true)
-					.css({"display":"none","opacity":0});*/
+					.fadeOut();
 			},
 			_highLightOption : function($element){
 				$(this.obj)
@@ -2605,31 +2600,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						if(e.keyCode === 38){
 							e.preventDefault();
 						}
-						/*that._setInputVal($(this).val());
-
-							//console.log(1)
-
-							var inputCurVal = $(this.obj).val();
-
-							this._clearList();
-
-							if(inputCurVal.length > 0){
-
-								for(var i = 0; i < this.defaults.data.length; i++){
-
-									if(this.defaults.data[i].indexOf(inputCurVal.toLowerCase()) >= 0 ){
-
-										this._appendList(this.defaults.data[i]);
-
-									}
-								}
-							}
-
-							if(that._judgeListLen()){
-								that._showList();
-							}else{
-								that._hideList();
-							}*/
 					});
 
 				$(this.obj)
@@ -2637,45 +2607,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						$(e.target)
 							.next('.autocomplete')
 							.fadeOut();
-							/*.animate({"opacity":0},function(){
-								$(this).css({"display":"none"})
-							});*/
 					});
-
-				/*$(this.obj)
-					.on("input",function(e){
-						
-						that._setInputVal($(this).val());
-
-						that._switchOption();
-
-						if(that._judgeListLen()){
-							that._showList();
-						}else{
-							that._hideList();
-						}
-						
-					});
-*/
-				//ie6 fix doesn't support input event
-				/*$(this.obj)
-					.on("keypress",function(e){
-						//if (e.propertyName.toLowerCase() == "value") {
-						
-							that._setInputVal($(this).val());
-
-							//console.log(1)
-
-							that._switchOption();
-
-							if(that._judgeListLen()){
-								that._showList();
-							}else{
-								that._hideList();
-							}
-						//}
-						
-					});*/
 
 				$(this.obj)
 					.on("keyup",function(e){
@@ -2683,8 +2615,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						switch(e.keyCode){
 							case 40:
 								if($(this).next('.autocomplete').find("li").length > 0){
-
-									//console.log(1)
 
 									var $nextEle = that._getNextIndex();
 
@@ -2758,9 +2688,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				$(this.obj)
 					.next('.autocomplete')
 					.on("click","a",function(e){
-						$(that.obj).val($(this).text())
+						$(that.obj).val($(this).text());
 						that.inputVal = $(this).text();
-						//$(that.obj).next('.autocomplete').hide();
 					});
 			},
 			_selectOption : function(e){
