@@ -7,6 +7,6 @@
  */
 
 require(["jquery", "prettify", "gui"], function ($, prettify) {
-    $(".gui-placeholder").guiPlaceholder({'labelText':['Please Input 1','Please Input 2']});
+    $(".place-holder-input").guiPlaceholder();
     prettify.prettyPrint();
 });

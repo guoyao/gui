@@ -2,7 +2,7 @@ $(function (undefined) {
 
 	var $ = window.jQuery;
 
-	var moduleDebug = $(document).guiPopup('debug');
+	/*var moduleDebug = $(document).guiPopup('debug');
 
 	//get the test wrapper
 	var mainWp = $("#qunit-fixture");

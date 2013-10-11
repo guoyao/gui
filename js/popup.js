@@ -6,9 +6,22 @@
 		gui = window.gui,
 		old = $.fn.guiPopup;
 
+
+
 	$.fn.guiPopup = function (option) {
 
-		var module = {
+		//console.log(this.module)
+
+		//if (option == 'debug') {
+			//for debug
+			//return module;
+		//}
+		return this.each(function () {
+			$.fn.guiPopup.module._init(this, option);
+		});
+	}
+
+	$.fn.guiPopup.module = {
 			_init : function(obj,option){
 				this.obj = obj;
 				this._initOptions(option);
@@ -78,14 +91,6 @@
 				});
 			}
 		}
-		if (option == 'debug') {
-			//for debug
-			return module;
-		}
-		return this.each(function () {
-			module._init(this, option);
-		});
-	}
 
 		/*var defaults = {
 			animationDuration: 500,
