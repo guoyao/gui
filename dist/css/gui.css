@@ -2858,9 +2858,9 @@ th {
 .autocomplete {
   position: absolute;
   display: none;
+  padding: 0;
   overflow: hidden;
   list-style-type: none;
-  opacity: 0;
 }
 
 .autocomplete li.active a {

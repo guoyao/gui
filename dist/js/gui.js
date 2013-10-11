@@ -1333,7 +1333,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this._appendElem();
 			this._iptFocus();
 		},
-		//
 		_calNowHighlight : function(){
 			var now = new Date(),
 				nowYear = now.getFullYear(),
@@ -1345,11 +1344,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				return true;
 			}
 		},
-		//tested
 		_initOptions:function(option){
 			this.defaults = $.extend({},$.fn.guiDatePicker.defaults,option);
 		},
-		//tested
 		_initNewDate :function(){
 			var initNewDate = this.defaults.initNewDate;
 			
@@ -1357,11 +1354,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this._setNewDate('month',initNewDate.getMonth());
 			this._setNewDate('date',initNewDate.getDate());
 		},
-		//tested
 		_setNewDate : function(type,value){
 			this.obj.data(type,value);
 		},
-		//tested
 		_getNewDate : function(){
 			var date = {};
 				date.year = $(this.obj).data('year');
@@ -1369,7 +1364,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				date.date = $(this.obj).data('date');
 			return date;
 		},
-		//tested
 		_initDatePickerPos : function(){
 			var inputOffset = this._getInputProp(),
 				left = inputOffset.left,
@@ -1380,7 +1374,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						'top' : top
 				})
 		},
-		//
 		_getInputProp : function(){
 			var inputNode = $(this.obj) || undefined,
 				prop = [];
@@ -1392,7 +1385,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			}
 			return prop;
 		},
-		//tested
 		_setCalender : function(){
 			var totalDate = this._calTotalDate();
 			var daysPerWeek = 7;
@@ -1413,7 +1405,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				}
 			}
 		},
-		//tested
 		_appendEmptyCalenderWp : function(){
 			var firstDay = this._calFirstDay();
 			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
@@ -1423,12 +1414,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					.appendTo(datesObj.find("tr").eq(0));
 			}
 		},
-		//tested
 		_clearCalender : function(){
 			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
 			datesObj.html('<tr></tr>');
 		},
-		//tested
 		_calFirstDay:function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month,
@@ -1436,7 +1425,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			return new Date(curYear,curMonth,1).getDay();
 		},
-		//tested
 		_calTotalDate:function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month,
@@ -1444,7 +1432,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			return new Date(curYear,curMonth,0).getDate();
 		},
-		//tested
 		_recalYearFactory:function(cal){
 			var curYear = this._getNewDate().year;
 			if(cal === 1){
@@ -1453,7 +1440,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				this._setNewDate('year',curYear - 1);
 			}
 		},
-		//tested
 		_recalMonthFactory:function(cal){
 			var curMonth = this._getNewDate().month;
 			if(cal === 1){
@@ -1470,7 +1456,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				}
 			}
 		},
-		//tested 
 		_calTitle:function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month + 1,
@@ -1478,12 +1463,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			return titleformat;
 		},
-		//tested
 		_setTitle:function(){
 			var title = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.title);
 			return title.html(this._calTitle());
 		},
-		//tested step by step
 		_rerenderCalender : function(){
 			this._initDatePickerPos();
 			this._clearCalender();
@@ -1492,7 +1475,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this._highlightToday();
 			this._setTitle();
 		},
-		//bind focus several times
 		_iptFocus :function(){
 			var mo = this,
 				dateInputObj = $(this.obj);
@@ -1508,7 +1490,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				mo._highlightToday();
 			});
 		},
-		//test covered by the others
 		_eventHandler:function(){
 			var mo = this,
 				mainWrapper = $('.' + this.defaults.mainWrapper),
@@ -1557,11 +1538,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				mo._setInputVal();
 			});
 		},
-		//tested
 		_setActiveDate : function(num){
 			this._setNewDate('date',parseInt(num,10));
 		},
-		//
 		_setInputVal : function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month + 1,
@@ -1573,7 +1552,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			$(this.obj).val(inputVal);
 		},
-		//
 		_highCurLightDate : function(index){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month,
@@ -1583,7 +1561,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
 			dateObj.eq(tdIndex).addClass(this.defaults.curDateClass);
 		},
-		//
 		_highlightToday : function(){
 			if(this._calNowHighlight()){
 				var now = new Date();
@@ -1594,7 +1571,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				dateObj.eq(tdIndex).addClass(this.defaults.todayClass);
 			}
 		},
-		//tested
 		_appendElem : function(){
 			if($('.' + this.defaults.mainWrapper).length === 0){
 				$('<div class=' + this.defaults.mainWrapper +' style="display:none;position: absolute;">' + 
@@ -2482,13 +2458,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			},
 			_setAutocompletePos : function(){
 
-				//var x = $(this.obj).offsetParent()[0] == $("body")[0] ? true : false ;
-
-				//var parentPos = $(this.obj).offsetParent().offset();
-				//var ePos = $(this.obj).offset();
-
-				//var eH = $(this.obj).outerHeight() - parseInt($(this.obj).css("margin-bottom"),10);
-
 				var left,
 					top;
 
@@ -2497,8 +2466,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					left = $(this.obj).offset().left;
 					top = $(this.obj).offset().top + $(this.obj).outerHeight();
 
-
-
 				}else{
 
 					var parentPos = $(this.obj).offsetParent().offset();
@@ -2506,13 +2473,16 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 					var eH = $(this.obj).outerHeight() - parseInt($(this.obj).css("margin-bottom"),10);
 
+					left = ePos.left - parentPos.left;
+					top = ePos.top - parentPos.top + eH;
+
 				}
 
 				$(this.obj)
 					.next('.autocomplete')
 					.css({
-						"left":left,//ePos.left - parentPos.left,
-						"top":top//ePos.top - parentPos.top + eH
+						"left":left,
+						"top":top
 					});
 			},
 			_getData : function(callback){
@@ -2566,15 +2536,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			_showList : function(){
 				$(this.obj)
 					.next('.autocomplete')
-					.css({"display":"block"})
+					.fadeIn()
+					/*.css({"display":"block"})
 					.stop(true,true)
-					.animate({"opacity":1});
+					.animate({"opacity":1});*/
 			},
 			_hideList : function(){
 				$(this.obj)
 					.next('.autocomplete')
-					.stop(true,true)
-					.css({"display":"none","opacity":0});
+					.fadeOut()
+					/*.stop(true,true)
+					.css({"display":"none","opacity":0});*/
 			},
 			_highLightOption : function($element){
 				$(this.obj)
@@ -2586,7 +2558,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			},
 			_getNextIndex : function(){
 				var nextVisible;
-									
+				
 				if($(this.obj).next('.autocomplete').find("li.active").length === 0){
 
 					nextVisible = $(this.obj).next('.autocomplete').find('li').eq(0);
@@ -2626,7 +2598,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				$(this.obj)
 					.on("focus",function(e){
 						that._switchOption();
-						//that._calculatePos(e);
 					});
 
 				$(this.obj)
@@ -2634,35 +2605,92 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						if(e.keyCode === 38){
 							e.preventDefault();
 						}
+						/*that._setInputVal($(this).val());
+
+							//console.log(1)
+
+							var inputCurVal = $(this.obj).val();
+
+							this._clearList();
+
+							if(inputCurVal.length > 0){
+
+								for(var i = 0; i < this.defaults.data.length; i++){
+
+									if(this.defaults.data[i].indexOf(inputCurVal.toLowerCase()) >= 0 ){
+
+										this._appendList(this.defaults.data[i]);
+
+									}
+								}
+							}
+
+							if(that._judgeListLen()){
+								that._showList();
+							}else{
+								that._hideList();
+							}*/
 					});
 
 				$(this.obj)
 					.on("blur",function(e){
 						$(e.target)
 							.next('.autocomplete')
-							.animate({"opacity":0},function(){
+							.fadeOut();
+							/*.animate({"opacity":0},function(){
 								$(this).css({"display":"none"})
-							});
+							});*/
 					});
 
-				$(this.obj)
+				/*$(this.obj)
 					.on("input",function(e){
-
+						
 						that._setInputVal($(this).val());
 
 						that._switchOption();
+
+						if(that._judgeListLen()){
+							that._showList();
+						}else{
+							that._hideList();
+						}
 						
-					})
+					});
+*/
+				//ie6 fix doesn't support input event
+				/*$(this.obj)
+					.on("keypress",function(e){
+						//if (e.propertyName.toLowerCase() == "value") {
+						
+							that._setInputVal($(this).val());
+
+							//console.log(1)
+
+							that._switchOption();
+
+							if(that._judgeListLen()){
+								that._showList();
+							}else{
+								that._hideList();
+							}
+						//}
+						
+					});*/
 
 				$(this.obj)
 					.on("keyup",function(e){
+
 						switch(e.keyCode){
 							case 40:
 								if($(this).next('.autocomplete').find("li").length > 0){
 
+									//console.log(1)
+
 									var $nextEle = that._getNextIndex();
 
 									var $nextEleTxt = $nextEle.text();
+
+									var str = $nextEle.toString();
 
 									that._highLightOption($nextEle);
 
@@ -2693,23 +2721,30 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 							case 13:
 								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').find('li.active').text();
+									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
 									that._setInputVal(txt);
 								}
 								break;
 
  							case 37:
 								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').find('li.active').text();
+									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
 									that._setInputVal(txt);
 								}
 								break;
 
 							case 39:
 								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').find('li.active').text();
+									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
 									that._setInputVal(txt);
 								}
+								break;
+
+							default :
+								that._setInputVal($(this).val());
+
+								that._switchOption();
+
 								break;
 						}
 					});
@@ -2724,6 +2759,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					.next('.autocomplete')
 					.on("click","a",function(e){
 						$(that.obj).val($(this).text())
+						that.inputVal = $(this).text();
+						//$(that.obj).next('.autocomplete').hide();
 					});
 			},
 			_selectOption : function(e){
@@ -2747,6 +2784,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		data:[],
 		width:'300px',
 		height:'200px',
+		remote:{}
 	};
 
 	$.fn.guiAutocomplete.noConflict = function () {

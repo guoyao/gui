@@ -114,15 +114,12 @@
 			_showList : function(){
 				$(this.obj)
 					.next('.autocomplete')
-					.css({"display":"block"})
-					.stop(true,true)
-					.animate({"opacity":1});
+					.fadeIn();
 			},
 			_hideList : function(){
 				$(this.obj)
 					.next('.autocomplete')
-					.stop(true,true)
-					.css({"display":"none","opacity":0});
+					.fadeOut();
 			},
 			_highLightOption : function($element){
 				$(this.obj)
@@ -134,7 +131,7 @@
 			},
 			_getNextIndex : function(){
 				var nextVisible;
-									
+				
 				if($(this.obj).next('.autocomplete').find("li.active").length === 0){
 
 					nextVisible = $(this.obj).next('.autocomplete').find('li').eq(0);
@@ -174,7 +171,6 @@
 				$(this.obj)
 					.on("focus",function(e){
 						that._switchOption();
-						//that._calculatePos(e);
 					});
 
 				$(this.obj)
@@ -188,22 +184,12 @@
 					.on("blur",function(e){
 						$(e.target)
 							.next('.autocomplete')
-							.animate({"opacity":0},function(){
-								$(this).css({"display":"none"})
-							});
+							.fadeOut();
 					});
 
 				$(this.obj)
-					.on("input",function(e){
-
-						that._setInputVal($(this).val());
-
-						that._switchOption();
-						
-					})
-
-				$(this.obj)
 					.on("keyup",function(e){
+
 						switch(e.keyCode){
 							case 40:
 								if($(this).next('.autocomplete').find("li").length > 0){
@@ -211,6 +197,8 @@
 									var $nextEle = that._getNextIndex();
 
 									var $nextEleTxt = $nextEle.text();
+
+									var str = $nextEle.toString();
 
 									that._highLightOption($nextEle);
 
@@ -241,23 +229,30 @@
 
 							case 13:
 								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').find('li.active').text();
+									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
 									that._setInputVal(txt);
 								}
 								break;
 
  							case 37:
 								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').find('li.active').text();
+									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
 									that._setInputVal(txt);
 								}
 								break;
 
 							case 39:
 								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').find('li.active').text();
+									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
 									that._setInputVal(txt);
 								}
+								break;
+
+							default :
+								that._setInputVal($(this).val());
+
+								that._switchOption();
+
 								break;
 						}
 					});
@@ -271,7 +266,8 @@
 				$(this.obj)
 					.next('.autocomplete')
 					.on("click","a",function(e){
-						$(that.obj).val($(this).text())
+						$(that.obj).val($(this).text());
+						that.inputVal = $(this).text();
 					});
 			},
 			_selectOption : function(e){
@@ -295,6 +291,7 @@
 		data:[],
 		width:'300px',
 		height:'200px',
+		remote:{}
 	};
 
 	$.fn.guiAutocomplete.noConflict = function () {
