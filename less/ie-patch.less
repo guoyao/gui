@@ -357,6 +357,58 @@ html {
 }
 
 //
+// Splitter
+// ---------------------------------------------------
+
+.gui-splitter {
+  _overflow: hidden;
+  .gui-splitter-part-first-ie {
+    .gui-splitter-part-first-mixin();
+  }
+  .gui-splitter-part-second-ie {
+    .gui-splitter-part-second-mixin();
+  }
+  .gui-splitter-control-bar-ie {
+    .gui-splitter-control-bar-mixin();
+    _overflow: hidden;
+  }
+  .gui-splitter-control-bar-ghost-ie {
+    _position: absolute;
+    _z-index: 100;
+    _overflow: visible;
+    .opacity(0.5);
+  }
+}
+
+.gui-splitter-vertical {
+  > .gui-splitter-part-first {
+    *float: none;
+  }
+  > .gui-splitter-part-second {
+    *float: none;
+  }
+  > .gui-splitter-control-bar {
+    *float: none;
+  }
+  .gui-splitter-vertical-part-first-ie {
+    _float: none;
+    .gui-splitter-vertical-part-first-mixin();
+  }
+  .gui-splitter-vertical-part-second-ie {
+    _float: none;
+    .gui-splitter-vertical-part-second-mixin();
+  }
+  .gui-splitter-vertical-control-bar-ie {
+    _float: none;
+    .gui-splitter-vertical-control-bar-mixin();
+    .gui-splitter-close-btn {
+      _overflow: hidden;
+    }
+  }
+}
+
+
+//
 // Other
 // --------------------------------------------------
 

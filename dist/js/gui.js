@@ -144,12 +144,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             return href && href.replace(/.*(?=#[^\s]*$)/, "");
         }
 
+        function isPercentage(str) {
+            return typeof str === "string" && str.indexOf("%") !== -1;
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
             darken: darken,
             removeChildAfter: removeChildAfter,
-            stripHref: stripHref
+            stripHref: stripHref,
+            isPercentage: isPercentage
         }
     })();
 
@@ -1070,11 +1075,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiPlaceholder;
 
-	var module = function(obj,option){
+	var Module = function(obj,option){
 		this._init(obj,option);
 	}
 
-	module.prototype = {
+	Module.prototype = {
 		_inputSize: {},
 		_wrapperPosition: {},
 		_labelPosition: {},
@@ -1154,7 +1159,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	$.fn.guiPlaceholder = function (option) {
 		return this.each(function(){
-			new module(this,option);
+			new Module(this,option);
 		});
 	};
 
@@ -1165,7 +1170,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		animateSpeed: 300
 	};
 
-	$.fn.guiPlaceholder.Constructor = module;
+	$.fn.guiPlaceholder.Constructor = Module;
 
 	$.fn.guiPlaceholder.noConflict = function () {
 		$.fn.guiPlaceholder = old;
@@ -2165,78 +2170,163 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         this.$secondPart = this.$element.find("> .gui-splitter-part-second");
         this.$splitBar = $('<div class="gui-splitter-control-bar"></div>');
         this.$ghostSplitBar = undefined; // splitbar ghosted element
+        this.isVertical = this.$element.hasClass("gui-splitter-vertical");
+        if (this.isVertical) {
+            options.sizing = "height";
+            options.moving = "top";
+            options.eventPosition = "pageY";
+            options.outerSize = "outerHeight";
+        } else {
+            options.sizing = "width";
+            options.moving = "left";
+            options.eventPosition = "pageX";
+            options.outerSize = "outerWidth";
+        }
         this.options = options;
         this.transitioning = false;
         this.splitPosition = 0; // current split position
         this.savedSplitPosition = 0; // saved split position
-        this.minWidth = Math.max(options.minWidth ? parseInt(options.minWidth, 10) : 0); // min width of first part
-        this.maxWidth = Math.min(options.maxWidth ? parseInt(options.maxWidth, 10) : this.$element.width());
-        this.padding = this.$element.css(options.vertical ? "padding-top" : "padding-left");
+        this.totalSize = this.$element[options.sizing]();
+        this.minSize = Math.min(Math.max(options.minSize ? parseInt(options.minSize, 10) : 0, 0), this.totalSize); // min width/height of first part
+        this.maxSize = Math.max(Math.min(options.maxSize ? parseInt(options.maxSize, 10) : this.totalSize, this.totalSize), 0);
+        this.padding = this.$element.css(this.isVertical ? "padding-top" : "padding-left");
         this.padding = this.padding ? parseInt(this.padding, 10) : 0;
     };
 
     GuiSplitter.prototype.init = function () {
         this.$firstPart.after(this.$splitBar);
-        this.splitPosition = this.$firstPart.width() - this.$splitBar.outerWidth(true);
-        this.$firstPart.width(this.splitPosition);
+        var splitBarSize = this.$splitBar[this.options.outerSize](true);
+        if (this.maxSize + splitBarSize > this.totalSize) {
+            this.maxSize -= splitBarSize;
+        }
+        this.splitPosition = Math.max(Math.min(parseInt(this.$firstPart[this.options.sizing](), 10), this.maxSize), this.minSize);
+        if (this.options.splitPosition) {
+            if (gui.isPercentage(this.options.splitPosition)) {
+                this.splitPosition = this.totalSize * parseInt(this.options.splitPosition, 10) / 100;
+            } else if (typeof this.options.splitPosition === "number" || typeof this.options.splitPosition === "string") {
+                this.splitPosition = parseInt(this.options.splitPosition, 10);
+            }
+            this.splitPosition = parseInt(Math.max(Math.min(this.splitPosition, this.maxSize), this.minSize), 10);
+        }
+        this.$firstPart[this.options.sizing](this.splitPosition);
+        this.$secondPart[this.options.sizing](this.totalSize - this.splitPosition - splitBarSize);
         var that = this;
         if (this.options.closeable) {
-            this.$closeButton = $('<div class="gui-splitter-close-btn"></div>');
-            this.$splitBar.append(this.$closeButton);
-            this.maxWidth = Math.max(this.maxWidth - this.$splitBar.outerWidth(true), 0);
-            this.$closeButton.mousedown(function () {
-                that.$closeButton.toggleClass("gui-splitter-close-btn-inverse").hide();
-                that.splitTo();
-            });
+            this.$closeButton = $('<div class="gui-splitter-close-btn"></div>')
+                .appendTo(this.$splitBar)
+                .on("mousedown", function () {
+                    that.$closeButton.toggleClass("gui-splitter-close-btn-inverse").hide();
+                    that.splitTo();
+                });
         }
         this.$splitBar.on("mousedown", function (e) {
             if (e.target == this) {
-                that.startDrag(e.pageX);
+                that.startDrag(e[that.options.eventPosition]);
             }
+        });
+        this.$element.on("resize", function () {
+            that.$secondPart[that.options.sizing](that.$element[that.options.sizing]() - that.$firstPart[that.options.sizing]() - splitBarSize);
         });
     };
 
+    GuiSplitter.prototype.update = function () {
+        this.totalSize = this.$element[this.options.sizing]();
+        this.minSize = Math.min(Math.max(this.options.minSize ? parseInt(this.options.minSize, 10) : 0, 0), this.totalSize); // min width/height of first part
+        this.maxSize = Math.max(Math.min(this.options.maxSize ? parseInt(this.options.maxSize, 10) : this.totalSize, this.totalSize), 0);
+        var splitBarSize = this.$splitBar[this.options.outerSize](true);
+        if (this.maxSize + splitBarSize > this.totalSize) {
+            this.maxSize -= splitBarSize;
+        }
+        this.splitPosition = Math.min(parseInt(this.$firstPart[this.options.sizing](), 10), this.maxSize);
+        this.$firstPart[this.options.sizing](this.splitPosition);
+        this.$secondPart[this.options.sizing](this.totalSize - this.splitPosition - splitBarSize);
+    };
+
+    GuiSplitter.prototype.show = function () {
+        this.options.closeable && this.$closeButton.hasClass("gui-splitter-close-btn-inverse") && this.$closeButton.trigger("mousedown");
+        return this;
+    };
+
+    GuiSplitter.prototype.hide = function () {
+        this.options.closeable && !this.$closeButton.hasClass("gui-splitter-close-btn-inverse") && this.$closeButton.trigger("mousedown");
+        return this;
+    };
+
+    GuiSplitter.prototype.toggle = function () {
+        this.options.closeable && this.$closeButton.trigger("mousedown");
+        return this;
+    };
+
     GuiSplitter.prototype.startDrag = function (mousePosition) {
-        this.$ghostSplitBar = this.$ghostSplitBar || this.$splitBar.clone(false).insertAfter(this.$firstPart);
-        this.$ghostSplitBar.addClass("gui-splitter-control-bar-ghost").css({
-            width: this.$splitBar.width(),
-            height: this.$splitBar.height()
-        });
-        var that = this,
-            startPosition = this.splitPosition + this.padding;
-        this.$ghostSplitBar.css("left", startPosition);
-        this.$ghostSplitBar.show();
+        if (!this.$ghostSplitBar) {
+            this.$ghostSplitBar = this.$splitBar.clone(false)
+                .insertAfter(this.$firstPart)
+                .addClass("gui-splitter-control-bar-ghost")
+                .css({
+                    width: this.$splitBar.width(),
+                    height: this.$splitBar.height()
+                });
+        }
+        this.$closeButton && this.$ghostSplitBar.find(".gui-splitter-close-btn").toggleClass("gui-splitter-close-btn-inverse", this.$closeButton.hasClass("gui-splitter-close-btn-inverse"));
+        this.$ghostSplitBar.css(this.options.moving, this.splitPosition + this.padding).show();
+        var that = this;
         $(document).on("mousemove.gui.splitter", function (e) {
-            that.performDrag(startPosition, e.pageX - mousePosition);
+            that.performDrag(e[that.options.eventPosition] - mousePosition);
         }).on("mouseup.gui.splitter", function () {
                 that.endDrag();
             });
     };
 
-    GuiSplitter.prototype.performDrag = function (startPosition, increment) {
-        var position = Math.min(this.maxWidth + this.padding, Math.max(this.minWidth + this.padding, startPosition + increment));
-        this.$ghostSplitBar.css("left", position);
+    GuiSplitter.prototype.performDrag = function (increment) {
+        var splitPosition = this.splitPosition + increment;
+        if (splitPosition < this.minSize || splitPosition > this.maxSize) {
+            return;
+        }
+        this.$ghostSplitBar.css(this.options.moving, splitPosition + this.padding);
     };
 
     GuiSplitter.prototype.endDrag = function () {
         $(document).off(".gui.splitter");
-        this.splitTo(parseInt(this.$ghostSplitBar.css("left")) - this.padding);
+        var position = parseInt(this.$ghostSplitBar.css(this.options.moving), 10) - this.padding;
+        if (position != this.splitPosition) {
+            this.splitTo(position);
+        } else {
+            this.$ghostSplitBar.hide();
+        }
     };
 
     GuiSplitter.prototype.splitTo = function (position) {
         if (this.transitioning) {
             return;
         }
+        var startEvent = $.Event('start.gui.splitter');
+        this.$element.trigger(startEvent);
+        if (startEvent.isDefaultPrevented()) {
+            return;
+        }
+
         this.transitioning = true;
-        var that = this;
-        if (position || position == 0) {
-            this.$firstPart.animate({width: position}, this.options.animationDuration, function () {
-                that.transitioning = false;
-                that.splitPosition = position;
-                that.$closeButton.fadeIn("fast");
-                that.$ghostSplitBar.hide();
-            });
-            this.$secondPart.animate({width: this.$element.width() - this.$splitBar.outerWidth(true) - position}, this.options.animationDuration);
+        var that = this,
+            animateProperties = {},
+            secondPartAnimateProperties = {};
+        if (position || position === 0) {
+            position = Math.min(Math.max(position, this.minSize), this.maxSize);
+            animateProperties[this.options.sizing] = position;
+            this.$firstPart.animate(animateProperties, {
+                duration: this.options.animationDuration,
+                progress: function () {
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").trigger("resize");
+                },
+                complete: function () {
+                    that.transitioning = false;
+                    that.splitPosition = position;
+                    that.$ghostSplitBar && that.$ghostSplitBar.hide();
+                    that.$closeButton && that.$closeButton.toggleClass("gui-splitter-close-btn-inverse", position === 0).fadeIn("fast");
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").each(function () {
+                        $(this).data("gui.splitter").update();
+                    });
+                    that.$element.trigger('complete.gui.splitter');
+                }});
         } else {
             if (this.splitPosition > 0) {
                 this.savedSplitPosition = this.splitPosition;
@@ -2244,13 +2334,25 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             } else {
                 position = this.savedSplitPosition;
             }
-            this.$firstPart.animate({width: position}, this.options.animationDuration, function () {
-                that.transitioning = false;
-                that.splitPosition = position;
-                that.$closeButton.fadeIn("fast");
+            animateProperties[this.options.sizing] = position;
+            this.$firstPart.animate(animateProperties, {
+                duration: this.options.animationDuration,
+                progress: function () {
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").trigger("resize");
+                },
+                complete: function () {
+                    that.transitioning = false;
+                    that.splitPosition = position;
+                    that.$closeButton && that.$closeButton.fadeIn("fast");
+                    that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").each(function () {
+                        $(this).data("gui.splitter").update();
+                    });
+                    that.$element.trigger('complete.gui.splitter');
+                }
             });
-            this.$secondPart.animate({width: this.$element.width() - this.$splitBar.outerWidth(true) - position}, this.options.animationDuration);
         }
+        secondPartAnimateProperties[this.options.sizing] = this.totalSize - this.$splitBar[this.options.outerSize](true) - position;
+        this.$secondPart.animate(secondPartAnimateProperties, this.options.animationDuration);
     };
 
     $.fn.guiSplitter = function (option) {
@@ -2291,17 +2393,17 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiTooltip;
 
-	var module = function (obj, option) {
+	var Module = function (obj, option) {
 		this._init(obj, option);
 	}
 
-	module.prototype = {
+	Module.prototype = {
 		_init: function (obj, option) {
 				this.obj = obj;
 			this._eventHandler();
 		},
 		_initOptions: function (option) {
-			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
+			this.defaults = $.extend({}, $.fn.guiTooltip.defaults, option);
 		},
 		_eventHandler: function () {
 			var that = this;
@@ -2404,7 +2506,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	$.fn.guiTooltip = function (option) {
 		return this.each(function () {
-			new module(this, option);
+			new Module(this, option);
 		});
 	}
 
@@ -2412,7 +2514,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	};
 
-	$.fn.guiTooltip.Constructor = module;
+	$.fn.guiTooltip.Constructor = Module;
 
 	$.fn.guiTooltip.noConflict = function () {
 		$.fn.guiTooltip = old;
@@ -2421,305 +2523,307 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 })(window);
 
 (function (window) {
-	"use strict";
+    "use strict";
 
-	var console = window.console,
-		$ = window.jQuery,
-		gui = window.gui,
-		old = $.fn.guiAutocomplete;
+    var console = window.console,
+        $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiAutocomplete;
 
-	var module = function(obj,option){
-		this._init(obj,option);
-	}
+    var Module = function (obj, option) {
+        this._init(obj, option);
+    }
 
-	module.prototype = {
-			_init : function(obj,option){
-				this.obj = obj;
-				this._initOptions(option);
-				this._appendListWrapper();
-				this._setAutocompletePos();
-				this._eventHandler();
-			},
-			_initOptions : function (option) {
-				this.defaults = $.extend({}, $.fn.guiAutocomplete.defaults, option);
-			},
-			_appendListWrapper : function(){
+    Module.prototype = {
+        _init: function (obj, option) {
+            this.obj = obj;
+            this._initOptions(option);
+            this._appendListWrapper();
+            this._setAutocompletePos();
+            this._eventHandler();
+        },
+        _initOptions: function (option) {
+            this.defaults = $.extend({}, $.fn.guiAutocomplete.defaults, option);
+        },
+        _appendListWrapper: function () {
 
-				var $autocompleteNode = $('<ul class="autocomplete">');
+            var $autocompleteNode = $('<ul class="autocomplete">');
 
-				$autocompleteNode
-					.insertAfter($(this.obj));
+            $autocompleteNode
+                .insertAfter($(this.obj));
 
-				$autocompleteNode
-					.css({
-						"width":this.defaults.width,
-						"height":this.defaults.height
-					});
-			},
-			_setAutocompletePos : function(){
+            $autocompleteNode
+                .css({
+                    "width": this.defaults.width,
+                    "height": this.defaults.height
+                });
+        },
+        _setAutocompletePos: function () {
 
-				var left,
-					top;
+            var left,
+                top;
 
-				if($(this.obj).offsetParent()[0] == $("body")[0]){
+            if ($(this.obj).offsetParent()[0] == $("body")[0]) {
 
-					left = $(this.obj).offset().left;
-					top = $(this.obj).offset().top + $(this.obj).outerHeight();
+                left = $(this.obj).offset().left;
+                top = $(this.obj).offset().top + $(this.obj).outerHeight();
 
-				}else{
+            } else {
 
-					var parentPos = $(this.obj).offsetParent().offset();
-					var ePos = $(this.obj).offset();
+                var parentPos = $(this.obj).offsetParent().offset();
+                var ePos = $(this.obj).offset();
 
-					var eH = $(this.obj).outerHeight() - parseInt($(this.obj).css("margin-bottom"),10);
+                var eH = $(this.obj).outerHeight() - parseInt($(this.obj).css("margin-bottom"), 10);
 
-					left = ePos.left - parentPos.left;
-					top = ePos.top - parentPos.top + eH;
+                left = ePos.left - parentPos.left;
+                top = ePos.top - parentPos.top + eH;
 
-				}
+            }
 
-				$(this.obj)
-					.next('.autocomplete')
-					.css({
-						"left":left,
-						"top":top
-					});
-			},
-			_getData : function(callback){
-				$.ajax({
-					url:'localhost:3000/',
-					data:11,
-					dataType : "json",
-					success : function(data){
-						//callback();
-						//console.log(data);
-					},
-					error : function(){
-						//console.log(11);
-					}
-				})
-			},
-			_setInputVal : function(text){
-				this.inputVal = text;
-			},
-			_tempInputVal : function(text){
-				$(this.obj).val(text);
-			},
-			_switchOption : function(){
+            $(this.obj)
+                .next('.autocomplete')
+                .css({
+                    "left": left,
+                    "top": top
+                });
+        },
+        _getData: function (callback) {
+            $.ajax({
+                url: 'localhost:3000/',
+                data: 11,
+                dataType: "json",
+                success: function (data) {
+                    //callback();
+                    //console.log(data);
+                },
+                error: function () {
+                    //console.log(11);
+                }
+            })
+        },
+        _setInputVal: function (text) {
+            this.inputVal = text;
+        },
+        _tempInputVal: function (text) {
+            $(this.obj).val(text);
+        },
+        _switchOption: function () {
 
-				var inputCurVal = $(this.obj).val();
+            var inputCurVal = $(this.obj).val();
 
-				this._clearList();
+            this._clearList();
 
-				if(inputCurVal.length > 0){
+            if (inputCurVal.length > 0) {
 
-					for(var i = 0; i < this.defaults.data.length; i++){
+                for (var i = 0; i < this.defaults.data.length; i++) {
 
-						if(this.defaults.data[i].indexOf(inputCurVal.toLowerCase()) >= 0 ){
+                    if (this.defaults.data[i].indexOf(inputCurVal.toLowerCase()) >= 0) {
 
-							this._appendList(this.defaults.data[i]);
+                        this._appendList(this.defaults.data[i]);
 
-						}
-					}
-				}
-				if($(this.obj).next('.autocomplete').find("li").length > 0){
-					this._showList();
-				}else{
-					this._hideList();
-				}
-			},
-			_clearList : function(){
-				$(this.obj)
-					.next('.autocomplete')
-					.html('');
-			},
-			_showList : function(){
-				$(this.obj)
-					.next('.autocomplete')
-					.fadeIn();
-			},
-			_hideList : function(){
-				$(this.obj)
-					.next('.autocomplete')
-					.fadeOut();
-			},
-			_highLightOption : function($element){
-				$(this.obj)
-					.next('.autocomplete')
-					.find("li")
-					.removeClass("active");
-					
-				$element.addClass("active");
-			},
-			_getNextIndex : function(){
-				var nextVisible;
-				
-				if($(this.obj).next('.autocomplete').find("li.active").length === 0){
+                    }
+                }
+            }
+            if ($(this.obj).next('.autocomplete').find("li").length > 0) {
+                this._showList();
+            } else {
+                this._hideList();
+            }
+        },
+        _clearList: function () {
+            $(this.obj)
+                .next('.autocomplete')
+                .html('');
+        },
+        _showList: function () {
+            $(this.obj)
+                .next('.autocomplete')
+                .fadeIn();
+        },
+        _hideList: function () {
+            $(this.obj)
+                .next('.autocomplete')
+                .fadeOut();
+        },
+        _highLightOption: function ($element) {
+            $(this.obj)
+                .next('.autocomplete')
+                .find("li")
+                .removeClass("active");
 
-					nextVisible = $(this.obj).next('.autocomplete').find('li').eq(0);
+            $element.addClass("active");
+        },
+        _getNextIndex: function () {
+            var nextVisible;
 
-				}else{
+            if ($(this.obj).next('.autocomplete').find("li.active").length === 0) {
 
-					nextVisible = $(this.obj).next('.autocomplete').find('li.active').next();
+                nextVisible = $(this.obj).next('.autocomplete').find('li').eq(0);
 
-				}
+            } else {
 
-				return nextVisible;
-			},
-			_getPrevIndex : function(){
-				var prevVisible;
-									
-				if($(this.obj).next('.autocomplete').find("li.active").length === 0){
+                nextVisible = $(this.obj).next('.autocomplete').find('li.active').next();
 
-					prevVisible = $(this.obj).next('.autocomplete').find('li').last();
+            }
 
-				}else{
+            return nextVisible;
+        },
+        _getPrevIndex: function () {
+            var prevVisible;
 
-					prevVisible = $(this.obj).next('.autocomplete').find('li.active').prev();
+            if ($(this.obj).next('.autocomplete').find("li.active").length === 0) {
 
-				}
-				
-				return prevVisible;
-			},
-			_appendList : function(text){
-				$(this.obj)
-					.next('.autocomplete')
-					.append('<li><a>' + text + '</a></li>');
-			},
-			_eventHandler : function(){
+                prevVisible = $(this.obj).next('.autocomplete').find('li').last();
 
-				var that = this;
+            } else {
 
-				$(this.obj)
-					.on("focus",function(e){
-						that._switchOption();
-					});
+                prevVisible = $(this.obj).next('.autocomplete').find('li.active').prev();
 
-				$(this.obj)
-					.on("keydown",function(e){
-						if(e.keyCode === 38){
-							e.preventDefault();
-						}
-					});
+            }
 
-				$(this.obj)
-					.on("blur",function(e){
-						$(e.target)
-							.next('.autocomplete')
-							.fadeOut();
-					});
+            return prevVisible;
+        },
+        _appendList: function (text) {
+            $(this.obj)
+                .next('.autocomplete')
+                .append('<li><a>' + text + '</a></li>');
+        },
+        _eventHandler: function () {
 
-				$(this.obj)
-					.on("keyup",function(e){
+            var that = this;
 
-						switch(e.keyCode){
-							case 40:
-								if($(this).next('.autocomplete').find("li").length > 0){
+            $(this.obj)
+                .on("focus", function (e) {
+                    that._switchOption();
+                });
 
-									var $nextEle = that._getNextIndex();
+            $(this.obj)
+                .on("keydown", function (e) {
+                    if (e.keyCode === 38) {
+                        e.preventDefault();
+                    }
+                });
 
-									var $nextEleTxt = $nextEle.text();
+            $(this.obj)
+                .on("blur", function (e) {
+                    $(e.target)
+                        .next('.autocomplete')
+                        .fadeOut();
+                });
 
-									var str = $nextEle.toString();
+            $(this.obj)
+                .on("keyup", function (e) {
 
-									that._highLightOption($nextEle);
+                    var txt;
 
-									if($(this).next('.autocomplete').find("li.active").length === 0){
-										that._tempInputVal(that.inputVal);
-									}else{
-										that._tempInputVal($nextEleTxt);
-									}
-								}
-								break;
+                    switch (e.keyCode) {
+                        case 40:
+                            if ($(this).next('.autocomplete').find("li").length > 0) {
 
-							case 38:
-								if($(this).next('.autocomplete').find("li").length > 0){
+                                var $nextEle = that._getNextIndex();
 
-									var $prevEle = that._getPrevIndex();
+                                var $nextEleTxt = $nextEle.text();
 
-									var $prevEleTxt = $prevEle.text();
+                                var str = $nextEle.toString();
 
-									that._highLightOption($prevEle);
+                                that._highLightOption($nextEle);
 
-									if($(this).next('.autocomplete').find("li.active").length === 0){
-										that._tempInputVal(that.inputVal);
-									}else{
-										that._tempInputVal($prevEleTxt);
-									}								
-								}
-								break;
+                                if ($(this).next('.autocomplete').find("li.active").length === 0) {
+                                    that._tempInputVal(that.inputVal);
+                                } else {
+                                    that._tempInputVal($nextEleTxt);
+                                }
+                            }
+                            break;
 
-							case 13:
-								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
-									that._setInputVal(txt);
-								}
-								break;
+                        case 38:
+                            if ($(this).next('.autocomplete').find("li").length > 0) {
 
- 							case 37:
-								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
-									that._setInputVal(txt);
-								}
-								break;
+                                var $prevEle = that._getPrevIndex();
 
-							case 39:
-								if($(this).next('.autocomplete').find('li.active').length !== 0 ){
-									var txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
-									that._setInputVal(txt);
-								}
-								break;
+                                var $prevEleTxt = $prevEle.text();
 
-							default :
-								that._setInputVal($(this).val());
+                                that._highLightOption($prevEle);
 
-								that._switchOption();
+                                if ($(this).next('.autocomplete').find("li.active").length === 0) {
+                                    that._tempInputVal(that.inputVal);
+                                } else {
+                                    that._tempInputVal($prevEleTxt);
+                                }
+                            }
+                            break;
 
-								break;
-						}
-					});
+                        case 13:
+                            if ($(this).next('.autocomplete').find('li.active').length !== 0) {
+                                txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
+                                that._setInputVal(txt);
+                            }
+                            break;
 
-				$(this.obj)
-					.next('.autocomplete')
-					.on("mouseover","a",function(e){
-						that._selectOption(e);
-					});
+                        case 37:
+                            if ($(this).next('.autocomplete').find('li.active').length !== 0) {
+                                txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
+                                that._setInputVal(txt);
+                            }
+                            break;
 
-				$(this.obj)
-					.next('.autocomplete')
-					.on("click","a",function(e){
-						$(that.obj).val($(this).text());
-						that.inputVal = $(this).text();
-					});
-			},
-			_selectOption : function(e){
-				$(e.target)
-					.parent()
-					.addClass("active")
-					.siblings()
-					.removeClass("active");
-			}
-		}
+                        case 39:
+                            if ($(this).next('.autocomplete').find('li.active').length !== 0) {
+                                txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
+                                that._setInputVal(txt);
+                            }
+                            break;
 
-	$.fn.guiAutocomplete = function (option) {
-		return this.each(function () {
-			new module(this,option);
-		});
-	};
+                        default :
+                            that._setInputVal($(this).val());
 
-	$.fn.guiAutocomplete.Constructor = module;
-	
-	$.fn.guiAutocomplete.defaults = {
-		data:[],
-		width:'300px',
-		height:'200px',
-		remote:{}
-	};
+                            that._switchOption();
 
-	$.fn.guiAutocomplete.noConflict = function () {
-		$.fn.guiAutocomplete = old;
-		return this;
-	};
+                            break;
+                    }
+                });
+
+            $(this.obj)
+                .next('.autocomplete')
+                .on("mouseover", "a", function (e) {
+                    that._selectOption(e);
+                });
+
+            $(this.obj)
+                .next('.autocomplete')
+                .on("click", "a", function (e) {
+                    $(that.obj).val($(this).text());
+                    that.inputVal = $(this).text();
+                });
+        },
+        _selectOption: function (e) {
+            $(e.target)
+                .parent()
+                .addClass("active")
+                .siblings()
+                .removeClass("active");
+        }
+    }
+
+    $.fn.guiAutocomplete = function (option) {
+        return this.each(function () {
+            new Module(this, option);
+        });
+    };
+
+    $.fn.guiAutocomplete.Constructor = Module;
+
+    $.fn.guiAutocomplete.defaults = {
+        data: [],
+        width: '300px',
+        height: '200px',
+        remote: {}
+    };
+
+    $.fn.guiAutocomplete.noConflict = function () {
+        $.fn.guiAutocomplete = old;
+        return this;
+    };
 
 })(window);
 (function (window) {
@@ -2730,11 +2834,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiDropdown;
 
-	var module = function(obj,option){
+	var Module = function(obj,option){
 		this._init(obj,option);
 	}
 
-	module.prototype = {
+	Module.prototype = {
 		_init : function(obj,option){
 			this.obj = obj;
 			this._initOptions(option);
@@ -2799,7 +2903,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	$.fn.guiDropdown = function (option) {
 
 		return this.each(function () {
-			new module(this,option);
+			new Module(this,option);
 		});
 	}
 
@@ -2809,7 +2913,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		caret : true
 	};
 
-	$.fn.guiDropdown.Constructor = module;
+	$.fn.guiDropdown.Constructor = Module;
 
 	$.fn.guiDropdown.noConflict = function () {
 		$.fn.guiDropdown = old;
@@ -3125,6 +3229,41 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                     }
                 });
                 this.update();
+            };
+        }
+    }
+
+    //
+    // Splitter
+    // --------------------------------------------------
+    if (!!$.fn.guiSplitter) {
+        if (gui.browserInfo.version <= 6) { // lte IE 6
+            var GuiSplitter = $.fn.guiSplitter.Constructor,
+                superInit = GuiSplitter.prototype.init,
+                superStartDrag = GuiSplitter.prototype.startDrag;
+
+            GuiSplitter.prototype.init = function () {
+                this.$splitBar.addClass("gui-splitter-control-bar-ie");
+                this.$firstPart.addClass("gui-splitter-part-first-ie");
+                this.$secondPart.addClass("gui-splitter-part-second-ie");
+                if (this.isVertical) {
+                    this.$splitBar.addClass("gui-splitter-vertical-control-bar-ie");
+                    this.$firstPart.addClass("gui-splitter-vertical-part-first-ie");
+                    this.$secondPart.addClass("gui-splitter-vertical-part-second-ie");
+                }
+                superInit.call(this);
+//                console.debug(this.$element.width() + " : " + this.$firstPart.width() + " : " + this.$splitBar.width() + " : " + this.$secondPart.width());
+            };
+
+            GuiSplitter.prototype.startDrag = function (mousePosition) {
+                if (!this.$ghostSplitBar) {
+                    this.$ghostSplitBar = this.$splitBar.clone(false).insertAfter(this.$firstPart);
+                    this.$ghostSplitBar.addClass("gui-splitter-control-bar-ghost gui-splitter-control-bar-ghost-ie").css({
+                        width: this.$splitBar.width(),
+                        height: this.$splitBar.height()
+                    });
+                }
+                superStartDrag.call(this, mousePosition);
             };
         }
     }

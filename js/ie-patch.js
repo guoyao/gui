@@ -311,4 +311,39 @@
         }
     }
 
+    //
+    // Splitter
+    // --------------------------------------------------
+    if (!!$.fn.guiSplitter) {
+        if (gui.browserInfo.version <= 6) { // lte IE 6
+            var GuiSplitter = $.fn.guiSplitter.Constructor,
+                superInit = GuiSplitter.prototype.init,
+                superStartDrag = GuiSplitter.prototype.startDrag;
+
+            GuiSplitter.prototype.init = function () {
+                this.$splitBar.addClass("gui-splitter-control-bar-ie");
+                this.$firstPart.addClass("gui-splitter-part-first-ie");
+                this.$secondPart.addClass("gui-splitter-part-second-ie");
+                if (this.isVertical) {
+                    this.$splitBar.addClass("gui-splitter-vertical-control-bar-ie");
+                    this.$firstPart.addClass("gui-splitter-vertical-part-first-ie");
+                    this.$secondPart.addClass("gui-splitter-vertical-part-second-ie");
+                }
+                superInit.call(this);
+//                console.debug(this.$element.width() + " : " + this.$firstPart.width() + " : " + this.$splitBar.width() + " : " + this.$secondPart.width());
+            };
+
+            GuiSplitter.prototype.startDrag = function (mousePosition) {
+                if (!this.$ghostSplitBar) {
+                    this.$ghostSplitBar = this.$splitBar.clone(false).insertAfter(this.$firstPart);
+                    this.$ghostSplitBar.addClass("gui-splitter-control-bar-ghost gui-splitter-control-bar-ghost-ie").css({
+                        width: this.$splitBar.width(),
+                        height: this.$splitBar.height()
+                    });
+                }
+                superStartDrag.call(this, mousePosition);
+            };
+        }
+    }
+
 })(window);

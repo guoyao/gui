@@ -135,12 +135,17 @@
             return href && href.replace(/.*(?=#[^\s]*$)/, "");
         }
 
+        function isPercentage(str) {
+            return typeof str === "string" && str.indexOf("%") !== -1;
+        }
+
         return {
             browserInfo: browserInfo,
             plugin: plugin,
             darken: darken,
             removeChildAfter: removeChildAfter,
-            stripHref: stripHref
+            stripHref: stripHref,
+            isPercentage: isPercentage
         }
     })();
 
