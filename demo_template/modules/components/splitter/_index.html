@@ -1,6 +1,10 @@
 <div class="module-container">
+  <h1 id="splitters">Splitters</h1>
 
-  <div class="gui-splitter" style="height: 300px;">
+  <hr/>
+
+  <h4>Simple Horizontal Splitter</h4>
+  <div class="gui-splitter" style="height: 200px;">
     <div class="gui-splitter-part-first">
       Left
     </div>
@@ -8,8 +12,18 @@
       Right
     </div>
   </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;div class="gui-splitter" style="height: 200px;"&gt;
+  &lt;div class="gui-splitter-part-first"&gt;
+    Left
+  &lt;/div&gt;
+  &lt;div class="gui-splitter-part-second"&gt;
+    Right
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 
-  <div class="gui-splitter gui-splitter-vertical" style="height: 300px; margin-top: 20px;">
+  <h4>Simple Vertical Splitter</h4>
+  <div class="gui-splitter gui-splitter-vertical" style="height: 200px; margin-top: 20px;">
     <div class="gui-splitter-part-first">
       Top
     </div>
@@ -17,7 +31,17 @@
       Bottom
     </div>
   </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;div class="gui-splitter gui-splitter-vertical" style="height: 200px;"&gt;
+  &lt;div class="gui-splitter-part-first"&gt;
+    Top
+  &lt;/div&gt;
+  &lt;div class="gui-splitter-part-second"&gt;
+    Bottom
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 
+  <h4>Simple Nested Splitter: a horizontal splitter with a vertical splitter wrapped in</h4>
   <div class="gui-splitter" style="height: 300px; margin-top: 20px;">
     <div class="gui-splitter-part-first">
       Left
@@ -33,7 +57,24 @@
       </div>
     </div>
   </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;div class="gui-splitter" style="height: 300px;"&gt;
+  &lt;div class="gui-splitter-part-first"&gt;
+    Left
+  &lt;/div&gt;
+  &lt;div class="gui-splitter-part-second"&gt;
+    &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+      &lt;div class="gui-splitter-part-first"&gt;
+        Top
+      &lt;/div&gt;
+      &lt;div class="gui-splitter-part-second"&gt;
+        Bottom
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 
+  <h4>Simple Nested Splitter: a vertical splitter with a horizontal splitter wrapped in</h4>
   <div class="gui-splitter gui-splitter-vertical" style="height: 300px; margin-top: 20px;">
     <div class="gui-splitter-part-first">
       Top
@@ -49,7 +90,24 @@
       </div>
     </div>
   </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;div class="gui-splitter gui-splitter-vertical" style="height: 300px;"&gt;
+  &lt;div class="gui-splitter-part-first"&gt;
+    Top
+  &lt;/div&gt;
+  &lt;div class="gui-splitter-part-second"&gt;
+    &lt;div class="gui-splitter"&gt;
+      &lt;div class="gui-splitter-part-first"&gt;
+        Left
+      &lt;/div&gt;
+      &lt;div class="gui-splitter-part-second"&gt;
+        Right
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 
+  <h4>Complex Nested Splitter: a horizontal splitter with vertical and horizontal splitters wrapped in</h4>
   <div class="gui-splitter" style="height: 300px; margin-top: 20px;">
     <div class="gui-splitter-part-first">
       Left
@@ -79,7 +137,38 @@
       </div>
     </div>
   </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;div class="gui-splitter" style="height: 300px;"&gt;
+  &lt;div class="gui-splitter-part-first"&gt;
+    Left
+  &lt;/div&gt;
+  &lt;div class="gui-splitter-part-second"&gt;
+    &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+      &lt;div class="gui-splitter-part-first"&gt;
+        Top
+      &lt;/div&gt;
+      &lt;div class="gui-splitter-part-second"&gt;
+        &lt;div class="gui-splitter"&gt;
+          &lt;div class="gui-splitter-part-first"&gt;
+            Left
+          &lt;/div&gt;
+          &lt;div class="gui-splitter-part-second"&gt;
+            &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+              &lt;div class="gui-splitter-part-first"&gt;
+                Top
+              &lt;/div&gt;
+              &lt;div class="gui-splitter-part-second"&gt;
+                Bottom
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 
+  <h4>Complex Nested Splitter: a vertical splitter with horizontal and vertical splitters wrapped in</h4>
   <div class="gui-splitter gui-splitter-vertical" style="height: 300px; margin-top: 20px;">
     <div class="gui-splitter-part-first">
       Top
@@ -109,7 +198,38 @@
       </div>
     </div>
   </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;div class="gui-splitter gui-splitter-vertical" style="height: 300px;"&gt;
+  &lt;div class="gui-splitter-part-first"&gt;
+    Top
+  &lt;/div&gt;
+  &lt;div class="gui-splitter-part-second"&gt;
+    &lt;div class="gui-splitter"&gt;
+      &lt;div class="gui-splitter-part-first"&gt;
+        Left
+      &lt;/div&gt;
+      &lt;div class="gui-splitter-part-second"&gt;
+        &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+          &lt;div class="gui-splitter-part-first"&gt;
+            Top
+          &lt;/div&gt;
+          &lt;div class="gui-splitter-part-second"&gt;
+            &lt;div class="gui-splitter"&gt;
+              &lt;div class="gui-splitter-part-first"&gt;
+                Left
+              &lt;/div&gt;
+              &lt;div class="gui-splitter-part-second"&gt;
+                Right
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 
+  <h4>Most Complex Nested Splitter</h4>
   <div class="gui-splitter" style="height: 500px; margin-top: 20px;">
     <div class="gui-splitter-part-first">
       <div class="gui-splitter gui-splitter-vertical">
@@ -195,5 +315,145 @@
       </div>
     </div>
   </div>
+  <pre class="prettyprint prettyprint-margin-top">
+&lt;div class="gui-splitter" style="height: 500px;"&gt;
+  &lt;div class="gui-splitter-part-first"&gt;
+    &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+      &lt;div class="gui-splitter-part-first"&gt;
+        Top
+      &lt;/div&gt;
+      &lt;div class="gui-splitter-part-second"&gt;
+        &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+          &lt;div class="gui-splitter-part-first"&gt;
+            Top
+          &lt;/div&gt;
+          &lt;div class="gui-splitter-part-second"&gt;
+            ...
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="gui-splitter-part-second"&gt;
+    &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+      &lt;div class="gui-splitter-part-first"&gt;
+        &lt;div class="gui-splitter"&gt;
+          &lt;div class="gui-splitter-part-first"&gt;
+            Left
+          &lt;/div&gt;
+          &lt;div class="gui-splitter-part-second"&gt;
+            ...
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class="gui-splitter-part-second"&gt;
+        &lt;div class="gui-splitter"&gt;
+          &lt;div class="gui-splitter-part-first"&gt;
+            ...
+          &lt;/div&gt;
+          &lt;div class="gui-splitter-part-second"&gt;
+            &lt;div class="gui-splitter gui-splitter-vertical"&gt;
+              &lt;div class="gui-splitter-part-first"&gt;
+                ...
+              &lt;/div&gt;
+              &lt;div class="gui-splitter-part-second"&gt;
+                ...
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+  <h2 id="splitters-usage">Usage</h2>
+  <p>Enable splitters via JavaScript:</p>
+  <pre class="prettyprint">$('.gui-splitter').guiSplitter();</pre>
+
+  <h3>Markup</h3>
+  <p>Data attributes are integral to the splitter plugin. Check out the example code below for the various markup types.</p>
+
+  <h3>Options</h3>
+  <p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>,
+    as in <code>data-min-size=""</code>.</p>
+  <table class="gui-table gui-table-bordered gui-table-striped">
+    <thead>
+    <tr>
+      <th style="width: 100px;">Name</th>
+      <th style="width: 130px;">type</th>
+      <th style="width: 72px;">default</th>
+      <th>description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>minSize</td>
+      <td>integer</td>
+      <td>0</td>
+      <td>If minSize specified, the width of the first part can't be less than minSize when drag splitter.
+        Use <code>data-min-size</code> for data attributes.</td>
+    </tr>
+    <tr>
+      <td>maxSize</td>
+      <td>integer</td>
+      <td>(Total Size)</td>
+      <td>If maxSize specified, the width of the first part can't be greater than maxSize when drag splitter.
+        Use <code>data-max-size</code> for data attributes.</td>
+    </tr>
+    <tr>
+      <td>splitPosition</td>
+      <td>integer / percentage</td>
+      <td>No</td>
+      <td>the initialized position of splitter or the initialized width of first part. (should between minSize and maxSize if specified)
+        Use <code>data-split-position</code> for data attributes.</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h3>Methods</h3>
+  <h4>.guiSplitter(options)</h4>
+  <p>Activates your content as a splitter component. Accepts an optional options <code>object</code>.
+  <pre class="prettyprint">
+$('#mySplitter').guiSplitter({
+  minSize: 50,
+  maxSize: 200,
+  splitPosition: "50%"
+})</pre>
+
+  <h4>.guiSplitter('show')</h4>
+  <p>Show first part of splitter component</p>
+
+  <h4>.guiSplitter('hide')</h4>
+  <p>Hide first part of splitter component</p>
+
+  <h4>.guiSplitter('toggle')</h4>
+  <p>Toggle first part of splitter component to shown or hidden.</p>
+
+  <h3>Events</h3>
+  <p>GUI's splitter class exposes a few events for hooking into splitter functionality.</p>
+  <table class="gui-table gui-table-bordered gui-table-striped">
+    <thead>
+    <tr>
+      <th style="width: 150px;">Event Type</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>start.gui.splitter</td>
+      <td>This event fires immediately when the <code>show</code> or <code>hide</code> or <code>toggle</code> instance method is called.
+        (Namely the jquery animation of splitter start.)</td>
+    </tr>
+    <tr>
+      <td>complete.gui.splitter</td>
+      <td>This event is fired when jquery animation of splitter complete.</td>
+    </tr>
+    </tbody>
+  </table>
+  <pre class="prettyprint">
+$('#mySplitter').on('complete.gui.splitter', function () {
+  // do something…
+})</pre>
 
 </div>

@@ -114,6 +114,11 @@
         return this;
     };
 
+    GuiSplitter.prototype.toggle = function () {
+        this.options.closeable && this.$closeButton.trigger("mousedown");
+        return this;
+    };
+
     GuiSplitter.prototype.startDrag = function (mousePosition) {
         if (!this.$ghostSplitBar) {
             this.$ghostSplitBar = this.$splitBar.clone(false)

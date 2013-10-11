@@ -2164,14 +2164,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         if (this.maxSize + splitBarSize > this.totalSize) {
             this.maxSize -= splitBarSize;
         }
-        this.splitPosition = Math.min(parseInt(this.$firstPart[this.options.sizing](), 10), this.maxSize);
+        this.splitPosition = Math.max(Math.min(parseInt(this.$firstPart[this.options.sizing](), 10), this.maxSize), this.minSize);
         if (this.options.splitPosition) {
             if (gui.isPercentage(this.options.splitPosition)) {
                 this.splitPosition = this.totalSize * parseInt(this.options.splitPosition, 10) / 100;
             } else if (typeof this.options.splitPosition === "number" || typeof this.options.splitPosition === "string") {
                 this.splitPosition = parseInt(this.options.splitPosition, 10);
             }
-            this.splitPosition = parseInt(Math.min(this.splitPosition, this.maxSize), 10);
+            this.splitPosition = parseInt(Math.max(Math.min(this.splitPosition, this.maxSize), this.minSize), 10);
         }
         this.$firstPart[this.options.sizing](this.splitPosition);
         this.$secondPart[this.options.sizing](this.totalSize - this.splitPosition - splitBarSize);
@@ -2214,6 +2214,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
     GuiSplitter.prototype.hide = function () {
         this.options.closeable && !this.$closeButton.hasClass("gui-splitter-close-btn-inverse") && this.$closeButton.trigger("mousedown");
+        return this;
+    };
+
+    GuiSplitter.prototype.toggle = function () {
+        this.options.closeable && this.$closeButton.trigger("mousedown");
         return this;
     };
 
