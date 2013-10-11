@@ -17,6 +17,10 @@ define(["./demo"], function (demo) {
         new Module("Button", "button"),
         new Module("Button Bar", "button-bar"),
         new Module("Carousel", "carousel"),
+        new Module("Tooltip", "tooltip"),
+        new Module("Pagination", "pagination"),
+        new Module("Autocomplete", "autocomplete"),
+        new Module("Dropdown", "dropdown"),
         new Module("Breadcrumb", "breadcrumb"),
         new Module("Splitter", "splitter")
     ], {
