@@ -79,7 +79,7 @@
 		});
 	}
 
-	$(document).on('click.gui.dropdown.data-api',function(){module.prototype._hideList();})
+	$(document).on('click.gui.dropdown.data-api',function(){Module.prototype._hideList();})
 
 	$.fn.guiDropdown.defaults = {
 		caret : true
