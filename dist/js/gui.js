@@ -399,7 +399,87 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		$ = window.jQuery,
 		gui = window.gui,
 		old = $.fn.guiCollapse;
+/*
+<<<<<<< HEAD
+	var module = function(obj,option){
+		this._init(obj,option);
+	}
 
+	module.prototype = {
+		_init: function (obj, option) {
+			this.obj = obj;
+			this._initOptions(option);
+			this._recordEleHeight();
+			this._eventHandler();
+		},
+		orgHeight: [],
+		//
+		_initOptions: function (option) {
+			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
+		},
+		_recordEleHeight: function () {
+			var mo = this;
+			$(this.obj)
+				.find('.' + this.defaults.switchTabClass)
+				.each(function (i) {
+					if (!$(this).is(":visible")) {
+						$(this).show();
+						mo.orgHeight[i] = $(this).height();
+						$(this).hide();
+					} else {
+						mo.orgHeight[i] = $(this).height();
+					}
+				});
+			return mo.orgHeight;
+		},
+		_eventHandler: function () {
+			var mo = this;
+			$(this.obj)
+				.find('.' + this.defaults.switchBtnClass)
+				.each(function (i) {
+					$(this).click(function (e) {
+						//var tabIndex = $(e.target).eq(i);
+
+						var curHeight = $(this).siblings('.' + mo.defaults.switchTabClass).height();
+						var tabContent = $(this).siblings('.' + mo.defaults.switchTabClass);
+
+						var animspeed = mo.defaults.animationDuration;
+						var toggleClass = mo.defaults.switchBtnToggleClass;
+
+						if (curHeight <= 0 || tabContent.is(":hidden")) {
+							tabContent
+								.css({display: "block", height: 0, opacity: 0})
+								.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed);
+							$(this).removeClass(toggleClass);
+						} else {
+							tabContent
+								.animate({'height': 0, 'opacity': 0}, animspeed);
+							$(this).addClass(toggleClass);
+						}
+					});
+				});
+		}
+	}
+
+	$.fn.guiCollapse = function (option) {
+
+		return this.each(function () {
+			new module(this,option);
+			//module._init(this, option);
+		});
+	}
+
+	$.fn.guiCollapse.defaults = {
+		switchBtnClass: 'tab-btn',
+		switchBtnToggleClass: 'tab-btn-closed',
+		switchTabClass: 'tab-content',
+		animationDuration: 500
+	};
+
+	//for debug
+	$.fn.guiCollapse.Constructor = module;
+=======
+*/
     // COLLAPSE PUBLIC CLASS DEFINITION
     // ================================
 
@@ -493,6 +573,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
     // COLLAPSE NO CONFLICT
     // ====================
+//>>>>>>> 8aa611db3915f048d66ffccb306b541812b2d917
 
 	$.fn.guiCollapse.noConflict = function () {
 		$.fn.guiCollapse = old;
@@ -522,9 +603,22 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiPopup;
 
+
+
 	$.fn.guiPopup = function (option) {
 
-		var module = {
+		//console.log(this.module)
+
+		//if (option == 'debug') {
+			//for debug
+			//return module;
+		//}
+		return this.each(function () {
+			$.fn.guiPopup.module._init(this, option);
+		});
+	}
+
+	$.fn.guiPopup.module = {
 			_init : function(obj,option){
 				this.obj = obj;
 				this._initOptions(option);
@@ -594,14 +688,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				});
 			}
 		}
-		if (option == 'debug') {
-			//for debug
-			return module;
-		}
-		return this.each(function () {
-			module._init(this, option);
-		});
-	}
 
 		/*var defaults = {
 			animationDuration: 500,
@@ -989,129 +1075,102 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiPlaceholder;
 
-		//define object
-	var module = {
-		_inputId: {},
+	var Module = function(obj,option){
+		this._init(obj,option);
+	}
+
+	Module.prototype = {
 		_inputSize: {},
 		_wrapperPosition: {},
 		_labelPosition: {},
 		_init: function (obj,option) {
-			this.obj = $(obj);
+			this.obj = obj;
 			this._initOptions(option);
-			this._getInputEle();
+			this._getInputPlaceTxt();
 			this._addPlaceHolderElem();
 			this._EventHandler();
-			},
-		//tested
+		},
 		_initOptions : function(option){
 			this.defaults = $.extend({},$.fn.guiPlaceholder.defaults, option);
 		},
-		//tesetd
-		_getInputEle : function () {
-			this.inputTextObj = this.obj.find(this.defaults.inputType);
+		_getInputPlaceTxt : function(){
+			this.inputPlaceTxt = $(this.obj).attr("data-default-text");
 		},
-		//tested
+		_getInputId: function () {
+			this._inputId = $(this.obj).attr('id');
+		},
 		_addPlaceHolderElem: function () {
 			this._getParentPostion();
-			for (var i = 0; i < this.inputTextObj.length; i++) {
-				this._calculateLabelPostion(i);
-				this._getInputSize(i);
-				this._getInputId(i);
-				$('<label for=' + this._inputId.id + '></label>')
-					.insertAfter(this.inputTextObj.eq(i))
-					.text(this.defaults.labelText[i])
-					.css({
-						'width': this._inputSize.width,
-						'height': this._inputSize.height,
-						'left': this._labelPosition.left + this.defaults.labelOffset.left,
-						'top': this._labelPosition.top + this.defaults.labelOffset.top,
-						//'margin': this.defaults.labelMargin ? this.defaults.labelMargin : this._inputSize.margin,
-						'line-height': this._inputSize.height + 'px',
-						'text-indent': this.defaults.labelTextIndent,
-						'text-align': this.defaults.labelTextAlign,
-						'cursor': 'text',
-						'position': 'absolute'
-					});
-			}
+			this._calculateLabelPostion();
+			this._getInputSize();
+			this._getInputId();
+			$('<label for=' + this._inputId + '></label>')
+				.insertAfter($(this.obj))
+				.text(this.inputPlaceTxt)
+				.css({
+					'width': this._inputSize.width,
+					'height': this._inputSize.height,
+					'left': this._labelPosition.left + this.defaults.labelOffset.left,
+					'top': this._labelPosition.top + this.defaults.labelOffset.top,
+					'line-height': this._inputSize.height + 'px',
+					'text-indent': this.defaults.labelTextIndent,
+					'text-align': this.defaults.labelTextAlign,
+					'cursor': 'text',
+					'position': 'absolute'
+				});
 		},
-		//tested
-		_getInputId: function (i) {
-			this._inputId.id = this.inputTextObj.eq(i).attr('id');
-			//return this._inputId;//for unit test
+		_getInputSize: function () {
+			this._inputSize.width = $(this.obj).outerWidth();
+			this._inputSize.height = $(this.obj).outerHeight();
 		},
-		//tested
-		_getInputSize: function (i) {
-			this._inputSize.width = this.inputTextObj.eq(i).outerWidth();
-			this._inputSize.height = this.inputTextObj.eq(i).outerHeight();
-			this._inputSize.margin = this.inputTextObj.eq(i).css("margin");
-			//return this._inputSize;//for unit test
-		},
-		//tested
 		_getParentPostion: function () {
-			this._wrapperPosition.left = this.obj.offset().left;
-			this._wrapperPosition.top = this.obj.offset().top;
-			//return this._wrapperPosition;//for unit test
+			this._wrapperPosition.left = $(this.obj).offsetParent().offset().left;
+			this._wrapperPosition.top = $(this.obj).offsetParent().offset().top;
 		},
-		//tested
-		_calculateLabelPostion: function (i) {
-			var inputNodes = this.inputTextObj;
-			var inputLeft = inputNodes.eq(i).offset().left;
-			var inputTop = inputNodes.eq(i).offset().top;
-			var inputMarginTop = parseInt(inputNodes.eq(i).css('margin-top'), 10);
-			var inputMarginLeft = parseInt(inputNodes.eq(i).css('margin-left'), 10);
+		_calculateLabelPostion: function () {
+			var inputLeft = $(this.obj).offset().left;
+			var inputTop = $(this.obj).offset().top;
+			var inputMarginTop = parseInt($(this.obj).css('margin-top'), 10);
+			var inputMarginLeft = parseInt($(this.obj).css('margin-left'), 10);
 
 			this._labelPosition.left = Math.abs(this._wrapperPosition.left - inputLeft + inputMarginLeft);
 			this._labelPosition.top = Math.abs(this._wrapperPosition.top - inputTop + inputMarginTop);
-			//return this._labelPosition;//for unit test
 		},
-		//tested
 		_EventHandler: function () {
-			var defaults = this.defaults;
-			this.obj.delegate('label', 'mousedown', function (e) {
-				e.preventDefault();
-			});
-			this.obj.delegate(this.defaults.inputType, 'focus', function () {
+			var that = this;
+
+			$(this.obj).on("focus",function(){
 				$(this)
-					.parent()
-					.find('label')
-					.eq($(this).index(defaults.inputType))
+					.next("label")
 					.stop(true, true)
-					.fadeOut(defaults.animateSpeed);
+					.fadeOut(that.defaults.animateSpeed);
 			});
-			this.obj.delegate(this.defaults.inputType, 'blur', function () {
+
+			$(this.obj).on("blur",function(){
 				if($(this).val() === ''){
 					$(this)
-						.parent()
-						.find('label')
-						.eq($(this).index(defaults.inputType))
+						.next("label")
 						.stop(true, true)
-						.fadeIn(defaults.animateSpeed);
+						.fadeIn(that.defaults.animateSpeed);
 				}
 			});
 		}
-	}
+	};
 
 	$.fn.guiPlaceholder = function (option) {
-
-		//$.extend({},placeholder.defaults, option);
-
 		return this.each(function(){
-			module._init(this,option);
+			new Module(this,option);
 		});
-	}
+	};
 
 	$.fn.guiPlaceholder.defaults = {
-		labelText: [],
-		//labelMargin: '',
 		labelTextAlign: 'left',
 		labelOffset: {'top': 0, 'left': 0},
 		labelTextIndent: '5px',
-		animateSpeed: 300,
-		inputType: 'input'
+		animateSpeed: 300
 	};
 
-	//for debug
-	$.fn.guiPlaceholder.debug = module;
+	$.fn.guiPlaceholder.Constructor = Module;
 
 	$.fn.guiPlaceholder.noConflict = function () {
 		$.fn.guiPlaceholder = old;
@@ -1279,7 +1338,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this._appendElem();
 			this._iptFocus();
 		},
-		//
 		_calNowHighlight : function(){
 			var now = new Date(),
 				nowYear = now.getFullYear(),
@@ -1291,11 +1349,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				return true;
 			}
 		},
-		//tested
 		_initOptions:function(option){
 			this.defaults = $.extend({},$.fn.guiDatePicker.defaults,option);
 		},
-		//tested
 		_initNewDate :function(){
 			var initNewDate = this.defaults.initNewDate;
 			
@@ -1303,11 +1359,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this._setNewDate('month',initNewDate.getMonth());
 			this._setNewDate('date',initNewDate.getDate());
 		},
-		//tested
 		_setNewDate : function(type,value){
 			this.obj.data(type,value);
 		},
-		//tested
 		_getNewDate : function(){
 			var date = {};
 				date.year = $(this.obj).data('year');
@@ -1315,7 +1369,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				date.date = $(this.obj).data('date');
 			return date;
 		},
-		//tested
 		_initDatePickerPos : function(){
 			var inputOffset = this._getInputProp(),
 				left = inputOffset.left,
@@ -1326,7 +1379,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 						'top' : top
 				})
 		},
-		//
 		_getInputProp : function(){
 			var inputNode = $(this.obj) || undefined,
 				prop = [];
@@ -1338,7 +1390,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			}
 			return prop;
 		},
-		//tested
 		_setCalender : function(){
 			var totalDate = this._calTotalDate();
 			var daysPerWeek = 7;
@@ -1359,7 +1410,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				}
 			}
 		},
-		//tested
 		_appendEmptyCalenderWp : function(){
 			var firstDay = this._calFirstDay();
 			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
@@ -1369,12 +1419,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					.appendTo(datesObj.find("tr").eq(0));
 			}
 		},
-		//tested
 		_clearCalender : function(){
 			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
 			datesObj.html('<tr></tr>');
 		},
-		//tested
 		_calFirstDay:function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month,
@@ -1382,7 +1430,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			return new Date(curYear,curMonth,1).getDay();
 		},
-		//tested
 		_calTotalDate:function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month,
@@ -1390,7 +1437,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			return new Date(curYear,curMonth,0).getDate();
 		},
-		//tested
 		_recalYearFactory:function(cal){
 			var curYear = this._getNewDate().year;
 			if(cal === 1){
@@ -1399,7 +1445,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				this._setNewDate('year',curYear - 1);
 			}
 		},
-		//tested
 		_recalMonthFactory:function(cal){
 			var curMonth = this._getNewDate().month;
 			if(cal === 1){
@@ -1416,7 +1461,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				}
 			}
 		},
-		//tested 
 		_calTitle:function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month + 1,
@@ -1424,12 +1468,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			return titleformat;
 		},
-		//tested
 		_setTitle:function(){
 			var title = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.title);
 			return title.html(this._calTitle());
 		},
-		//tested step by step
 		_rerenderCalender : function(){
 			this._initDatePickerPos();
 			this._clearCalender();
@@ -1438,7 +1480,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			this._highlightToday();
 			this._setTitle();
 		},
-		//bind focus several times
 		_iptFocus :function(){
 			var mo = this,
 				dateInputObj = $(this.obj);
@@ -1454,7 +1495,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				mo._highlightToday();
 			});
 		},
-		//test covered by the others
 		_eventHandler:function(){
 			var mo = this,
 				mainWrapper = $('.' + this.defaults.mainWrapper),
@@ -1503,11 +1543,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				mo._setInputVal();
 			});
 		},
-		//tested
 		_setActiveDate : function(num){
 			this._setNewDate('date',parseInt(num,10));
 		},
-		//
 		_setInputVal : function(){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month + 1,
@@ -1519,7 +1557,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			$(this.obj).val(inputVal);
 		},
-		//
 		_highCurLightDate : function(index){
 			var curYear = this._getNewDate().year,
 				curMonth = this._getNewDate().month,
@@ -1529,7 +1566,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
 			dateObj.eq(tdIndex).addClass(this.defaults.curDateClass);
 		},
-		//
 		_highlightToday : function(){
 			if(this._calNowHighlight()){
 				var now = new Date();
@@ -1540,7 +1576,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				dateObj.eq(tdIndex).addClass(this.defaults.todayClass);
 			}
 		},
-		//tested
 		_appendElem : function(){
 			if($('.' + this.defaults.mainWrapper).length === 0){
 				$('<div class=' + this.defaults.mainWrapper +' style="display:none;position: absolute;">' + 
@@ -2349,6 +2384,541 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         $.fn.guiSplitter = old;
         return this;
     };
+})(window);
+(function (window) {
+	"use strict";
+
+	var console = window.console,
+		$ = window.jQuery,
+		gui = window.gui,
+		old = $.fn.guiTooltip;
+
+	var Module = function (obj, option) {
+		this._init(obj, option);
+	}
+
+	Module.prototype = {
+		_init: function (obj, option) {
+				this.obj = obj;
+			this._eventHandler();
+		},
+		_initOptions: function (option) {
+			this.defaults = $.extend({}, $.fn.guiTooltip.defaults, option);
+		},
+		_eventHandler: function () {
+			var that = this;
+
+			$(this.obj).on("mouseover", function (e) {
+
+				if (that._judgeTooltipNode(e)) {
+
+					var $TooltipWp = that._appendTooltip(e);
+
+					that._setTooltipPos(e, $TooltipWp);
+				}
+
+				$(this)
+					.next(".tooltip")
+					.stop()
+					.fadeIn();
+			});
+
+			$(this.obj).on("mouseout", function (e) {
+				$(this)
+					.next(".tooltip")
+					.fadeOut()
+			});
+		},
+		_judgeTooltipNode: function (e) {
+			return $(e.target).next('.tooltip').length === 0;
+		},
+		_appendTooltip: function (e) {
+
+			var direction;
+
+			if ($(e.target).attr("data-placement") !== undefined) {
+				direction = $(e.target).attr("data-placement");
+			} else {
+				direction = "top";
+			}
+
+			var $TooltipWp = $('<div class="tooltip"></div>');
+
+			var $TooltipArrow = $('<div class="tooltip-arrow ' + direction + '"></div>');
+
+			var $TooltipInner = $('<div class="tooltip-inner">' + $(e.target).attr("data-original-title") + '</div>');
+
+			$TooltipWp.append($TooltipArrow).append($TooltipInner);
+
+			$TooltipWp.insertAfter($(e.target));
+
+			return $TooltipWp;
+
+		},
+		_setTooltipPos: function (e, tooltipEle) {
+
+			var pos = this._calTooltipPos(e, tooltipEle);
+
+			tooltipEle.css({"left": pos.left, "top": pos.top});
+
+		},
+		_calTooltipPos: function (e, tooltipEle) {
+			var parentOffset = $(this.obj).offsetParent().offset();
+
+			var targetOffset = $(e.target).offset();
+
+			var tooltipOrgEleWidth = $(e.target).outerWidth();
+			var tooltipOrgEleHeight = $(e.target).outerHeight();
+
+			var w = tooltipEle.outerWidth();
+			var h = tooltipEle.outerHeight();
+
+			var direction = $(e.target).attr('data-placement');
+
+			var calculatedLeft,
+				calculatedTop;
+
+			switch (direction) {
+				case "top":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
+					break;
+				case "right":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
+					break;
+				case "bottom":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight;
+					break;
+				case "left":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) - w;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
+					break;
+				default:
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
+					break;
+			}
+			return {left: calculatedLeft, top: calculatedTop}
+		}
+	}
+
+	$.fn.guiTooltip = function (option) {
+		return this.each(function () {
+			new Module(this, option);
+		});
+	}
+
+	$.fn.guiTooltip.defaults = {
+
+	};
+
+	$.fn.guiTooltip.Constructor = Module;
+
+	$.fn.guiTooltip.noConflict = function () {
+		$.fn.guiTooltip = old;
+		return this;
+	};
+})(window);
+
+(function (window) {
+    "use strict";
+
+    var console = window.console,
+        $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiAutocomplete;
+
+    var Module = function (obj, option) {
+        this._init(obj, option);
+    }
+
+    Module.prototype = {
+        _init: function (obj, option) {
+            this.obj = obj;
+            this._initOptions(option);
+            this._appendListWrapper();
+            this._setAutocompletePos();
+            this._eventHandler();
+        },
+        _initOptions: function (option) {
+            this.defaults = $.extend({}, $.fn.guiAutocomplete.defaults, option);
+        },
+        _appendListWrapper: function () {
+
+            var $autocompleteNode = $('<ul class="autocomplete">');
+
+            $autocompleteNode
+                .insertAfter($(this.obj));
+
+            $autocompleteNode
+                .css({
+                    "width": this.defaults.width,
+                    "height": this.defaults.height
+                });
+        },
+        _setAutocompletePos: function () {
+
+            var left,
+                top;
+
+            if ($(this.obj).offsetParent()[0] == $("body")[0]) {
+
+                left = $(this.obj).offset().left;
+                top = $(this.obj).offset().top + $(this.obj).outerHeight();
+
+            } else {
+
+                var parentPos = $(this.obj).offsetParent().offset();
+                var ePos = $(this.obj).offset();
+
+                var eH = $(this.obj).outerHeight() - parseInt($(this.obj).css("margin-bottom"), 10);
+
+                left = ePos.left - parentPos.left;
+                top = ePos.top - parentPos.top + eH;
+
+            }
+
+            $(this.obj)
+                .next('.autocomplete')
+                .css({
+                    "left": left,
+                    "top": top
+                });
+        },
+        _getData: function (callback) {
+            $.ajax({
+                url: 'localhost:3000/',
+                data: 11,
+                dataType: "json",
+                success: function (data) {
+                    //callback();
+                    //console.log(data);
+                },
+                error: function () {
+                    //console.log(11);
+                }
+            })
+        },
+        _setInputVal: function (text) {
+            this.inputVal = text;
+        },
+        _tempInputVal: function (text) {
+            $(this.obj).val(text);
+        },
+        _switchOption: function () {
+
+            var inputCurVal = $(this.obj).val();
+
+            this._clearList();
+
+            if (inputCurVal.length > 0) {
+
+                for (var i = 0; i < this.defaults.data.length; i++) {
+
+                    if (this.defaults.data[i].indexOf(inputCurVal.toLowerCase()) >= 0) {
+
+                        this._appendList(this.defaults.data[i]);
+
+                    }
+                }
+            }
+            if ($(this.obj).next('.autocomplete').find("li").length > 0) {
+                this._showList();
+            } else {
+                this._hideList();
+            }
+        },
+        _clearList: function () {
+            $(this.obj)
+                .next('.autocomplete')
+                .html('');
+        },
+        _showList: function () {
+            $(this.obj)
+                .next('.autocomplete')
+                .fadeIn();
+        },
+        _hideList: function () {
+            $(this.obj)
+                .next('.autocomplete')
+                .fadeOut();
+        },
+        _highLightOption: function ($element) {
+            $(this.obj)
+                .next('.autocomplete')
+                .find("li")
+                .removeClass("active");
+
+            $element.addClass("active");
+        },
+        _getNextIndex: function () {
+            var nextVisible;
+
+            if ($(this.obj).next('.autocomplete').find("li.active").length === 0) {
+
+                nextVisible = $(this.obj).next('.autocomplete').find('li').eq(0);
+
+            } else {
+
+                nextVisible = $(this.obj).next('.autocomplete').find('li.active').next();
+
+            }
+
+            return nextVisible;
+        },
+        _getPrevIndex: function () {
+            var prevVisible;
+
+            if ($(this.obj).next('.autocomplete').find("li.active").length === 0) {
+
+                prevVisible = $(this.obj).next('.autocomplete').find('li').last();
+
+            } else {
+
+                prevVisible = $(this.obj).next('.autocomplete').find('li.active').prev();
+
+            }
+
+            return prevVisible;
+        },
+        _appendList: function (text) {
+            $(this.obj)
+                .next('.autocomplete')
+                .append('<li><a>' + text + '</a></li>');
+        },
+        _eventHandler: function () {
+
+            var that = this;
+
+            $(this.obj)
+                .on("focus", function (e) {
+                    that._switchOption();
+                });
+
+            $(this.obj)
+                .on("keydown", function (e) {
+                    if (e.keyCode === 38) {
+                        e.preventDefault();
+                    }
+                });
+
+            $(this.obj)
+                .on("blur", function (e) {
+                    $(e.target)
+                        .next('.autocomplete')
+                        .fadeOut();
+                });
+
+            $(this.obj)
+                .on("keyup", function (e) {
+
+                    var txt;
+
+                    switch (e.keyCode) {
+                        case 40:
+                            if ($(this).next('.autocomplete').find("li").length > 0) {
+
+                                var $nextEle = that._getNextIndex();
+
+                                var $nextEleTxt = $nextEle.text();
+
+                                var str = $nextEle.toString();
+
+                                that._highLightOption($nextEle);
+
+                                if ($(this).next('.autocomplete').find("li.active").length === 0) {
+                                    that._tempInputVal(that.inputVal);
+                                } else {
+                                    that._tempInputVal($nextEleTxt);
+                                }
+                            }
+                            break;
+
+                        case 38:
+                            if ($(this).next('.autocomplete').find("li").length > 0) {
+
+                                var $prevEle = that._getPrevIndex();
+
+                                var $prevEleTxt = $prevEle.text();
+
+                                that._highLightOption($prevEle);
+
+                                if ($(this).next('.autocomplete').find("li.active").length === 0) {
+                                    that._tempInputVal(that.inputVal);
+                                } else {
+                                    that._tempInputVal($prevEleTxt);
+                                }
+                            }
+                            break;
+
+                        case 13:
+                            if ($(this).next('.autocomplete').find('li.active').length !== 0) {
+                                txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
+                                that._setInputVal(txt);
+                            }
+                            break;
+
+                        case 37:
+                            if ($(this).next('.autocomplete').find('li.active').length !== 0) {
+                                txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
+                                that._setInputVal(txt);
+                            }
+                            break;
+
+                        case 39:
+                            if ($(this).next('.autocomplete').find('li.active').length !== 0) {
+                                txt = $(this).next('.autocomplete').fadeOut().find('li.active').text();
+                                that._setInputVal(txt);
+                            }
+                            break;
+
+                        default :
+                            that._setInputVal($(this).val());
+
+                            that._switchOption();
+
+                            break;
+                    }
+                });
+
+            $(this.obj)
+                .next('.autocomplete')
+                .on("mouseover", "a", function (e) {
+                    that._selectOption(e);
+                });
+
+            $(this.obj)
+                .next('.autocomplete')
+                .on("click", "a", function (e) {
+                    $(that.obj).val($(this).text());
+                    that.inputVal = $(this).text();
+                });
+        },
+        _selectOption: function (e) {
+            $(e.target)
+                .parent()
+                .addClass("active")
+                .siblings()
+                .removeClass("active");
+        }
+    }
+
+    $.fn.guiAutocomplete = function (option) {
+        return this.each(function () {
+            new Module(this, option);
+        });
+    };
+
+    $.fn.guiAutocomplete.Constructor = Module;
+
+    $.fn.guiAutocomplete.defaults = {
+        data: [],
+        width: '300px',
+        height: '200px',
+        remote: {}
+    };
+
+    $.fn.guiAutocomplete.noConflict = function () {
+        $.fn.guiAutocomplete = old;
+        return this;
+    };
+
+})(window);
+(function (window) {
+	"use strict";
+
+	var console = window.console,
+		$ = window.jQuery,
+		gui = window.gui,
+		old = $.fn.guiDropdown;
+
+	var Module = function(obj,option){
+		this._init(obj,option);
+	}
+
+	Module.prototype = {
+		_init : function(obj,option){
+			this.obj = obj;
+			this._initOptions(option);
+			this._defaultList();
+			this._eventHandler();
+		},
+		_initOptions : function (option) {
+			this.defaults = $.extend({}, $.fn.guiDropdown.defaults, option);
+		},
+		_defaultList : function(){
+
+			$(this.obj).find(".dropdown-toggle").text($(this.obj).find(".dropdown-list li.default").text());
+
+			if(this.defaults.caret === true){
+				$('<span class="caret">')
+					.appendTo($(this.obj).find(".dropdown-toggle"));
+			}
+		},
+		_toggleList : function(e){
+
+			var $parent = $(e.target).parent(".dropdown").find(".dropdown-list");
+
+			$parent.addClass("focus");
+
+			$(".dropdown-list").not(".focus").hide();
+
+			if($parent.is(":visible")){
+				$parent.hide();
+			}else{
+				$parent.show();
+			}
+			$parent.removeClass("focus");
+		},
+		_hideList : function(){
+
+			$(".dropdown-list").hide();
+
+		},
+		_changeCurList : function(e){
+
+			var txt = $(e.target).text();
+
+			$(this.obj).find(".dropdown-toggle").text(txt);
+
+			if(this.defaults.caret === true){
+				$('<span class="caret">')
+					.appendTo($(this.obj).find(".dropdown-toggle"));
+			}
+
+			this._hideList();
+		},
+		_eventHandler : function(){
+			var that = this;
+
+			$(this.obj)
+				.on('click.gui.dropdown.data-api',function(e){e.stopPropagation();})
+				.on('click.gui.dropdown.data-api',function(e){that._toggleList(e);})
+				.on('click.gui.dropdown.data-api',".dropdown-list a",function(e){that._changeCurList(e);})
+		}
+	}
+
+	$.fn.guiDropdown = function (option) {
+
+		return this.each(function () {
+			new Module(this,option);
+		});
+	}
+
+	$(document).on('click.gui.dropdown.data-api',function(){module.prototype._hideList();})
+
+	$.fn.guiDropdown.defaults = {
+		caret : true
+	};
+
+	$.fn.guiDropdown.Constructor = Module;
+
+	$.fn.guiDropdown.noConflict = function () {
+		$.fn.guiDropdown = old;
+		return this;
+	};
 })(window);
 /* ========================================================================
  * GUI: ie-patch.js v0.1.0

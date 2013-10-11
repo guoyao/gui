@@ -6,130 +6,120 @@
 		gui = window.gui,
 		old = $.fn.guiTooltip;
 
-	$.fn.guiTooltip = function (option) {
+	var Module = function (obj, option) {
+		this._init(obj, option);
+	}
 
-		var module = {
-			_init: function (obj, option) {
+	Module.prototype = {
+		_init: function (obj, option) {
 				this.obj = obj;
-				this._eventHandler();
-			},
-			_initOptions: function (option) {
-				this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
-			},
-			//_findTooltipEle: function () {
-				//var $tooltipEle = $(this.obj).find("[data-toggle=tooltip]");
-				//return $tooltipEle;
-			//},
-			_eventHandler: function () {
-				var that = this;
+			this._eventHandler();
+		},
+		_initOptions: function (option) {
+			this.defaults = $.extend({}, $.fn.guiTooltip.defaults, option);
+		},
+		_eventHandler: function () {
+			var that = this;
 
-				$(this.obj).on("mouseover", "[data-toggle=tooltip]", function (e) {
+			$(this.obj).on("mouseover", function (e) {
 
-					if(that._judgeTooltipNode(e)){
+				if (that._judgeTooltipNode(e)) {
 
-						var $TooltipWp = that._appendTooltip(e);
+					var $TooltipWp = that._appendTooltip(e);
 
-						that._setTooltipPos(e, $TooltipWp);
-					}
-
-					$(e.target)
-						.next(".tooltip")
-						.stop()
-						.animate({"opacity": 1});
-				});
-
-				$(this.obj).on("mouseout", "[data-toggle=tooltip]", function (e) {
-					$(e.target)
-						.next(".tooltip")
-						.animate({"opacity": 0}, function () {
-							$(this).remove()
-						});
-				});
-			},
-			_judgeTooltipNode : function(e){
-				return $(e.target).next('.tooltip').length === 0;
-			},
-			_appendTooltip: function (e) {
-				//if (this._judgeTooltipNode(e)) {
-
-					var direction;
-
-					if ($(e.target).attr("data-placement") !== undefined) {
-						direction = $(e.target).attr("data-placement");
-					} else {
-						direction = "top";
-					}
-
-					var $TooltipWp = $('<div class="tooltip"></div>');
-
-					var $TooltipArrow = $('<div class="tooltip-arrow ' + direction + '"></div>');
-
-					var $TooltipInner = $('<div class="tooltip-inner">' + $(e.target).attr("data-original-title") + '</div>');
-
-					$TooltipWp.append($TooltipArrow).append($TooltipInner);
-
-					$TooltipWp.insertAfter($(e.target));
-
-					//this._setTooltipPos(e, $TooltipWp);
-
-					return $TooltipWp;
-				//}
-			},
-			_setTooltipPos: function (e, tooltipEle) {
-
-				var pos = this._calTooltipPos(e, tooltipEle);
-
-				tooltipEle.css({"left": pos.left, "top": pos.top});
-
-			},
-			_calTooltipPos: function (e, tooltipEle) {
-				var parentOffset = $(this.obj).offset();
-
-				var targetOffset = $(e.target).offset();
-
-				var tooltipOrgEleWidth = $(e.target).outerWidth();
-				var tooltipOrgEleHeight = $(e.target).outerHeight();
-
-				var w = tooltipEle.outerWidth();
-				var h = tooltipEle.outerHeight();
-
-				var direction = $(e.target).attr('data-placement');
-
-				var calculatedLeft,
-					calculatedTop;
-
-				switch (direction) {
-					case "top":
-						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
-						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
-						break;
-					case "right":
-						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth;
-						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
-						break;
-					case "bottom":
-						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
-						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight;
-						break;
-					case "left":
-						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) - w;
-						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
-						break;
-					default:
-						calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
-						calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
-						break;
+					that._setTooltipPos(e, $TooltipWp);
 				}
-				return {left: calculatedLeft, top: calculatedTop}
-			}
-		}
-		if (option == 'debug') {
-			//for debug
-			return module;
-		}
 
+				$(this)
+					.next(".tooltip")
+					.stop()
+					.fadeIn();
+			});
+
+			$(this.obj).on("mouseout", function (e) {
+				$(this)
+					.next(".tooltip")
+					.fadeOut()
+			});
+		},
+		_judgeTooltipNode: function (e) {
+			return $(e.target).next('.tooltip').length === 0;
+		},
+		_appendTooltip: function (e) {
+
+			var direction;
+
+			if ($(e.target).attr("data-placement") !== undefined) {
+				direction = $(e.target).attr("data-placement");
+			} else {
+				direction = "top";
+			}
+
+			var $TooltipWp = $('<div class="tooltip"></div>');
+
+			var $TooltipArrow = $('<div class="tooltip-arrow ' + direction + '"></div>');
+
+			var $TooltipInner = $('<div class="tooltip-inner">' + $(e.target).attr("data-original-title") + '</div>');
+
+			$TooltipWp.append($TooltipArrow).append($TooltipInner);
+
+			$TooltipWp.insertAfter($(e.target));
+
+			return $TooltipWp;
+
+		},
+		_setTooltipPos: function (e, tooltipEle) {
+
+			var pos = this._calTooltipPos(e, tooltipEle);
+
+			tooltipEle.css({"left": pos.left, "top": pos.top});
+
+		},
+		_calTooltipPos: function (e, tooltipEle) {
+			var parentOffset = $(this.obj).offsetParent().offset();
+
+			var targetOffset = $(e.target).offset();
+
+			var tooltipOrgEleWidth = $(e.target).outerWidth();
+			var tooltipOrgEleHeight = $(e.target).outerHeight();
+
+			var w = tooltipEle.outerWidth();
+			var h = tooltipEle.outerHeight();
+
+			var direction = $(e.target).attr('data-placement');
+
+			var calculatedLeft,
+				calculatedTop;
+
+			switch (direction) {
+				case "top":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
+					break;
+				case "right":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
+					break;
+				case "bottom":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight;
+					break;
+				case "left":
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) - w;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) + tooltipOrgEleHeight / 2 - h / 2;
+					break;
+				default:
+					calculatedLeft = Math.abs(parentOffset.left - targetOffset.left) + tooltipOrgEleWidth / 2 - w / 2;
+					calculatedTop = Math.abs(parentOffset.top - targetOffset.top) - h;
+					break;
+			}
+			return {left: calculatedLeft, top: calculatedTop}
+		}
+	}
+
+	$.fn.guiTooltip = function (option) {
 		return this.each(function () {
-			module._init(this, option);
+			new Module(this, option);
 		});
 	}
 
@@ -137,8 +127,7 @@
 
 	};
 
-	//for debug
-	//$.fn.guiTooltip.debug = module;
+	$.fn.guiTooltip.Constructor = Module;
 
 	$.fn.guiTooltip.noConflict = function () {
 		$.fn.guiTooltip = old;

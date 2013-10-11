@@ -1,19 +1,15 @@
 <div class="module-container">
 	<h4>Input Place Holder Component:</h4>
     <div class="gui-placeholder">
-        <input type="text" id="place-holder-demo-input_1"/>
-        <input type="text" id="place-holder-demo-input_2"/>
+        <input type="text" class="place-holder-input" id="place-holder-demo-input_1" data-default-text="please input 1"/>
+        <input type="text" class="place-holder-input" id="place-holder-demo-input_2" data-default-text="please input 2"/>
     </div>
     <h5 class="code-label">Html Code:</h5>
     <pre class="prettyprint linenums">
 &lt;div class="gui-placeholder"&gt;
-    &lt;input type="text" id="place-holder-demo-input_1"/&gt;
-    &lt;input type="text" id="place-holder-demo-input_2"/&gt;
+    &lt;input type="text" class="place-holder-input" id="place-holder-demo-input_1" data-default-text="please input 1"/&gt;
+    &lt;input type="text" class="place-holder-input" id="place-holder-demo-input_2" data-default-text="please input 2"/&gt;
 &lt;/div&gt;</pre>
     <h5 class="code-label">Js Code</h5>
-    <pre class="prettyprint">$(".gui-placeholder").guiPlaceholder({
-    labelText:[
-    	'Please Input 1','Please Input 2'
-    ]
-});</pre>
+    <pre class="prettyprint">$(".place-holder-input").guiPlaceholder();</pre>
 </div>
