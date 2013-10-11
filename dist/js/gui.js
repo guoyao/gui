@@ -2177,12 +2177,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         this.$secondPart[this.options.sizing](this.totalSize - this.splitPosition - splitBarSize);
         var that = this;
         if (this.options.closeable) {
-            this.$closeButton = $('<div class="gui-splitter-close-btn"></div>');
-            this.$splitBar.append(this.$closeButton);
-            this.$closeButton.mousedown(function () {
-                that.$closeButton.toggleClass("gui-splitter-close-btn-inverse").hide();
-                that.splitTo();
-            });
+            this.$closeButton = $('<div class="gui-splitter-close-btn"></div>')
+                .appendTo(this.$splitBar)
+                .on("mousedown", function () {
+                    that.$closeButton.toggleClass("gui-splitter-close-btn-inverse").hide();
+                    that.splitTo();
+                });
         }
         this.$splitBar.on("mousedown", function (e) {
             if (e.target == this) {
@@ -2207,17 +2207,28 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         this.$secondPart[this.options.sizing](this.totalSize - this.splitPosition - splitBarSize);
     };
 
+    GuiSplitter.prototype.show = function () {
+        this.options.closeable && this.$closeButton.hasClass("gui-splitter-close-btn-inverse") && this.$closeButton.trigger("mousedown");
+        return this;
+    };
+
+    GuiSplitter.prototype.hide = function () {
+        this.options.closeable && !this.$closeButton.hasClass("gui-splitter-close-btn-inverse") && this.$closeButton.trigger("mousedown");
+        return this;
+    };
+
     GuiSplitter.prototype.startDrag = function (mousePosition) {
         if (!this.$ghostSplitBar) {
-            this.$ghostSplitBar = this.$splitBar.clone(false).insertAfter(this.$firstPart);
-            this.$ghostSplitBar.addClass("gui-splitter-control-bar-ghost").css({
-                width: this.$splitBar.width(),
-                height: this.$splitBar.height()
-            });
+            this.$ghostSplitBar = this.$splitBar.clone(false)
+                .insertAfter(this.$firstPart)
+                .addClass("gui-splitter-control-bar-ghost")
+                .css({
+                    width: this.$splitBar.width(),
+                    height: this.$splitBar.height()
+                });
         }
-        this.$ghostSplitBar.find(".gui-splitter-close-btn").toggleClass("gui-splitter-close-btn-inverse", this.$closeButton.hasClass("gui-splitter-close-btn-inverse"));
-        this.$ghostSplitBar.css(this.options.moving, this.splitPosition + this.padding);
-        this.$ghostSplitBar.show();
+        this.$closeButton && this.$ghostSplitBar.find(".gui-splitter-close-btn").toggleClass("gui-splitter-close-btn-inverse", this.$closeButton.hasClass("gui-splitter-close-btn-inverse"));
+        this.$ghostSplitBar.css(this.options.moving, this.splitPosition + this.padding).show();
         var that = this;
         $(document).on("mousemove.gui.splitter", function (e) {
             that.performDrag(e[that.options.eventPosition] - mousePosition);
@@ -2248,11 +2259,18 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         if (this.transitioning) {
             return;
         }
+        var startEvent = $.Event('start.gui.splitter');
+        this.$element.trigger(startEvent);
+        if (startEvent.isDefaultPrevented()) {
+            return;
+        }
+
         this.transitioning = true;
         var that = this,
             animateProperties = {},
             secondPartAnimateProperties = {};
         if (position || position === 0) {
+            position = Math.min(Math.max(position, this.minSize), this.maxSize);
             animateProperties[this.options.sizing] = position;
             this.$firstPart.animate(animateProperties, {
                 duration: this.options.animationDuration,
@@ -2262,12 +2280,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 complete: function () {
                     that.transitioning = false;
                     that.splitPosition = position;
-                    that.$ghostSplitBar.hide();
-                    that.$closeButton.toggleClass("gui-splitter-close-btn-inverse", position === 0);
-                    that.$closeButton.fadeIn("fast");
+                    that.$ghostSplitBar && that.$ghostSplitBar.hide();
+                    that.$closeButton && that.$closeButton.toggleClass("gui-splitter-close-btn-inverse", position === 0).fadeIn("fast");
                     that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").each(function () {
                         $(this).data("gui.splitter").update();
                     });
+                    that.$element.trigger('complete.gui.splitter');
                 }});
         } else {
             if (this.splitPosition > 0) {
@@ -2285,10 +2303,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 complete: function () {
                     that.transitioning = false;
                     that.splitPosition = position;
-                    that.$closeButton.fadeIn("fast");
+                    that.$closeButton && that.$closeButton.fadeIn("fast");
                     that.$element.find(that.isVertical ? ".gui-splitter-vertical" : ".gui-splitter:not(.gui-splitter-vertical)").each(function () {
                         $(this).data("gui.splitter").update();
                     });
+                    that.$element.trigger('complete.gui.splitter');
                 }
             });
         }

@@ -82,12 +82,15 @@ module.exports = function (grunt) {
                 ]
             },
             test: {
-                files: {
-                    'js/tests/vendor/lib/jquery.js': 'bower_components/jquery/jquery.js',
-                    'js/tests/vendor/lib/qunit.js': 'bower_components/qunit/qunit//qunit.js',
-                    'js/tests/vendor/lib/qunit.css': 'bower_components/qunit/qunit/qunit.css',
-                    'js/tests/vendor/lib/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.min.css'
-                }
+                files: [
+                    {
+                        'js/tests/vendor/lib/jquery.js': 'bower_components/jquery/jquery.js',
+                        'js/tests/vendor/lib/qunit.js': 'bower_components/qunit/qunit//qunit.js',
+                        'js/tests/vendor/lib/qunit.css': 'bower_components/qunit/qunit/qunit.css',
+                        'js/tests/vendor/lib/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.min.css'
+                    },
+                    {expand: true, src: ['assets/gui/**'], dest: 'js/tests/vendor'}
+                ]
             },
             dist_assets: {
                 files: [
