@@ -2446,6 +2446,8 @@ th {
 }
 
 .gui-date-picker {
+  position: absolute;
+  display: none;
   width: 211px;
   padding: 0 5px 5px;
   overflow: hidden;
