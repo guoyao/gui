@@ -22,16 +22,12 @@
 		},
 		_defaultList : function(){
 
-			$(this.obj).find(".dropdown-toggle").text($(this.obj).find(".dropdown-list li.default").text());
+			$(this.obj).find(".dropdown-toggle span").text($(this.obj).find(".dropdown-list li.default").text());
 
-			if(this.defaults.caret === true){
-				$('<span class="caret">')
-					.appendTo($(this.obj).find(".dropdown-toggle"));
-			}
 		},
 		_toggleList : function(e){
 
-			var $parent = $(e.target).parent(".dropdown").find(".dropdown-list");
+			var $parent = $(this.obj).find(".dropdown-list");
 
 			$parent.addClass("focus");
 
@@ -39,8 +35,12 @@
 
 			if($parent.is(":visible")){
 				$parent.hide();
+
+				$(this.obj).find(".dropdown-toggle").removeClass("dropdown-toggle-open");
 			}else{
 				$parent.show();
+
+				$(this.obj).find(".dropdown-toggle").addClass("dropdown-toggle-open");
 			}
 			$parent.removeClass("focus");
 		},
@@ -48,17 +48,14 @@
 
 			$(".dropdown-list").hide();
 
+			$(".dropdown-toggle").removeClass("dropdown-toggle-open");
+
 		},
 		_changeCurList : function(e){
 
 			var txt = $(e.target).text();
 
-			$(this.obj).find(".dropdown-toggle").text(txt);
-
-			if(this.defaults.caret === true){
-				$('<span class="caret">')
-					.appendTo($(this.obj).find(".dropdown-toggle"));
-			}
+			$(this.obj).find(".dropdown-toggle span").text(txt);
 
 			this._hideList();
 		},
@@ -67,8 +64,10 @@
 
 			$(this.obj)
 				.on('click.gui.dropdown.data-api',function(e){e.stopPropagation();})
-				.on('click.gui.dropdown.data-api',function(e){that._toggleList(e);})
+				.on('click.gui.dropdown.data-api',".dropdown-toggle",function(e){that._toggleList(e);})
 				.on('click.gui.dropdown.data-api',".dropdown-list a",function(e){that._changeCurList(e);})
+				.on('mouseover.gui.dropdown.data-api',".dropdown-list a",function(e){$(this).parent().addClass("active")})
+				.on('mouseout.gui.dropdown.data-api',".dropdown-list a",function(e){$(".dropdown-list li").removeClass("active")})
 		}
 	}
 
@@ -82,7 +81,7 @@
 	$(document).on('click.gui.dropdown.data-api',function(){Module.prototype._hideList();})
 
 	$.fn.guiDropdown.defaults = {
-		caret : true
+		
 	};
 
 	$.fn.guiDropdown.Constructor = Module;

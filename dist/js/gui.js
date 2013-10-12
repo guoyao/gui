@@ -1340,8 +1340,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             this._getNewDate();
             //this._setNowHighlight();
             this._appendElem();
+            this._initDatePickerPos();
             //this._iptFocus();
             this._eventHandler();
+        },
+        _initOptions: function (option) {
+            this.defaults = $.extend({}, $.fn.guiDatePicker.defaults, option);
         },
         _calNowHighlight: function () {
             var now = new Date(),
@@ -1353,9 +1357,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             if (nowYear == objCurYear && nowMonth == objCurMonth) {
                 return true;
             }
-        },
-        _initOptions: function (option) {
-            this.defaults = $.extend({}, $.fn.guiDatePicker.defaults, option);
         },
         _initNewDate: function () {
             var initNewDate = this.defaults.initNewDate;
@@ -1374,12 +1375,13 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             date.date = $(this.obj).data('date');
             return date;
         },
+        //
         _initDatePickerPos: function () {
             var inputOffset = this._getInputProp(),
                 left = inputOffset.left,
                 top = inputOffset.top + inputOffset.h;
 
-            $('.gui-date-picker')
+            $(this.obj).next('.gui-date-picker')
                 .css({
                     'left': left,
                     'top': top
@@ -1400,7 +1402,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             var totalDate = this._calTotalDate();
             var daysPerWeek = 7;
             var trIndex = 0;
-            var datesObj = $('.gui-date-picker').find('.gui-date-dates');
+            var datesObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates');
 
             for (var j = 0; j < totalDate; j++) {
                 if (datesObj.find("td").length % daysPerWeek === 0) {
@@ -1418,7 +1420,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         },
         _appendEmptyCalenderWp: function () {
             var firstDay = this._calFirstDay();
-            var datesObj = $('.gui-date-picker').find('.gui-date-dates');
+            var datesObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates');
 
             for (var i = 0; i < firstDay; i++) {
                 $('<td><span></span></td>')
@@ -1426,7 +1428,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             }
         },
         _clearCalender: function () {
-            var datesObj = $('.gui-date-picker').find('.gui-date-dates');
+            var datesObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates');
             datesObj.html('<tr></tr>');
         },
         _calFirstDay: function () {
@@ -1470,40 +1472,25 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         _calTitle: function () {
             var curYear = this._getNewDate().year,
                 curMonth = this._getNewDate().month + 1,
-                titleformat = curYear + '\n' + curMonth + '月';
+                titleformat = curYear + ' ' + curMonth + '月';
 
             return titleformat;
         },
         _setTitle: function () {
-            var $title = $('.gui-date-picker').find('.gui-date-title');
+            var $title = $(this.obj).next('.gui-date-picker').find('.gui-date-title');
             return $title.html(this._calTitle());
         },
         _rerenderCalender: function () {
-            this._initDatePickerPos();
+            //this._initDatePickerPos();
             this._clearCalender();
             this._appendEmptyCalenderWp();
             this._setCalender();
             this._highlightToday();
             this._setTitle();
         },
-        /*_iptFocus :function(){
-         var mo = this,
-         dateInputObj = $(this.obj);
-
-         dateInputObj.focus(function(e){
-         mo.obj = $(e.target);
-         mo._rerenderCalender();
-         $('.' + mo.defaults.mainWrapper)
-         .stop(true,true)
-         .fadeIn();
-         //mo.obj = $(e.target);
-         mo._highCurLightDate();
-         mo._highlightToday();
-         });
-         },*/
         _eventHandler: function () {
             var that = this,
-                $mainWrapper = $('.gui-date-picker'),
+                $mainWrapper = $(this.obj).next('.gui-date-picker'),
                 $prevYearObj = $mainWrapper.find('.gui-date-py-btn'),
                 $nextYearObj = $mainWrapper.find('.gui-date-ny-btn'),
 
@@ -1549,21 +1536,24 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 that._setInputVal();
             });
 
-            $(document).on("click", function () {
-                $('.gui-date-picker').fadeOut();
-            });
+            $(document)
+                .on("click", function () {$('.gui-date-picker').fadeOut();})
+                .on("click", ".gui-date-picker" , function(e){e.stopPropagation()});
 
             $(this.obj).on("click", function (e) {
                 e.stopPropagation();
             })
 
             $(this.obj).on("focus", function (e) {
-                that.obj = $(e.target);
+                //that.obj = $(e.target);
                 that._rerenderCalender();
-                $('.gui-date-picker')
+
+                $('.gui-date-picker').fadeOut();
+
+                $(that.obj).next('.gui-date-picker')
                     .stop(true, true)
                     .fadeIn();
-                //mo.obj = $(e.target);
+
                 that._highCurLightDate();
                 that._highlightToday();
             });
@@ -1588,7 +1578,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 curDate = this._getNewDate().date;
             var firstDay = this._calFirstDay();
             var tdIndex = curDate + firstDay - 1;
-            var dateObj = $('.gui-date-picker').find('.gui-date-dates td');
+            var dateObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates td');
             dateObj.eq(tdIndex).addClass("gui-date-current-date");
         },
         _highlightToday: function () {
@@ -1597,7 +1587,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 var nowDate = now.getDate();
                 var firstDay = this._calFirstDay();
                 var tdIndex = nowDate + firstDay - 1;
-                var dateObj = $('.gui-date-picker').find('.gui-date-dates td');
+                var dateObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates td');
                 dateObj.eq(tdIndex).addClass("gui-date-today");
             }
         },
@@ -1619,16 +1609,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 '<tr></tr>' +
                 '</tbody>' +
                 '</table>' +
-                '</div>').insertAfter($(this.obj));//.appendTo(this.defaults.topNode);
-
-            //this._eventHandler();
+                '</div>').insertAfter($(this.obj));
 
             this._addWeekTitle();
             //}
         },
         _addWeekTitle: function () {
             var weekTitle = this.defaults.weekTitle;
-            var weekTitleNode = $('.gui-date-picker').find('.gui-date-week tr');
+            var weekTitleNode = $(this.obj).next('.gui-date-picker').find('.gui-date-week tr');
 
             for (var i = 0; i < weekTitle.length; i++) {
                 $('<th><span>' + weekTitle[i] + '</span></th>').appendTo(weekTitleNode);
@@ -1643,26 +1631,11 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     }
 
     $.fn.guiDatePicker.defaults = {
-        /*mainWrapper: "gui-date-picker",
-        nextYearBtn: "gui-date-ny-btn",
-        prevYearBtn: "gui-date-py-btn",
-        title: "gui-date-title",
-        calender: "gui-date-calender",
-        week: "gui-date-week",
-        dates: "gui-date-dates",
-        header: "gui-date-header",
-        prevMonthBtn: "gui-date-pm-btn",
-        nextMonthBtn: "gui-date-nm-btn",
-        curDateClass: "gui-date-current-date",
-        todayClass: "gui-date-today",
-        //dateInput : "gui-date-input",
-        topNode: "body",*/
         initNewDate: new Date(),
         dateSpliter: '-',
         weekTitle: ['日', '一', '二', '三', '四', '五', '六']
     }
 
-    //for debug
     $.fn.guiDatePicker.Constructor = Module;
 
     $.fn.guiDatePicker.noConflict = function () {
@@ -2874,16 +2847,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		_defaultList : function(){
 
-			$(this.obj).find(".dropdown-toggle").text($(this.obj).find(".dropdown-list li.default").text());
+			$(this.obj).find(".dropdown-toggle span").text($(this.obj).find(".dropdown-list li.default").text());
 
-			if(this.defaults.caret === true){
-				$('<span class="caret">')
-					.appendTo($(this.obj).find(".dropdown-toggle"));
-			}
 		},
 		_toggleList : function(e){
 
-			var $parent = $(e.target).parent(".dropdown").find(".dropdown-list");
+			var $parent = $(this.obj).find(".dropdown-list");
 
 			$parent.addClass("focus");
 
@@ -2891,8 +2860,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			if($parent.is(":visible")){
 				$parent.hide();
+
+				$(this.obj).find(".dropdown-toggle").removeClass("dropdown-toggle-open");
 			}else{
 				$parent.show();
+
+				$(this.obj).find(".dropdown-toggle").addClass("dropdown-toggle-open");
 			}
 			$parent.removeClass("focus");
 		},
@@ -2900,17 +2873,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			$(".dropdown-list").hide();
 
+			$(".dropdown-toggle").removeClass("dropdown-toggle-open");
+
 		},
 		_changeCurList : function(e){
 
 			var txt = $(e.target).text();
 
-			$(this.obj).find(".dropdown-toggle").text(txt);
-
-			if(this.defaults.caret === true){
-				$('<span class="caret">')
-					.appendTo($(this.obj).find(".dropdown-toggle"));
-			}
+			$(this.obj).find(".dropdown-toggle span").text(txt);
 
 			this._hideList();
 		},
@@ -2919,8 +2889,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			$(this.obj)
 				.on('click.gui.dropdown.data-api',function(e){e.stopPropagation();})
-				.on('click.gui.dropdown.data-api',function(e){that._toggleList(e);})
+				.on('click.gui.dropdown.data-api',".dropdown-toggle",function(e){that._toggleList(e);})
 				.on('click.gui.dropdown.data-api',".dropdown-list a",function(e){that._changeCurList(e);})
+				.on('mouseover.gui.dropdown.data-api',".dropdown-list a",function(e){$(this).parent().addClass("active")})
+				.on('mouseout.gui.dropdown.data-api',".dropdown-list a",function(e){$(".dropdown-list li").removeClass("active")})
 		}
 	}
 
@@ -2934,7 +2906,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	$(document).on('click.gui.dropdown.data-api',function(){Module.prototype._hideList();})
 
 	$.fn.guiDropdown.defaults = {
-		caret : true
+		
 	};
 
 	$.fn.guiDropdown.Constructor = Module;

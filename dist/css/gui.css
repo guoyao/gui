@@ -2878,9 +2878,11 @@ th {
 .dropdown {
   position: relative;
   display: inline-block;
+  *display: inline;
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 4px;
+  *zoom: 1;
 }
 
 .dropdown .dropdown-toggle {
@@ -2893,11 +2895,14 @@ th {
   display: inline-block;
   width: 0;
   height: 0;
+  overflow: hidden;
   vertical-align: middle;
   border-top: 4px solid black;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
+  _border-color: tomato;
   content: "";
+  _filter: chroma(color=#ff6347);
 }
 
 .dropdown .dropdown-list {
@@ -2921,8 +2926,13 @@ th {
 
 .dropdown .dropdown-list li a {
   display: block;
+  width: 100%;
   padding: 3px 20px;
   cursor: pointer;
+}
+
+.dropdown .dropdown-list li.active {
+  background: #ddd;
 }
 
 .dropdown .dropdown-list li.divider {
@@ -2931,6 +2941,10 @@ th {
   overflow: hidden;
   background-color: #e5e5e5;
   border-bottom: 1px solid #fff;
+}
+
+.dropdown .dropdown-toggle-open {
+  background: #eee;
 }
 
 /*!
@@ -3584,4 +3598,14 @@ html {
 
 a.active {
   _color: #428bca;
+}
+
+.dropdown {
+  *display: inline;
+  *zoom: 1;
+}
+
+.dropdown .dropdown-toggle .caret {
+  _border-color: tomato;
+  _filter: chroma(color=#ff6347);
 }
