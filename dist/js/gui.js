@@ -399,87 +399,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		$ = window.jQuery,
 		gui = window.gui,
 		old = $.fn.guiCollapse;
-/*
-<<<<<<< HEAD
-	var module = function(obj,option){
-		this._init(obj,option);
-	}
 
-	module.prototype = {
-		_init: function (obj, option) {
-			this.obj = obj;
-			this._initOptions(option);
-			this._recordEleHeight();
-			this._eventHandler();
-		},
-		orgHeight: [],
-		//
-		_initOptions: function (option) {
-			this.defaults = $.extend({}, $.fn.guiCollapse.defaults, option);
-		},
-		_recordEleHeight: function () {
-			var mo = this;
-			$(this.obj)
-				.find('.' + this.defaults.switchTabClass)
-				.each(function (i) {
-					if (!$(this).is(":visible")) {
-						$(this).show();
-						mo.orgHeight[i] = $(this).height();
-						$(this).hide();
-					} else {
-						mo.orgHeight[i] = $(this).height();
-					}
-				});
-			return mo.orgHeight;
-		},
-		_eventHandler: function () {
-			var mo = this;
-			$(this.obj)
-				.find('.' + this.defaults.switchBtnClass)
-				.each(function (i) {
-					$(this).click(function (e) {
-						//var tabIndex = $(e.target).eq(i);
-
-						var curHeight = $(this).siblings('.' + mo.defaults.switchTabClass).height();
-						var tabContent = $(this).siblings('.' + mo.defaults.switchTabClass);
-
-						var animspeed = mo.defaults.animationDuration;
-						var toggleClass = mo.defaults.switchBtnToggleClass;
-
-						if (curHeight <= 0 || tabContent.is(":hidden")) {
-							tabContent
-								.css({display: "block", height: 0, opacity: 0})
-								.animate({'height': mo.orgHeight[i], 'opacity': 1}, animspeed);
-							$(this).removeClass(toggleClass);
-						} else {
-							tabContent
-								.animate({'height': 0, 'opacity': 0}, animspeed);
-							$(this).addClass(toggleClass);
-						}
-					});
-				});
-		}
-	}
-
-	$.fn.guiCollapse = function (option) {
-
-		return this.each(function () {
-			new module(this,option);
-			//module._init(this, option);
-		});
-	}
-
-	$.fn.guiCollapse.defaults = {
-		switchBtnClass: 'tab-btn',
-		switchBtnToggleClass: 'tab-btn-closed',
-		switchTabClass: 'tab-content',
-		animationDuration: 500
-	};
-
-	//for debug
-	$.fn.guiCollapse.Constructor = module;
-=======
-*/
     // COLLAPSE PUBLIC CLASS DEFINITION
     // ================================
 
@@ -573,7 +493,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
     // COLLAPSE NO CONFLICT
     // ====================
-//>>>>>>> 8aa611db3915f048d66ffccb306b541812b2d917
 
 	$.fn.guiCollapse.noConflict = function () {
 		$.fn.guiCollapse = old;
@@ -805,20 +724,23 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiSlider;
 
-	var module = {
+	var Module = function (obj, option) {
+        this._init(obj, option);
+    }
+
+	Module.prototype = {
+		curTarget: {},
+		//index: [],
 		_init: function (obj, option) {
-			this._mergeOptions(option);
-			this._initVaribles(obj);
+			this.obj = obj;
+			this._initOptions(option);
+			//this._initVaribles(obj);//this.rangeSelectorBar = $(this.obj).find("." + this.defaults.rangeBarClass);
 			this._initNodeWrapper();
 			this._initFetchData();
 		},
-		_mergeOptions: function (option) {
+		_initOptions: function (option) {
 			this.defaults = $.extend({}, $.fn.guiSlider.defaults, option);
 		},
-		//_sliceSelectorSymbol: function (name) {
-		//var reg = /[.#]*/;
-		//return name = name.replace(reg, '');
-		//},
 		_initFetchData: function () {
 			if (this.defaults.remote.url !== undefined) {
 				$.ajax({
@@ -840,34 +762,25 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		_initElements: function () {
 			this._initBtns();
 			this._calculateMoveDistance();
-			this._eventCapture();
 			this._renderRangeBar();
 			this._initAddIndicatorText();
-		},
-		curTarget: {},
-		index: [],
-		_initVaribles: function (obj) {
-			this.obj = obj;
-			if (this.defaults.rangeBar) {
-				this.rangeSelectorBar = this.obj.find("." + this.defaults.rangeBarClass);
-			}
+			this._eventHandler();
 		},
 		_initNodeWrapper: function () {
-			$('<div class="' + this.defaults.btnWrapperClass + '"></div>').appendTo(this.obj);
+			$('<div class="slider-btn-wrapper"></div>').appendTo(this.obj);
 			if (this.defaults.indicatorText) {
-				$('<div class="' + this.defaults.indicatorTextClass + '"></div>').appendTo(this.obj);
+				$('<div class="slider-range-indicator"></div>').appendTo(this.obj);
 			}
 		},
 		_initBtns: function () {
+			this.index = [];
 			for (var i = 0; i < this.defaults.btns.length; i++) {
 				this.index[i] = (this.defaults.btns[i] === 'max') ? this.defaults.data.indicatordata.length - 1 : this.defaults.btns[i];
 
-				$('<a class="' + this.defaults.btnClass + '"></a>')
-					.appendTo($("." + this.defaults.btnWrapperClass))
+				$('<a class="btn"></a>')
+					.appendTo($(this.obj).find(".slider-btn-wrapper"))
 					.css({
 						"left": this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%",
-						"width": this.defaults.btnSize.width,
-						"height": this.defaults.btnSize.height,
 						"margin-left": -(this.defaults.btnSize.width / 4),
 						"margin-top": -(this.defaults.btnSize.height / 4)
 					});
@@ -877,47 +790,46 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			if (this.defaults.indicatorText) {
 				for (var i = 0; i < this.defaults.data.indicatordata.length; i++) {
 					$('<span>' + this.defaults.data.indicatordata[i] + '</span>')
-						.appendTo($("." + this.defaults.indicatorTextClass))
+						.appendTo($(this.obj).find(".slider-range-indicator"))
 						.css({
 							"left": i / (this.defaults.data.indicatordata.length - 1) * 100 + "%",
-							"margin-left": -$("." + this.defaults.indicatorTextClass)
-								.find('span')
+							"margin-left": -$(this.obj).find(".slider-range-indicator span")
 								.eq(i)
 								.width()
 								/ 2 +
-								$("." + this.defaults.btnWrapperClass)
-									.find("." + this.defaults.btnClass)
+								$(this.obj)
+									.find(".btn")
 									.outerWidth()
 									/ 4
 						});
 				}
-				if (parseInt($("." + this.defaults.indicatorTextClass).find("span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $("." + this.defaults.rangeBarClass).outerWidth()) {
+				console.log(parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length , $(this.obj).find(".slider-btn-wrapper").outerWidth())
+				if (parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $(this.obj).find(".slider-btn-wrapper").outerWidth()) {
 					for (var j = 0; j < this.defaults.data.indicatordata.length; j++) {
 						if (j % 2 === 0) {
-							$("." + this.defaults.indicatorTextClass)
-								.find("span")
+							$(this.obj).find(".slider-range-indicator span")
 								.eq(j)
 								.css({
-									"top": $("." + this.defaults.indicatorTextClass)
-										.find("span")
-										.height()
+									"top": $(this.obj).find(".slider-range-indicator span").height()
 								});
 						}
 					}
 				}
 			}
 		},
-		_eventCapture: function () {
-			var slider = this;
-			$("." + this.defaults.btnWrapperClass).on("mousedown",function (e) {
+		_eventHandler: function () {
+			var that = this;
+
+			$(this.obj).find(".slider-btn-wrapper").on("mousedown",function(e){
 				e.preventDefault();
-				slider._saveTarget(e);
+
+				that._saveTarget(e);
 			});
 			$(document).on("mousemove",function (e) {
-				slider._refreshPosition(e);
+				that._refreshPosition(e);
 			});
 			$(document).on("mouseup",function (e) {
-				slider._destroyTarget();
+				that._destroyTarget();
 			});
 		},
 		_checkMoveStep: function () {
@@ -933,7 +845,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			}
 		},
 		_calculateMoveDistance: function () {
-			this.moveDistance = (parseInt($("." + this.defaults.btnWrapperClass).width(), 10)) / (this.defaults.data.indicatordata.length - 1);
+			this.moveDistance = (parseInt($(this.obj).find(".slider-btn-wrapper").width(), 10)) / (this.defaults.data.indicatordata.length - 1);
 			this.moveDistance = Math.round(this.moveDistance);
 		},
 		_refreshPosition: function (e) {
@@ -959,20 +871,20 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		_renderRangeBar: function () {
 			if (this.defaults.rangeBar) {
-				if ($("." + this.defaults.btnWrapperClass).find("." + this.defaults.rangeBarClass).length <= 0) {
-					$('<a class="' + this.defaults.rangeBarClass + '"></a>').appendTo($("." + this.defaults.btnWrapperClass));
+				if ($(this.obj).find(".slider-range-button").length <= 0) {
+					$('<a class="slider-range-button"></a>').appendTo($(this.obj).find(".slider-btn-wrapper"));
 				}
 				this._refreshRangeBarPosition();
 			}
 		},
 		_refreshRangeBarPosition: function (e) {
 			var btnLeft = [];
-			if (this.curTarget.className === this.defaults.rangeBarClass) {
+			if (this.curTarget.className === "slider-range-button") {
 				if (this._calculateMoveDirection() === 1 && this._checkRangeBarMoveRange()) {
 					for (var i = 0; i < this.index.length; i++) {
 						this.index[i] += this.defaults.step;
-						$("." + this.defaults.btnWrapperClass)
-							.find("." + this.defaults.btnClass)
+						$(this.obj)
+							.find(".btn")
 							.eq(i)
 							.css({"left": (this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 					}
@@ -980,7 +892,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				} else if (this._calculateMoveDirection() === -1 && this._checkRangeBarMoveRange()) {
 					for (var j = 0; j < this.index.length; j++) {
 						this.index[j] -= this.defaults.step;
-						$("." + this.defaults.btnWrapperClass)
+						$(this.obj)
 							.find("." + this.defaults.btnClass)
 							.eq(j)
 							.css({"left": (this.index[j] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
@@ -988,16 +900,15 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					this.orgX = this.curX;
 				}
 			}
-			for (var k = 0; k < $("." + this.defaults.btnWrapperClass).find("." + this.defaults.btnClass).length; k++) {
-				btnLeft.push(parseInt($("." + this.defaults.btnWrapperClass)
+			for (var k = 0; k < $(this.obj).find(".btn").length; k++) {
+				btnLeft.push(parseInt($(this.obj)
 					.find("." + this.defaults.btnClass)
-					.eq(k)
-					.css("left")
-					, 10));
+					.get(k)
+					.style.left,10) / 100 * parseInt($(this.obj).find(".slider-btn-wrapper").css("width")));
 			}
 			var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
-			$("." + this.defaults.btnWrapperClass)
-				.find("." + this.defaults.rangeBarClass)
+			$(this.obj)
+				.find(".slider-range-button")
 				.css({'width': rangeBar,
 					'left': btnLeft[0] - btnLeft[1] > 0 ? btnLeft[1] + this.defaults.btnSize.width / 4 : btnLeft[0] + this.defaults.btnSize.width / 4});
 		},
@@ -1022,21 +933,21 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		_saveTarget: function (e) {
 			this.curTarget = e.target;
 			this.orgX = e.pageX;
+
 			//this.curOffset = parseInt(e.target.style.left, 10);
 		},
-		_checkTarget: function (e) {
+		/*_checkTarget: function (e) {
 			return this.curTarget === e.target;
-		},
+		},*/
 		_destroyTarget: function () {
-			this.curTarget = "";
+			this.curTarget = {};
 		}
 	}
 
 	$.fn.guiSlider = function (option) {
-
-		module._init(this, option);
-
-		return this;
+		return this.each(function () {
+            new Module(this, option);
+        });
 	}
 
 	$.fn.guiSlider.defaults = {
@@ -1048,9 +959,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			height: 30
 		},
 		rangeBar: true,
-		rangeBarClass: 'slider-range-button',
+		/*rangeBarClass: 'slider-range-button',
 		btnWrapperClass: 'slider-btn-wrapper',
-		indicatorTextClass: 'slider-range-indicator',
+		indicatorTextClass: 'slider-range-indicator',*/
 		indicatorText: true,
 		data: {
 			indicatordata: []
@@ -1058,13 +969,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		remote: {}//'type':'POST','url':'','data':'','dataType':'JSON'
 	}
 
+	$.fn.guiSlider.Constructor = Module;
+
 	$.fn.guiSlider.noConflict = function () {
 		$.fn.guiSlider = old;
 		return this;
 	};
-
-	//for debug
-	$.fn.guiSlider.debug = module;
 
 })(window);
 (function (window, undefined) {
@@ -1917,13 +1827,13 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 							//$otherObj.eq(num).addClass("next").css({"left": "100%"});
 
-							$activeObj.stop(false, true).animate(
+							$activeObj.stop(true, true).animate(
 								{"left": "-100%"}
 								, "linear", function () {
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(false, true).animate({
+							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(true, true).animate({
 								"left": "0"
 								}, "linear", function () {
 								$otherObj.eq(num)
@@ -1936,13 +1846,13 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 							$otherObj.eq(num).addClass("prev").css({"left": "-100%"});
 
-							$activeObj.stop(false, true).animate(
+							$activeObj.stop(true, true).animate(
 								{"left": "100%"}
 								, "linear", function () {
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).stop(false, true).animate(
+							$otherObj.eq(num).stop(true, true).animate(
 								{"left": "0"}
 								, "linear", function () {
 								$otherObj.eq(num)

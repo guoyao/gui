@@ -142,13 +142,13 @@
 
 							//$otherObj.eq(num).addClass("next").css({"left": "100%"});
 
-							$activeObj.stop(false, true).animate(
+							$activeObj.stop(true, true).animate(
 								{"left": "-100%"}
 								, "linear", function () {
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(false, true).animate({
+							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(true, true).animate({
 								"left": "0"
 								}, "linear", function () {
 								$otherObj.eq(num)
@@ -161,13 +161,13 @@
 
 							$otherObj.eq(num).addClass("prev").css({"left": "-100%"});
 
-							$activeObj.stop(false, true).animate(
+							$activeObj.stop(true, true).animate(
 								{"left": "100%"}
 								, "linear", function () {
 									$activeObj.removeClass("active");
 								});
 
-							$otherObj.eq(num).stop(false, true).animate(
+							$otherObj.eq(num).stop(true, true).animate(
 								{"left": "0"}
 								, "linear", function () {
 								$otherObj.eq(num)

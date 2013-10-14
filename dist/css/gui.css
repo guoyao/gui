@@ -2329,6 +2329,7 @@ th {
   position: absolute;
   top: 0;
   height: 15px;
+  overflow: hidden;
   background: #6df1ff;
 }
 
@@ -2342,6 +2343,8 @@ th {
 .gui-slider .slider-range-indicator span {
   position: absolute;
   top: 0;
+  *display: inline;
+  *word-wrap: normal;
 }
 
 .gui-placeholder {
@@ -2706,9 +2709,12 @@ th {
 }
 
 .tooltip .tooltip-inner {
+  _width: 200px;
   max-width: 200px;
   padding: 8px;
+  _overflow: auto;
   color: white;
+  word-wrap: break-word;
   background: black;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 5px;
@@ -2727,7 +2733,6 @@ th {
   bottom: 0;
   left: 50%;
   margin-left: -5px;
-  border-color: white;
   border-color: transparent;
   border-top-color: black;
   border-style: solid;
@@ -2878,11 +2883,9 @@ th {
 .dropdown {
   position: relative;
   display: inline-block;
-  *display: inline;
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 4px;
-  *zoom: 1;
 }
 
 .dropdown .dropdown-toggle {
@@ -2900,9 +2903,7 @@ th {
   border-top: 4px solid black;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
-  _border-color: tomato;
   content: "";
-  _filter: chroma(color=#ff6347);
 }
 
 .dropdown .dropdown-list {
@@ -3607,5 +3608,35 @@ a.active {
 
 .dropdown .dropdown-toggle .caret {
   _border-color: tomato;
+  _border-top-color: black;
   _filter: chroma(color=#ff6347);
+}
+
+.tooltip .tooltip-inner {
+  _width: 200px;
+  _overflow: auto;
+}
+
+.tooltip .top,
+.tooltip .right,
+.tooltip .bottom,
+.tooltip .left {
+  _border-color: tomato;
+  _filter: chroma(color=#ff6347);
+}
+
+.tooltip .top {
+  _border-top-color: black;
+}
+
+.tooltip .right {
+  _border-right-color: black;
+}
+
+.tooltip .bottom {
+  _border-bottom-color: black;
+}
+
+.tooltip .left {
+  _border-left-color: black;
 }
