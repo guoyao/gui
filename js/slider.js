@@ -85,7 +85,7 @@
 									/ 4
 						});
 				}
-				console.log(parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length , $(this.obj).find(".slider-btn-wrapper").outerWidth())
+				//console.log(parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length , $(this.obj).find(".slider-btn-wrapper").outerWidth())
 				if (parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $(this.obj).find(".slider-btn-wrapper").outerWidth()) {
 					for (var j = 0; j < this.defaults.data.indicatordata.length; j++) {
 						if (j % 2 === 0) {
