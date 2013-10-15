@@ -2590,11 +2590,13 @@ th {
 }
 
 .carousel .carousel-inner .next {
-  left: 100%;
+  /*left:100%;*/
+
 }
 
 .carousel .carousel-inner .prev {
-  left: -100%;
+  /*left:-100%;*/
+
 }
 
 .carousel .carousel-control-left,

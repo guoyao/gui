@@ -142,6 +142,8 @@
 
 							//$otherObj.eq(num).addClass("next").css({"left": "100%"});
 
+							var n = num === 0 ? "prev" : "next";
+
 							$activeObj.stop(true, true).animate(
 								{"left": "-100%"}
 								, "linear", function () {
