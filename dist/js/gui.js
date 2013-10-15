@@ -826,6 +826,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				that._saveTarget(e);
 			});
 			$(document).on("mousemove",function (e) {
+				e.stopPropagation();
 				that._refreshPosition(e);
 			});
 			$(document).on("mouseup",function (e) {
@@ -1366,22 +1367,22 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         _recalMonthFactory: function (cal) {
             var curMonth = this._getNewDate().month;
             if (cal === 1) {
-                if (curMonth < 11) {
+                if (curMonth < 12) {
                     this._setNewDate('month', curMonth + 1);
                 } else {
-                    this._setNewDate('month', 0);
+                    this._setNewDate('month', 1);
                 }
             } else if (cal === -1) {
-                if (curMonth > 0) {
+                if (curMonth > 1) {
                     this._setNewDate('month', curMonth - 1);
                 } else {
-                    this._setNewDate('month', 11);
+                    this._setNewDate('month', 12);
                 }
             }
         },
         _calTitle: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month + 1,
+                curMonth = this._getNewDate().month,
                 titleformat = curYear + ' ' + curMonth + '月';
 
             return titleformat;
@@ -1473,7 +1474,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         },
         _setInputVal: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month + 1,
+                curMonth = this._getNewDate().month,
                 curDate = this._getNewDate().date;
 
             var spliter = this.defaults.dateSpliter;

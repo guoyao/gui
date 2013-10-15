@@ -59,23 +59,5 @@ $(function (undefined) {
 
 	});
 
-	test("check date picker title" , function(){
-
-		$(".datepicker_demo").trigger("focus");
-
-		var today = new Date();
-
-		var monthOfToday = today.getMonth() + 1;
-
-		var yearOfToday = today.getFullYear();
-
-		var dateTitle = yearOfToday.toString() + ' ' + monthOfToday.toString() + '月';
-
-		var x = 
-
-		console.log(today.getMonth(0))
-
-		equal(dateTitle, $(".gui-date-picker").find(".gui-date-title").text() , "check date picker title")
-
-	});
+	
 });

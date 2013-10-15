@@ -2577,6 +2577,18 @@ th {
   display: none;
 }
 
+.carousel .carousel-inner .item .carousel-text {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  line-height: 100px;
+  color: white;
+  text-align: center;
+  background: black;
+  opacity: 0.8;
+}
+
 .carousel .carousel-inner .active {
   position: relative;
   left: 0;

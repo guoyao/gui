@@ -108,6 +108,7 @@
 				that._saveTarget(e);
 			});
 			$(document).on("mousemove",function (e) {
+				e.stopPropagation();
 				that._refreshPosition(e);
 			});
 			$(document).on("mouseup",function (e) {
