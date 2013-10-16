@@ -14,8 +14,8 @@
         _init: function (obj, option) {
             this.obj = obj;
             this._initOptions(option);
-            this._initNewDate();
-            this._getNewDate();
+            //this._initNewDate();
+            //this._getNewDate();
             this._appendElem();
             this._initDatePickerPos();
             this._eventHandler();
@@ -34,13 +34,13 @@
                 return true;
             }
         },
-        _initNewDate: function () {
+        /*_initNewDate: function () {
             var initNewDate = this.defaults.initNewDate;
 
             this._setNewDate('setFullYear', initNewDate.getFullYear());
             this._setNewDate('setMonth', initNewDate.getMonth());
             this._setNewDate('setDate', initNewDate.getDate());
-        },
+        },*/
         _setNewDate: function (type, value) {
             this.defaults.initNewDate[type](value);
         },
@@ -111,15 +111,14 @@
         },
         _calFirstDay: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month + 1,
+                curMonth = this._getNewDate().month,
                 curDate = this._getNewDate().date;
 
             return new Date(curYear, curMonth, 1).getDay();
         },
         _calTotalDate: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month + 1,
-                curDate = this._getNewDate().date;
+                curMonth = this._getNewDate().month + 1
 
             return new Date(curYear, curMonth, 0).getDate();
         },
@@ -133,7 +132,6 @@
         },
         _recalMonthFactory: function (cal) {
             var curMonth = this._getNewDate().month;
-            console.log(curMonth < 12 , cal)
 
             if (cal === 1) {
                 if (curMonth < 11) {
@@ -204,13 +202,14 @@
             //get calender interactive button
             $datesObj.on('click', 'a', function (e) {
 
-                var getActiveDate = e.target.innerText;
+                var getActiveDate = $(this).text();
 
                 $mainWrapper
                     .stop(true, true)
                     .fadeOut();
 
-                that._setActiveDate(getActiveDate);
+                //that._setActiveDate(getActiveDate);
+                that._setNewDate("setDate",getActiveDate);
                 that._setInputVal();
             });
 
@@ -235,12 +234,13 @@
                 that._highlightToday();
             });
         },
+        //rm
         _setActiveDate: function (num) {
             this._setNewDate('date', parseInt(num, 10));
         },
         _setInputVal: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month,
+                curMonth = this._getNewDate().month + 1,
                 curDate = this._getNewDate().date;
 
             var spliter = this.defaults.dateSpliter;
@@ -269,25 +269,27 @@
             }
         },
         _appendElem: function () {
-            $('<div class="gui-date-picker">' +
-                '<div class="gui-date-header">' +
-                '<a class="gui-date-py-btn">&lt;&lt;</a>' +
-                '<a class="gui-date-ny-btn">&gt;&gt;</a>' +
-                '<a class="gui-date-pm-btn">&lt;</a>' +
-                '<a class="gui-date-nm-btn">&gt;</a>' +
-                '<div class="gui-date-title"></div>' +
-                '</div>' +
-                '<table class="gui-date-calender">' +
-                '<thead class="gui-date-week">' +
-                '<tr></tr>' +
-                '</thead>' +
-                '<tbody class="gui-date-dates">' +
-                '<tr></tr>' +
-                '</tbody>' +
-                '</table>' +
-                '</div>').insertAfter($(this.obj));
+            if($(this.obj).next(".gui-date-picker").length === 0){
+                $('<div class="gui-date-picker">' +
+                    '<div class="gui-date-header">' +
+                    '<a class="gui-date-py-btn">&lt;&lt;</a>' +
+                    '<a class="gui-date-ny-btn">&gt;&gt;</a>' +
+                    '<a class="gui-date-pm-btn">&lt;</a>' +
+                    '<a class="gui-date-nm-btn">&gt;</a>' +
+                    '<div class="gui-date-title"></div>' +
+                    '</div>' +
+                    '<table class="gui-date-calender">' +
+                    '<thead class="gui-date-week">' +
+                    '<tr></tr>' +
+                    '</thead>' +
+                    '<tbody class="gui-date-dates">' +
+                    '<tr></tr>' +
+                    '</tbody>' +
+                    '</table>' +
+                    '</div>').insertAfter($(this.obj));
 
-            this._addWeekTitle();
+                this._addWeekTitle();
+            }
         },
         _addWeekTitle: function () {
             var weekTitle = this.defaults.weekTitle;

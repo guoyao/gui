@@ -1247,12 +1247,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         _init: function (obj, option) {
             this.obj = obj;
             this._initOptions(option);
-            this._initNewDate();
-            this._getNewDate();
-            //this._setNowHighlight();
+            //this._initNewDate();
+            //this._getNewDate();
             this._appendElem();
             this._initDatePickerPos();
-            //this._iptFocus();
             this._eventHandler();
         },
         _initOptions: function (option) {
@@ -1269,30 +1267,19 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 return true;
             }
         },
-        _initNewDate: function () {
+        /*_initNewDate: function () {
             var initNewDate = this.defaults.initNewDate;
 
             this._setNewDate('setFullYear', initNewDate.getFullYear());
             this._setNewDate('setMonth', initNewDate.getMonth());
             this._setNewDate('setDate', initNewDate.getDate());
-        },
+        },*/
         _setNewDate: function (type, value) {
-            //$(this.obj).data(type, value);
-            //this.defaults.initNewDate = ;
-            //this.defaults.initNewDate.setMonth(1)
-
-            //var curDate = this.defaults.initNewDate;
-
             this.defaults.initNewDate[type](value);
-
-            //console.log(this.defaults.initNewDate.getMonth());
         },
         _getNewDate: function () {
             var curDate = this.defaults.initNewDate;
             var date = {};
-            //date.year = $(this.obj).data('year');
-            //date.month = $(this.obj).data('month');
-            //date.date = $(this.obj).data('date');
 
             date.year = curDate.getFullYear();
             date.month = curDate.getMonth();
@@ -1300,7 +1287,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
             return date;
         },
-        //
         _initDatePickerPos: function () {
             var inputOffset = this._getInputProp(),
                 left = inputOffset.left,
@@ -1358,15 +1344,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         },
         _calFirstDay: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month + 1,
+                curMonth = this._getNewDate().month,
                 curDate = this._getNewDate().date;
 
             return new Date(curYear, curMonth, 1).getDay();
         },
         _calTotalDate: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month + 1,
-                curDate = this._getNewDate().date;
+                curMonth = this._getNewDate().month + 1
 
             return new Date(curYear, curMonth, 0).getDate();
         },
@@ -1380,7 +1365,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         },
         _recalMonthFactory: function (cal) {
             var curMonth = this._getNewDate().month;
-            console.log(curMonth < 12 , cal)
 
             if (cal === 1) {
                 if (curMonth < 11) {
@@ -1408,7 +1392,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             return $title.html(this._calTitle());
         },
         _rerenderCalender: function () {
-            //this._initDatePickerPos();
             this._clearCalender();
             this._appendEmptyCalenderWp();
             this._setCalender();
@@ -1424,7 +1407,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 $prevMonthObj = $mainWrapper.find('.gui-date-pm-btn'),
                 $nextMonthObj = $mainWrapper.find('.gui-date-nm-btn'),
 
-            //dateInputObj = $(this.obj),
                 $datesObj = $mainWrapper.find('.gui-date-dates');
             //prev year
             $prevYearObj.click(function () {
@@ -1453,13 +1435,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             //get calender interactive button
             $datesObj.on('click', 'a', function (e) {
 
-                var getActiveDate = e.target.innerText;
+                var getActiveDate = $(this).text();
 
                 $mainWrapper
                     .stop(true, true)
                     .fadeOut();
 
-                that._setActiveDate(getActiveDate);
+                //that._setActiveDate(getActiveDate);
+                that._setNewDate("setDate",getActiveDate);
                 that._setInputVal();
             });
 
@@ -1472,7 +1455,6 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             })
 
             $(this.obj).on("focus", function (e) {
-                //that.obj = $(e.target);
                 that._rerenderCalender();
 
                 $('.gui-date-picker').fadeOut();
@@ -1485,12 +1467,13 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
                 that._highlightToday();
             });
         },
+        //rm
         _setActiveDate: function (num) {
             this._setNewDate('date', parseInt(num, 10));
         },
         _setInputVal: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month,
+                curMonth = this._getNewDate().month + 1,
                 curDate = this._getNewDate().date;
 
             var spliter = this.defaults.dateSpliter;
@@ -1519,27 +1502,27 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
             }
         },
         _appendElem: function () {
-            //if($('.' + this.defaults.mainWrapper).length === 0){
-            $('<div class="gui-date-picker">' +
-                '<div class="gui-date-header">' +
-                '<a class="gui-date-py-btn">&lt;&lt;</a>' +
-                '<a class="gui-date-ny-btn">&gt;&gt;</a>' +
-                '<a class="gui-date-pm-btn">&lt;</a>' +
-                '<a class="gui-date-nm-btn">&gt;</a>' +
-                '<div class="gui-date-title"></div>' +
-                '</div>' +
-                '<table class="gui-date-calender">' +
-                '<thead class="gui-date-week">' +
-                '<tr></tr>' +
-                '</thead>' +
-                '<tbody class="gui-date-dates">' +
-                '<tr></tr>' +
-                '</tbody>' +
-                '</table>' +
-                '</div>').insertAfter($(this.obj));
+            if($(this.obj).next(".gui-date-picker").length === 0){
+                $('<div class="gui-date-picker">' +
+                    '<div class="gui-date-header">' +
+                    '<a class="gui-date-py-btn">&lt;&lt;</a>' +
+                    '<a class="gui-date-ny-btn">&gt;&gt;</a>' +
+                    '<a class="gui-date-pm-btn">&lt;</a>' +
+                    '<a class="gui-date-nm-btn">&gt;</a>' +
+                    '<div class="gui-date-title"></div>' +
+                    '</div>' +
+                    '<table class="gui-date-calender">' +
+                    '<thead class="gui-date-week">' +
+                    '<tr></tr>' +
+                    '</thead>' +
+                    '<tbody class="gui-date-dates">' +
+                    '<tr></tr>' +
+                    '</tbody>' +
+                    '</table>' +
+                    '</div>').insertAfter($(this.obj));
 
-            this._addWeekTitle();
-            //}
+                this._addWeekTitle();
+            }
         },
         _addWeekTitle: function () {
             var weekTitle = this.defaults.weekTitle;
