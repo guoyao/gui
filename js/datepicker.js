@@ -16,10 +16,8 @@
             this._initOptions(option);
             this._initNewDate();
             this._getNewDate();
-            //this._setNowHighlight();
             this._appendElem();
             this._initDatePickerPos();
-            //this._iptFocus();
             this._eventHandler();
         },
         _initOptions: function (option) {
@@ -39,21 +37,23 @@
         _initNewDate: function () {
             var initNewDate = this.defaults.initNewDate;
 
-            this._setNewDate('year', initNewDate.getFullYear());
-            this._setNewDate('month', initNewDate.getMonth());
-            this._setNewDate('date', initNewDate.getDate());
+            this._setNewDate('setFullYear', initNewDate.getFullYear());
+            this._setNewDate('setMonth', initNewDate.getMonth());
+            this._setNewDate('setDate', initNewDate.getDate());
         },
         _setNewDate: function (type, value) {
-            $(this.obj).data(type, value);
+            this.defaults.initNewDate[type](value);
         },
         _getNewDate: function () {
+            var curDate = this.defaults.initNewDate;
             var date = {};
-            date.year = $(this.obj).data('year');
-            date.month = $(this.obj).data('month');
-            date.date = $(this.obj).data('date');
+
+            date.year = curDate.getFullYear();
+            date.month = curDate.getMonth();
+            date.date = curDate.getDate();
+
             return date;
         },
-        //
         _initDatePickerPos: function () {
             var inputOffset = this._getInputProp(),
                 left = inputOffset.left,
@@ -111,14 +111,14 @@
         },
         _calFirstDay: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month,
+                curMonth = this._getNewDate().month + 1,
                 curDate = this._getNewDate().date;
 
             return new Date(curYear, curMonth, 1).getDay();
         },
         _calTotalDate: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month,
+                curMonth = this._getNewDate().month + 1,
                 curDate = this._getNewDate().date;
 
             return new Date(curYear, curMonth, 0).getDate();
@@ -126,30 +126,32 @@
         _recalYearFactory: function (cal) {
             var curYear = this._getNewDate().year;
             if (cal === 1) {
-                this._setNewDate('year', curYear + 1);
+                this._setNewDate('setFullYear', curYear + 1);
             } else if (cal === -1) {
-                this._setNewDate('year', curYear - 1);
+                this._setNewDate('setFullYear', curYear - 1);
             }
         },
         _recalMonthFactory: function (cal) {
             var curMonth = this._getNewDate().month;
+            console.log(curMonth < 12 , cal)
+
             if (cal === 1) {
-                if (curMonth < 12) {
-                    this._setNewDate('month', curMonth + 1);
+                if (curMonth < 11) {
+                    this._setNewDate('setMonth', curMonth + 1);
                 } else {
-                    this._setNewDate('month', 1);
+                    this._setNewDate('setMonth', 0);
                 }
             } else if (cal === -1) {
-                if (curMonth > 1) {
-                    this._setNewDate('month', curMonth - 1);
+                if (curMonth > 0) {
+                    this._setNewDate('setMonth', curMonth - 1);
                 } else {
-                    this._setNewDate('month', 12);
+                    this._setNewDate('setMonth', 11);
                 }
             }
         },
         _calTitle: function () {
             var curYear = this._getNewDate().year,
-                curMonth = this._getNewDate().month,
+                curMonth = this._getNewDate().month + 1,
                 titleformat = curYear + ' ' + curMonth + '月';
 
             return titleformat;
@@ -159,7 +161,6 @@
             return $title.html(this._calTitle());
         },
         _rerenderCalender: function () {
-            //this._initDatePickerPos();
             this._clearCalender();
             this._appendEmptyCalenderWp();
             this._setCalender();
@@ -175,7 +176,6 @@
                 $prevMonthObj = $mainWrapper.find('.gui-date-pm-btn'),
                 $nextMonthObj = $mainWrapper.find('.gui-date-nm-btn'),
 
-            //dateInputObj = $(this.obj),
                 $datesObj = $mainWrapper.find('.gui-date-dates');
             //prev year
             $prevYearObj.click(function () {
@@ -223,7 +223,6 @@
             })
 
             $(this.obj).on("focus", function (e) {
-                //that.obj = $(e.target);
                 that._rerenderCalender();
 
                 $('.gui-date-picker').fadeOut();
@@ -270,7 +269,6 @@
             }
         },
         _appendElem: function () {
-            //if($('.' + this.defaults.mainWrapper).length === 0){
             $('<div class="gui-date-picker">' +
                 '<div class="gui-date-header">' +
                 '<a class="gui-date-py-btn">&lt;&lt;</a>' +
@@ -290,7 +288,6 @@
                 '</div>').insertAfter($(this.obj));
 
             this._addWeekTitle();
-            //}
         },
         _addWeekTitle: function () {
             var weekTitle = this.defaults.weekTitle;

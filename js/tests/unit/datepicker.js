@@ -49,7 +49,7 @@ $(function (undefined) {
 
 		var today = new Date();
 
-		var monthOfToday = today.getMonth() + 1;
+		var monthOfToday = today.getMonth();
 
 		var yearOfToday = today.getFullYear();
 
