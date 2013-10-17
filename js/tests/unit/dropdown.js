@@ -5,7 +5,8 @@ $(function (undefined) {
 
     var $testobj = $('<div class="dropdown">' +
         '<a class="dropdown-toggle">' +
-        'Action' +
+        '<span>Action</span>' +
+        '<b class="caret"></b>' +
         '</a>' +
         '<ul class="dropdown-list">' +
         '<li class="default"><a>111</a></li>' +
@@ -20,7 +21,7 @@ $(function (undefined) {
             $(".dropdown").guiDropdown();
         },
         teardown: function () {
-
+            $testobj.remove();
         }
     });
 
@@ -41,11 +42,12 @@ $(function (undefined) {
 
     test("set default list text", function () {
 
-        var defaultTxt = $(".dropdown").find(".dropdown-list .default a").text();
+            var defaultTxt = $(".dropdown").find(".dropdown-list .default a").text();
 
-        var toggleTxt = $(".dropdown").find(".dropdown-toggle").text();
+            var toggleTxt = $(".dropdown").find(".dropdown-toggle span").text();
 
-        equal(defaultTxt, toggleTxt, "should be the same text");
+            equal(defaultTxt, toggleTxt, "should be the same text");
+        
     });
 
     test("trigger click on toggle", function () {
@@ -70,5 +72,22 @@ $(function (undefined) {
 
         equal(curTxt, toggleTxt, "should be the same text")
         ok(list.is(":not(:visible)"), "dropdown list should disappear");
+    });
+
+    test("highlight option when mouse hover", function () {
+
+        $(".dropdown").find(".dropdown-toggle").trigger("click.gui.dropdown.data-api");
+
+        var $list = $(".dropdown").find(".dropdown-list li").eq(1);
+
+        var $option = $list.find("a");
+
+        $option.trigger("mouseover");
+
+        ok($list.hasClass("active") , "should add class active");
+
+        $option.trigger("mouseout");
+
+        ok(!$list.hasClass("active") , "should remove class active");
     });
 });

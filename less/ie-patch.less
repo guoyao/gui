@@ -142,6 +142,8 @@
 // --------------------------------------------------
 .pagination {
   ul {
+    *display: inline;
+    *zoom:1;
     li.first {
       a {
         border-width: 1px;
@@ -457,3 +459,51 @@ a.active {
     _border-color: @heading-border;
   }
 }
+
+//
+// Dropdown
+// --------------------------------------------------
+.dropdown {
+  *display:inline;
+  *zoom:1;
+  .dropdown-toggle {
+    .caret {
+      _border-color:tomato;
+      _filter:chroma(color=tomato);
+      _border-top-color:black;
+    }
+  }
+}
+
+
+//
+// Tooltip
+// --------------------------------------------------
+.tooltip {
+  .tooltip-inner {
+    _width:200px;
+    _overflow:auto;
+  }
+  .top , .right , .bottom , .left {
+      _border-color:tomato;
+      _filter:chroma(color=tomato);
+  }
+  .top {
+      _border-top-color: black;
+  }
+  .right {
+      _border-right-color: black;
+  }
+  .bottom {
+      _border-bottom-color: black;
+  }
+  .left {
+      _border-left-color: black;
+  }
+}
+    
+    
+    
+    
+   
+    

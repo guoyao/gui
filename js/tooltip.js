@@ -12,7 +12,8 @@
 
 	Module.prototype = {
 		_init: function (obj, option) {
-				this.obj = obj;
+			this.obj = obj;
+			this._initOptions();
 			this._eventHandler();
 		},
 		_initOptions: function (option) {
@@ -43,14 +44,14 @@
 			});
 		},
 		_judgeTooltipNode: function (e) {
-			return $(e.target).next('.tooltip').length === 0;
+			return $(this.obj).next('.tooltip').length === 0;
 		},
 		_appendTooltip: function (e) {
 
 			var direction;
 
-			if ($(e.target).attr("data-placement") !== undefined) {
-				direction = $(e.target).attr("data-placement");
+			if ($(this.obj).attr("data-placement") !== undefined) {
+				direction = $(this.obj).attr("data-placement");
 			} else {
 				direction = "top";
 			}
@@ -78,15 +79,15 @@
 		_calTooltipPos: function (e, tooltipEle) {
 			var parentOffset = $(this.obj).offsetParent().offset();
 
-			var targetOffset = $(e.target).offset();
+			var targetOffset = $(this.obj).offset();
 
-			var tooltipOrgEleWidth = $(e.target).outerWidth();
-			var tooltipOrgEleHeight = $(e.target).outerHeight();
+			var tooltipOrgEleWidth = $(this.obj).outerWidth();
+			var tooltipOrgEleHeight = $(this.obj).outerHeight();
 
 			var w = tooltipEle.outerWidth();
 			var h = tooltipEle.outerHeight();
 
-			var direction = $(e.target).attr('data-placement');
+			var direction = $(this.obj).attr('data-placement');
 
 			var calculatedLeft,
 				calculatedTop;

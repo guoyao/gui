@@ -724,20 +724,23 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		gui = window.gui,
 		old = $.fn.guiSlider;
 
-	var module = {
+	var Module = function (obj, option) {
+        this._init(obj, option);
+    }
+
+	Module.prototype = {
+		curTarget: {},
+		//index: [],
 		_init: function (obj, option) {
-			this._mergeOptions(option);
-			this._initVaribles(obj);
+			this.obj = obj;
+			this._initOptions(option);
+			//this._initVaribles(obj);//this.rangeSelectorBar = $(this.obj).find("." + this.defaults.rangeBarClass);
 			this._initNodeWrapper();
 			this._initFetchData();
 		},
-		_mergeOptions: function (option) {
+		_initOptions: function (option) {
 			this.defaults = $.extend({}, $.fn.guiSlider.defaults, option);
 		},
-		//_sliceSelectorSymbol: function (name) {
-		//var reg = /[.#]*/;
-		//return name = name.replace(reg, '');
-		//},
 		_initFetchData: function () {
 			if (this.defaults.remote.url !== undefined) {
 				$.ajax({
@@ -759,34 +762,25 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		_initElements: function () {
 			this._initBtns();
 			this._calculateMoveDistance();
-			this._eventCapture();
 			this._renderRangeBar();
 			this._initAddIndicatorText();
-		},
-		curTarget: {},
-		index: [],
-		_initVaribles: function (obj) {
-			this.obj = obj;
-			if (this.defaults.rangeBar) {
-				this.rangeSelectorBar = this.obj.find("." + this.defaults.rangeBarClass);
-			}
+			this._eventHandler();
 		},
 		_initNodeWrapper: function () {
-			$('<div class="' + this.defaults.btnWrapperClass + '"></div>').appendTo(this.obj);
+			$('<div class="slider-btn-wrapper"></div>').appendTo(this.obj);
 			if (this.defaults.indicatorText) {
-				$('<div class="' + this.defaults.indicatorTextClass + '"></div>').appendTo(this.obj);
+				$('<div class="slider-range-indicator"></div>').appendTo(this.obj);
 			}
 		},
 		_initBtns: function () {
+			this.index = [];
 			for (var i = 0; i < this.defaults.btns.length; i++) {
 				this.index[i] = (this.defaults.btns[i] === 'max') ? this.defaults.data.indicatordata.length - 1 : this.defaults.btns[i];
 
-				$('<a class="' + this.defaults.btnClass + '"></a>')
-					.appendTo($("." + this.defaults.btnWrapperClass))
+				$('<a class="btn"></a>')
+					.appendTo($(this.obj).find(".slider-btn-wrapper"))
 					.css({
 						"left": this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%",
-						"width": this.defaults.btnSize.width,
-						"height": this.defaults.btnSize.height,
 						"margin-left": -(this.defaults.btnSize.width / 4),
 						"margin-top": -(this.defaults.btnSize.height / 4)
 					});
@@ -796,47 +790,47 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			if (this.defaults.indicatorText) {
 				for (var i = 0; i < this.defaults.data.indicatordata.length; i++) {
 					$('<span>' + this.defaults.data.indicatordata[i] + '</span>')
-						.appendTo($("." + this.defaults.indicatorTextClass))
+						.appendTo($(this.obj).find(".slider-range-indicator"))
 						.css({
 							"left": i / (this.defaults.data.indicatordata.length - 1) * 100 + "%",
-							"margin-left": -$("." + this.defaults.indicatorTextClass)
-								.find('span')
+							"margin-left": -$(this.obj).find(".slider-range-indicator span")
 								.eq(i)
 								.width()
 								/ 2 +
-								$("." + this.defaults.btnWrapperClass)
-									.find("." + this.defaults.btnClass)
+								$(this.obj)
+									.find(".btn")
 									.outerWidth()
 									/ 4
 						});
 				}
-				if (parseInt($("." + this.defaults.indicatorTextClass).find("span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $("." + this.defaults.rangeBarClass).outerWidth()) {
+				//console.log(parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length , $(this.obj).find(".slider-btn-wrapper").outerWidth())
+				if (parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $(this.obj).find(".slider-btn-wrapper").outerWidth()) {
 					for (var j = 0; j < this.defaults.data.indicatordata.length; j++) {
 						if (j % 2 === 0) {
-							$("." + this.defaults.indicatorTextClass)
-								.find("span")
+							$(this.obj).find(".slider-range-indicator span")
 								.eq(j)
 								.css({
-									"top": $("." + this.defaults.indicatorTextClass)
-										.find("span")
-										.height()
+									"top": $(this.obj).find(".slider-range-indicator span").height()
 								});
 						}
 					}
 				}
 			}
 		},
-		_eventCapture: function () {
-			var slider = this;
-			$("." + this.defaults.btnWrapperClass).on("mousedown",function (e) {
+		_eventHandler: function () {
+			var that = this;
+
+			$(this.obj).find(".slider-btn-wrapper").on("mousedown",function(e){
 				e.preventDefault();
-				slider._saveTarget(e);
+
+				that._saveTarget(e);
 			});
 			$(document).on("mousemove",function (e) {
-				slider._refreshPosition(e);
+				e.stopPropagation();
+				that._refreshPosition(e);
 			});
 			$(document).on("mouseup",function (e) {
-				slider._destroyTarget();
+				that._destroyTarget();
 			});
 		},
 		_checkMoveStep: function () {
@@ -852,7 +846,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			}
 		},
 		_calculateMoveDistance: function () {
-			this.moveDistance = (parseInt($("." + this.defaults.btnWrapperClass).width(), 10)) / (this.defaults.data.indicatordata.length - 1);
+			this.moveDistance = (parseInt($(this.obj).find(".slider-btn-wrapper").width(), 10)) / (this.defaults.data.indicatordata.length - 1);
 			this.moveDistance = Math.round(this.moveDistance);
 		},
 		_refreshPosition: function (e) {
@@ -878,20 +872,20 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		_renderRangeBar: function () {
 			if (this.defaults.rangeBar) {
-				if ($("." + this.defaults.btnWrapperClass).find("." + this.defaults.rangeBarClass).length <= 0) {
-					$('<a class="' + this.defaults.rangeBarClass + '"></a>').appendTo($("." + this.defaults.btnWrapperClass));
+				if ($(this.obj).find(".slider-range-button").length <= 0) {
+					$('<a class="slider-range-button"></a>').appendTo($(this.obj).find(".slider-btn-wrapper"));
 				}
 				this._refreshRangeBarPosition();
 			}
 		},
 		_refreshRangeBarPosition: function (e) {
 			var btnLeft = [];
-			if (this.curTarget.className === this.defaults.rangeBarClass) {
+			if (this.curTarget.className === "slider-range-button") {
 				if (this._calculateMoveDirection() === 1 && this._checkRangeBarMoveRange()) {
 					for (var i = 0; i < this.index.length; i++) {
 						this.index[i] += this.defaults.step;
-						$("." + this.defaults.btnWrapperClass)
-							.find("." + this.defaults.btnClass)
+						$(this.obj)
+							.find(".btn")
 							.eq(i)
 							.css({"left": (this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 					}
@@ -899,7 +893,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 				} else if (this._calculateMoveDirection() === -1 && this._checkRangeBarMoveRange()) {
 					for (var j = 0; j < this.index.length; j++) {
 						this.index[j] -= this.defaults.step;
-						$("." + this.defaults.btnWrapperClass)
+						$(this.obj)
 							.find("." + this.defaults.btnClass)
 							.eq(j)
 							.css({"left": (this.index[j] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
@@ -907,16 +901,15 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 					this.orgX = this.curX;
 				}
 			}
-			for (var k = 0; k < $("." + this.defaults.btnWrapperClass).find("." + this.defaults.btnClass).length; k++) {
-				btnLeft.push(parseInt($("." + this.defaults.btnWrapperClass)
+			for (var k = 0; k < $(this.obj).find(".btn").length; k++) {
+				btnLeft.push(parseInt($(this.obj)
 					.find("." + this.defaults.btnClass)
-					.eq(k)
-					.css("left")
-					, 10));
+					.get(k)
+					.style.left,10) / 100 * parseInt($(this.obj).find(".slider-btn-wrapper").css("width"),10));
 			}
 			var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
-			$("." + this.defaults.btnWrapperClass)
-				.find("." + this.defaults.rangeBarClass)
+			$(this.obj)
+				.find(".slider-range-button")
 				.css({'width': rangeBar,
 					'left': btnLeft[0] - btnLeft[1] > 0 ? btnLeft[1] + this.defaults.btnSize.width / 4 : btnLeft[0] + this.defaults.btnSize.width / 4});
 		},
@@ -941,21 +934,21 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		_saveTarget: function (e) {
 			this.curTarget = e.target;
 			this.orgX = e.pageX;
+
 			//this.curOffset = parseInt(e.target.style.left, 10);
 		},
-		_checkTarget: function (e) {
+		/*_checkTarget: function (e) {
 			return this.curTarget === e.target;
-		},
+		},*/
 		_destroyTarget: function () {
-			this.curTarget = "";
+			this.curTarget = {};
 		}
 	}
 
 	$.fn.guiSlider = function (option) {
-
-		module._init(this, option);
-
-		return this;
+		return this.each(function () {
+            new Module(this, option);
+        });
 	}
 
 	$.fn.guiSlider.defaults = {
@@ -967,9 +960,9 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			height: 30
 		},
 		rangeBar: true,
-		rangeBarClass: 'slider-range-button',
+		/*rangeBarClass: 'slider-range-button',
 		btnWrapperClass: 'slider-btn-wrapper',
-		indicatorTextClass: 'slider-range-indicator',
+		indicatorTextClass: 'slider-range-indicator',*/
 		indicatorText: true,
 		data: {
 			indicatordata: []
@@ -977,13 +970,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		remote: {}//'type':'POST','url':'','data':'','dataType':'JSON'
 	}
 
+	$.fn.guiSlider.Constructor = Module;
+
 	$.fn.guiSlider.noConflict = function () {
 		$.fn.guiSlider = old;
 		return this;
 	};
-
-	//for debug
-	$.fn.guiSlider.debug = module;
 
 })(window);
 (function (window, undefined) {
@@ -1240,330 +1232,330 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 (function (window, undefined) {
-	"use strict";
+    "use strict";
 
-	var console = window.console,
-		$ = window.jQuery,
-		gui = window.gui,
-		old = $.fn.guiDatePicker;
+    var console = window.console,
+        $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiDatePicker;
 
-	var module = {
-		_init:function(obj,option){
-			this.obj = obj;
-			this._initOptions(option);
-			this._initNewDate();
-			this._getNewDate();
-			//this._setNowHighlight();
-			this._appendElem();
-			this._iptFocus();
-		},
-		_calNowHighlight : function(){
-			var now = new Date(),
-				nowYear = now.getFullYear(),
-				nowMonth = now.getMonth();
-			var objCur = this._getNewDate();
-			var objCurYear = objCur.year,
-				objCurMonth = objCur.month;
-			if(nowYear == objCurYear && nowMonth == objCurMonth){
-				return true;
-			}
-		},
-		_initOptions:function(option){
-			this.defaults = $.extend({},$.fn.guiDatePicker.defaults,option);
-		},
-		_initNewDate :function(){
-			var initNewDate = this.defaults.initNewDate;
-			
-			this._setNewDate('year',initNewDate.getFullYear());
-			this._setNewDate('month',initNewDate.getMonth());
-			this._setNewDate('date',initNewDate.getDate());
-		},
-		_setNewDate : function(type,value){
-			this.obj.data(type,value);
-		},
-		_getNewDate : function(){
-			var date = {};
-				date.year = $(this.obj).data('year');
-				date.month = $(this.obj).data('month');
-				date.date = $(this.obj).data('date');
-			return date;
-		},
-		_initDatePickerPos : function(){
-			var inputOffset = this._getInputProp(),
-				left = inputOffset.left,
-				top = inputOffset.top + inputOffset.h;
+    var Module = function (obj, option) {
+        this._init(obj, option);
+    }
 
-			$('.' + this.defaults.mainWrapper)
-				.css({'left' : left,
-						'top' : top
-				})
-		},
-		_getInputProp : function(){
-			var inputNode = $(this.obj) || undefined,
-				prop = [];
-			if(inputNode){
-				prop.left = inputNode.offset().left,
-				prop.top = inputNode.offset().top,
-				prop.h = parseInt(inputNode.outerHeight(),10),
-				prop.w = parseInt(inputNode.outerWidth(),10);
-			}
-			return prop;
-		},
-		_setCalender : function(){
-			var totalDate = this._calTotalDate();
-			var daysPerWeek = 7;
-			var trIndex = 0;
-			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
-			
-			for (var j = 0;j < totalDate; j++){
-				if(datesObj.find("td").length % daysPerWeek === 0){
+    Module.prototype = {
+        _init: function (obj, option) {
+            this.obj = obj;
+            this._initOptions(option);
+            //this._initNewDate();
+            //this._getNewDate();
+            this._appendElem();
+            this._initDatePickerPos();
+            this._eventHandler();
+        },
+        _initOptions: function (option) {
+            this.defaults = $.extend({}, $.fn.guiDatePicker.defaults, option);
+        },
+        _calNowHighlight: function () {
+            var now = new Date(),
+                nowYear = now.getFullYear(),
+                nowMonth = now.getMonth();
+            var objCur = this._getNewDate();
+            var objCurYear = objCur.year,
+                objCurMonth = objCur.month;
+            if (nowYear == objCurYear && nowMonth == objCurMonth) {
+                return true;
+            }
+        },
+        /*_initNewDate: function () {
+         var initNewDate = this.defaults.initNewDate;
 
-					trIndex++;
+         this._setNewDate('setFullYear', initNewDate.getFullYear());
+         this._setNewDate('setMonth', initNewDate.getMonth());
+         this._setNewDate('setDate', initNewDate.getDate());
+         },*/
+        _setNewDate: function (type, value) {
+            this.defaults.initNewDate[type](value);
+        },
+        _getNewDate: function () {
+            var curDate = this.defaults.initNewDate;
+            var date = {};
 
-					$('<tr><td><a>'+ (j + 1) +'</a></td></tr>')
-						.appendTo(datesObj);
+            date.year = curDate.getFullYear();
+            date.month = curDate.getMonth();
+            date.date = curDate.getDate();
 
-				}else{
-					$('<td><a>'+ (j + 1) +'</a></td>')
-						.appendTo(datesObj.find("tr").eq(trIndex));
-				}
-			}
-		},
-		_appendEmptyCalenderWp : function(){
-			var firstDay = this._calFirstDay();
-			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
+            return date;
+        },
+        _initDatePickerPos: function () {
+            var inputOffset = this._getInputProp(),
+                left = inputOffset.left,
+                top = inputOffset.top + inputOffset.h;
 
-			for(var i = 0; i < firstDay; i++){
-				$('<td><span></span></td>')
-					.appendTo(datesObj.find("tr").eq(0));
-			}
-		},
-		_clearCalender : function(){
-			var datesObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates);
-			datesObj.html('<tr></tr>');
-		},
-		_calFirstDay:function(){
-			var curYear = this._getNewDate().year,
-				curMonth = this._getNewDate().month,
-				curDate = this._getNewDate().date;
+            $(this.obj).next('.gui-date-picker')
+                .css({
+                    'left': left,
+                    'top': top
+                })
+        },
+        _getInputProp: function () {
+            var inputNode = $(this.obj) || undefined,
+                prop = [];
+            if (inputNode) {
+                prop.left = inputNode.offset().left,
+                    prop.top = inputNode.offset().top,
+                    prop.h = parseInt(inputNode.outerHeight(), 10),
+                    prop.w = parseInt(inputNode.outerWidth(), 10);
+            }
+            return prop;
+        },
+        _setCalender: function () {
+            var totalDate = this._calTotalDate();
+            var daysPerWeek = 7;
+            var trIndex = 0;
+            var datesObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates');
 
-			return new Date(curYear,curMonth,1).getDay();
-		},
-		_calTotalDate:function(){
-			var curYear = this._getNewDate().year,
-				curMonth = this._getNewDate().month,
-				curDate = this._getNewDate().date;
+            for (var j = 0; j < totalDate; j++) {
+                if (datesObj.find("td").length % daysPerWeek === 0) {
 
-			return new Date(curYear,curMonth,0).getDate();
-		},
-		_recalYearFactory:function(cal){
-			var curYear = this._getNewDate().year;
-			if(cal === 1){
-				this._setNewDate('year',curYear + 1);
-			}else if(cal === -1){
-				this._setNewDate('year',curYear - 1);
-			}
-		},
-		_recalMonthFactory:function(cal){
-			var curMonth = this._getNewDate().month;
-			if(cal === 1){
-				if(curMonth < 11){
-					this._setNewDate('month',curMonth + 1);
-				}else{
-					this._setNewDate('month',0);
-				}
-			}else if(cal === -1){
-				if(curMonth > 0){
-					this._setNewDate('month',curMonth - 1);
-				}else{
-					this._setNewDate('month',11);
-				}
-			}
-		},
-		_calTitle:function(){
-			var curYear = this._getNewDate().year,
-				curMonth = this._getNewDate().month + 1,
-				titleformat = curYear + '\n' + curMonth + '月';
+                    trIndex++;
 
-			return titleformat;
-		},
-		_setTitle:function(){
-			var title = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.title);
-			return title.html(this._calTitle());
-		},
-		_rerenderCalender : function(){
-			this._initDatePickerPos();
-			this._clearCalender();
-			this._appendEmptyCalenderWp();
-			this._setCalender();
-			this._highlightToday();
-			this._setTitle();
-		},
-		_iptFocus :function(){
-			var mo = this,
-				dateInputObj = $(this.obj);
+                    $('<tr><td><a>' + (j + 1) + '</a></td></tr>')
+                        .appendTo(datesObj);
 
-			dateInputObj.focus(function(e){
-				mo.obj = $(e.target);
-				mo._rerenderCalender();
-				$('.' + mo.defaults.mainWrapper)
-					.stop(true,true)
-					.fadeIn();
-				//mo.obj = $(e.target);
-				mo._highCurLightDate();
-				mo._highlightToday();
-			});
-		},
-		_eventHandler:function(){
-			var mo = this,
-				mainWrapper = $('.' + this.defaults.mainWrapper),
-				prevYearObj = mainWrapper.find('.' + this.defaults.prevYearBtn),
-				nextYearObj = mainWrapper.find('.' + this.defaults.nextYearBtn),
+                } else {
+                    $('<td><a>' + (j + 1) + '</a></td>')
+                        .appendTo(datesObj.find("tr").eq(trIndex));
+                }
+            }
+        },
+        _appendEmptyCalenderWp: function () {
+            var firstDay = this._calFirstDay();
+            var datesObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates');
 
-				prevMonthObj = mainWrapper.find('.' + this.defaults.prevMonthBtn),
-				nextMonthObj = mainWrapper.find('.' + this.defaults.nextMonthBtn),
+            for (var i = 0; i < firstDay; i++) {
+                $('<td><span></span></td>')
+                    .appendTo(datesObj.find("tr").eq(0));
+            }
+        },
+        _clearCalender: function () {
+            var datesObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates');
+            datesObj.html('<tr></tr>');
+        },
+        _calFirstDay: function () {
+            var curYear = this._getNewDate().year,
+                curMonth = this._getNewDate().month,
+                curDate = this._getNewDate().date;
 
-				//dateInputObj = $(this.obj),
-				datesObj = mainWrapper.find('.' + this.defaults.dates);
-			//prev year
-			prevYearObj.click(function(){
+            return new Date(curYear, curMonth, 1).getDay();
+        },
+        _calTotalDate: function () {
+            var curYear = this._getNewDate().year,
+                curMonth = this._getNewDate().month + 1
 
-				mo._recalYearFactory(-1);
-				mo._rerenderCalender();
-			});
-			//next year
-			nextYearObj.click(function(){
+            return new Date(curYear, curMonth, 0).getDate();
+        },
+        _recalYearFactory: function (cal) {
+            var curYear = this._getNewDate().year;
+            if (cal === 1) {
+                this._setNewDate('setFullYear', curYear + 1);
+            } else if (cal === -1) {
+                this._setNewDate('setFullYear', curYear - 1);
+            }
+        },
+        _recalMonthFactory: function (cal) {
+            var curMonth = this._getNewDate().month;
 
-				mo._recalYearFactory(1);
-				mo._rerenderCalender();
-			});
-			//prev month
-			prevMonthObj.click(function(){
+            if (cal === 1) {
+                if (curMonth < 11) {
+                    this._setNewDate('setMonth', curMonth + 1);
+                } else {
+                    this._setNewDate('setMonth', 0);
+                }
+            } else if (cal === -1) {
+                if (curMonth > 0) {
+                    this._setNewDate('setMonth', curMonth - 1);
+                } else {
+                    this._setNewDate('setMonth', 11);
+                }
+            }
+        },
+        _calTitle: function () {
+            var curYear = this._getNewDate().year,
+                curMonth = this._getNewDate().month + 1,
+                titleformat = curYear + ' ' + curMonth + '月';
 
-				mo._recalMonthFactory(-1);
-				mo._rerenderCalender();
-			});
-			//next month
-			nextMonthObj.click(function(){
+            return titleformat;
+        },
+        _setTitle: function () {
+            var $title = $(this.obj).next('.gui-date-picker').find('.gui-date-title');
+            return $title.html(this._calTitle());
+        },
+        _rerenderCalender: function () {
+            this._clearCalender();
+            this._appendEmptyCalenderWp();
+            this._setCalender();
+            this._highlightToday();
+            this._setTitle();
+        },
+        _eventHandler: function () {
+            var that = this,
+                $mainWrapper = $(this.obj).next('.gui-date-picker'),
+                $prevYearObj = $mainWrapper.find('.gui-date-py-btn'),
+                $nextYearObj = $mainWrapper.find('.gui-date-ny-btn'),
 
-				mo._recalMonthFactory(1);
-				mo._rerenderCalender();
-			});
-			//get calender interactive button
-			datesObj.on('click','a',function(e){
-				
-				var getActiveDate = e.target.innerText;
+                $prevMonthObj = $mainWrapper.find('.gui-date-pm-btn'),
+                $nextMonthObj = $mainWrapper.find('.gui-date-nm-btn'),
 
-				mainWrapper
-					.stop(true,true)
-					.fadeOut();
+                $datesObj = $mainWrapper.find('.gui-date-dates');
+            //prev year
+            $prevYearObj.click(function () {
 
-				mo._setActiveDate(getActiveDate);
-				mo._setInputVal();
-			});
-		},
-		_setActiveDate : function(num){
-			this._setNewDate('date',parseInt(num,10));
-		},
-		_setInputVal : function(){
-			var curYear = this._getNewDate().year,
-				curMonth = this._getNewDate().month + 1,
-				curDate = this._getNewDate().date;
+                that._recalYearFactory(-1);
+                that._rerenderCalender();
+            });
+            //next year
+            $nextYearObj.click(function () {
 
-			var spliter = this.defaults.dateSpliter;
+                that._recalYearFactory(1);
+                that._rerenderCalender();
+            });
+            //prev month
+            $prevMonthObj.click(function () {
 
-			var inputVal = curYear + spliter + curMonth + spliter + curDate;
+                that._recalMonthFactory(-1);
+                that._rerenderCalender();
+            });
+            //next month
+            $nextMonthObj.click(function () {
 
-			$(this.obj).val(inputVal);
-		},
-		_highCurLightDate : function(index){
-			var curYear = this._getNewDate().year,
-				curMonth = this._getNewDate().month,
-				curDate = this._getNewDate().date;
-			var firstDay = this._calFirstDay();
-			var tdIndex = curDate + firstDay -1;
-			var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
-			dateObj.eq(tdIndex).addClass(this.defaults.curDateClass);
-		},
-		_highlightToday : function(){
-			if(this._calNowHighlight()){
-				var now = new Date();
-				var nowDate = now.getDate();
-				var firstDay = this._calFirstDay();
-				var tdIndex = nowDate + firstDay - 1;
-				var dateObj = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.dates + ' td');
-				dateObj.eq(tdIndex).addClass(this.defaults.todayClass);
-			}
-		},
-		_appendElem : function(){
-			if($('.' + this.defaults.mainWrapper).length === 0){
-				$('<div class=' + this.defaults.mainWrapper +' style="display:none;position: absolute;">' + 
-					'<div class='+ this.defaults.header +'>' + 
-						'<a class='+ this.defaults.prevYearBtn +'>&lt;&lt;</a>' + 
-						'<a class='+ this.defaults.nextYearBtn +'>&gt;&gt;</a>' + 
-						'<a class='+ this.defaults.prevMonthBtn +'>&lt;</a>' + 
-						'<a class='+ this.defaults.nextMonthBtn +'>&gt;</a>' + 
-						'<div class='+ this.defaults.title +'></div>' + 
-					'</div>' + 
-					'<table class='+ this.defaults.calender +'>' + 
-						'<thead class='+ this.defaults.week +'>'+
-							'<tr></tr>' + 
-						'</thead>' + 
-						'<tbody class='+ this.defaults.dates +'>' + 
-							'<tr></tr>' + 
-						'</tbody>' + 
-					'</table>' + 
-				'</div>').appendTo(this.defaults.topNode);
+                that._recalMonthFactory(1);
+                that._rerenderCalender();
+            });
+            //get calender interactive button
+            $datesObj.on('click', 'a', function (e) {
 
-				this._eventHandler();
+                var getActiveDate = $(this).text();
 
-				this._addWeekTitle();
-			}
-		},
-		_addWeekTitle : function(){
-			var weekTitle = this.defaults.weekTitle;
-			var weekTitleNode = $('.' + this.defaults.mainWrapper).find('.' + this.defaults.week + ' tr');
+                $mainWrapper
+                    .stop(true, true)
+                    .fadeOut();
 
-			for(var i = 0; i < weekTitle.length; i++){
-				$('<th><span>' + weekTitle[i] + '</span></th>').appendTo(weekTitleNode);
-			}
-		}
-	}
-	
-	$.fn.guiDatePicker = function (option) {
-		
-		module._init(this, option);
+                //that._setActiveDate(getActiveDate);
+                that._setNewDate("setDate", getActiveDate);
+                that._setInputVal();
+            });
 
-		return this.each(function(){});
-	}
+            $(document)
+                .on("click", function () {
+                    $('.gui-date-picker').fadeOut();
+                })
+                .on("click", ".gui-date-picker", function (e) {
+                    e.stopPropagation()
+                });
 
-	$.fn.guiDatePicker.defaults = {
-		mainWrapper : "gui-date-picker",
-		nextYearBtn : "gui-date-ny-btn",
-		prevYearBtn : "gui-date-py-btn",
-		title : "gui-date-title",
-		calender : "gui-date-calender",
-		week : "gui-date-week",
-		dates : "gui-date-dates",
-		header : "gui-date-header",
-		prevMonthBtn : "gui-date-pm-btn",
-		nextMonthBtn : "gui-date-nm-btn",
-		curDateClass : "gui-date-current-date",
-		todayClass : "gui-date-today",
-		//dateInput : "gui-date-input",
-		topNode : "body",
-		initNewDate : new Date(),
-		dateSpliter : '-',
-		weekTitle : ['日','一','二','三','四','五','六']
-	}
+            $(this.obj).on("click", function (e) {
+                e.stopPropagation();
+            })
 
-	//for debug
-	$.fn.guiDatePicker.debug = module;
+            $(this.obj).on("focus", function (e) {
+                that._rerenderCalender();
 
-	$.fn.guiDatePicker.noConflict = function () {
-		$.fn.guiDatePicker = old;
-		return this;
-	};
+                $('.gui-date-picker').fadeOut();
+
+                $(that.obj).next('.gui-date-picker')
+                    .stop(true, true)
+                    .fadeIn();
+
+                that._highCurLightDate();
+                that._highlightToday();
+            });
+        },
+        //rm
+        _setActiveDate: function (num) {
+            this._setNewDate('date', parseInt(num, 10));
+        },
+        _setInputVal: function () {
+            var curYear = this._getNewDate().year,
+                curMonth = this._getNewDate().month + 1,
+                curDate = this._getNewDate().date;
+
+            var spliter = this.defaults.dateSpliter;
+
+            var inputVal = curYear + spliter + curMonth + spliter + curDate;
+
+            $(this.obj).val(inputVal);
+        },
+        _highCurLightDate: function (index) {
+            var curYear = this._getNewDate().year,
+                curMonth = this._getNewDate().month,
+                curDate = this._getNewDate().date;
+            var firstDay = this._calFirstDay();
+            var tdIndex = curDate + firstDay - 1;
+            var dateObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates td');
+            dateObj.eq(tdIndex).addClass("gui-date-current-date");
+        },
+        _highlightToday: function () {
+            if (this._calNowHighlight()) {
+                var now = new Date();
+                var nowDate = now.getDate();
+                var firstDay = this._calFirstDay();
+                var tdIndex = nowDate + firstDay - 1;
+                var dateObj = $(this.obj).next('.gui-date-picker').find('.gui-date-dates td');
+                dateObj.eq(tdIndex).addClass("gui-date-today");
+            }
+        },
+        _appendElem: function () {
+            if ($(this.obj).next(".gui-date-picker").length === 0) {
+                $('<div class="gui-date-picker">' +
+                    '<div class="gui-date-header">' +
+                    '<a class="gui-date-py-btn">&lt;&lt;</a>' +
+                    '<a class="gui-date-ny-btn">&gt;&gt;</a>' +
+                    '<a class="gui-date-pm-btn">&lt;</a>' +
+                    '<a class="gui-date-nm-btn">&gt;</a>' +
+                    '<div class="gui-date-title"></div>' +
+                    '</div>' +
+                    '<table class="gui-date-calender">' +
+                    '<thead class="gui-date-week">' +
+                    '<tr></tr>' +
+                    '</thead>' +
+                    '<tbody class="gui-date-dates">' +
+                    '<tr></tr>' +
+                    '</tbody>' +
+                    '</table>' +
+                    '</div>').insertAfter($(this.obj));
+
+                this._addWeekTitle();
+            }
+        },
+        _addWeekTitle: function () {
+            var weekTitle = this.defaults.weekTitle;
+            var weekTitleNode = $(this.obj).next('.gui-date-picker').find('.gui-date-week tr');
+
+            for (var i = 0; i < weekTitle.length; i++) {
+                $('<th><span>' + weekTitle[i] + '</span></th>').appendTo(weekTitleNode);
+            }
+        }
+    }
+
+    $.fn.guiDatePicker = function (option) {
+        return this.each(function () {
+            new Module(this, option);
+        });
+    }
+
+    $.fn.guiDatePicker.defaults = {
+        initNewDate: new Date(),
+        dateSpliter: '-',
+        weekTitle: ['日', '一', '二', '三', '四', '五', '六']
+    }
+
+    $.fn.guiDatePicker.Constructor = Module;
+
+    $.fn.guiDatePicker.noConflict = function () {
+        $.fn.guiDatePicker = old;
+        return this;
+    };
 
 })(window);
 /* ========================================================================
@@ -1695,236 +1687,236 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 
-//
+
 (function (window, undefined) {
-	"use strict";
+    "use strict";
 
-	var console = window.console,
-		$ = window.jQuery,
-		gui = window.gui,
-		old = $.fn.guiCarousel;
+    var console = window.console,
+        $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiCarousel;
 
-	$.fn.guiCarousel = function (option) {
+    var Module = function (obj, option) {
+        this._init(obj, option);
+    }
 
-		var module = {
-			_init: function (obj, option) {
-				this.obj = obj;
-				this._initOptions(option);
-				this._eventHandler();
-				this._initAutoSlide();
-			},
-			_autoAnim: true,
-			_initOptions: function (option) {
-				this.defaults = $.extend({}, $.fn.guiCarousel.defaults, option);
-			},
-			_eventHandler: function () {
-				var that = this;
+    Module.prototype = {
+        _autoAnim: true,
+        _init: function (obj, option) {
+            this.obj = obj;
+            this._initOptions(option);
+            this._eventHandler();
+            this._initAutoSlide();
+        },
+        _initOptions: function (option) {
+            this.defaults = $.extend({}, $.fn.guiCarousel.defaults, option);
+        },
+        _eventHandler: function () {
+            var that = this;
 
-				$(this.obj)
-					.find('[data-slide=next]')
-					.on("click", function (e) {
+            $(this.obj)
+                .find('[data-slide=next]')
+                .on("click", function (e) {
 
-						e.preventDefault();
+                    e.preventDefault();
 
-						var nextPram = that._calNextItemIndex();
+                    var nextPram = that._calNextItemIndex();
 
-						that._toSlide(nextPram.num, nextPram.dir, that);
-						that._refreshIndicator(that);
-					});
+                    that._toSlide(nextPram.num, nextPram.dir, that);
+                    that._refreshIndicator(that);
+                });
 
-				$(this.obj)
-					.hover(function () {
-						that._autoAnim = false;
-					}, function () {
-						that._autoAnim = true;
-					})
-				$(this.obj)
-					.find('[data-slide=prev]')
-					.on("click", function (e) {
+            if(this.defaults.hoverToStop){
+                $(this.obj)
+                .hover(function () {
+                    that._autoAnim = false;
+                }, function () {
+                    that._autoAnim = true;
+                });
+            }
 
-						e.preventDefault();
+            $(this.obj)
+                .find('[data-slide=prev]')
+                .on("click", function (e) {
 
-						var prevPram = that._calPrevItemIndex();
+                    e.preventDefault();
 
-						that._toSlide(prevPram.num, prevPram.dir, that);
-						that._refreshIndicator(that);
-					});
-				$(this.obj)
-					.find(this.defaults.indicators + " li")
-					.on("click", function (e) {
+                    var prevPram = that._calPrevItemIndex();
 
-						var targetClicked = e.target;
+                    that._toSlide(prevPram.num, prevPram.dir, that);
+                    that._refreshIndicator(that);
+                });
 
-						var nextPram = that._calIndicatorBtnIndex(targetClicked);
-						var curItemIndex = that._getCurrentItemIndex();
+            $(this.obj)
+                .find(".carousel-indicators")
+                .on("click","li", function (e) {
 
-						if(nextPram.num != curItemIndex){
-							that._toSlide(nextPram.num, nextPram.dir, that);
-							that._refreshIndicator(that);
-						}
-					})
-			},
-			_getCurrentItemIndex: function () {
+                    var targetClicked = e.target;
+                    console.log(e)
 
-				var curIndex = $(this.obj).find(".carousel-inner .active.item").index();
+                    var nextPram = that._calIndicatorBtnIndex(targetClicked);
+                    var curItemIndex = that._getCurrentItemIndex();
 
-				return curIndex;
-			},
-			_calNextItemIndex: function () {
+                    if (nextPram.num != curItemIndex) {
+                        that._toSlide(nextPram.num, nextPram.dir, that);
+                        that._refreshIndicator(that);
+                    }
+                })
+        },
+        _getCurrentItemIndex: function () {
 
-				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
+            var curIndex = $(this.obj).find(".carousel-inner .active.item").index();
 
-				var nextIndex;
+            return curIndex;
+        },
+        _calNextItemIndex: function () {
 
-				if (this._getCurrentItemIndex() === lastIndex) {
-					nextIndex = 0;
-				} else {
-					nextIndex = this._getCurrentItemIndex() + 1;
-				}
-				return {num: nextIndex, dir: "next"};
-			},
-			_calPrevItemIndex: function () {
+            var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
 
-				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
+            var nextIndex;
 
-				var prevIndex;
+            if (this._getCurrentItemIndex() === lastIndex) {
+                nextIndex = 0;
+            } else {
+                nextIndex = this._getCurrentItemIndex() + 1;
+            }
+            return {num: nextIndex, dir: "next"};
+        },
+        _calPrevItemIndex: function () {
 
-				if (this._getCurrentItemIndex() === 0) {
-					prevIndex = lastIndex;
-				} else {
-					prevIndex = this._getCurrentItemIndex() - 1;
-				}
-				return {num: prevIndex, dir: "prev"};
-			},
-			_calIndicatorBtnIndex: function (target) {
+            var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
 
-				var nextIndex = parseInt($(target).attr("data-slide-to"), 10);
+            var prevIndex;
 
-				var curIndex = this._getCurrentItemIndex();
+            if (this._getCurrentItemIndex() === 0) {
+                prevIndex = lastIndex;
+            } else {
+                prevIndex = this._getCurrentItemIndex() - 1;
+            }
+            return {num: prevIndex, dir: "prev"};
+        },
+        _calIndicatorBtnIndex: function (target) {
 
-				var direction;
+            var nextIndex = parseInt($(target).attr("data-slide-to"), 10);
 
-				if (nextIndex > curIndex) {
-					direction = "next";
-				} else {
-					direction = "prev";
-				}
-				return {num: nextIndex, dir: direction};
-			},
-			_refreshIndicator: function (that) {
+            var curIndex = this._getCurrentItemIndex();
 
-				$(that.obj)
-					.find(".carousel-inner .active.item")
-					.promise()
-					.done(function () {
+            var direction;
 
-						var index = $(that.obj).find(".carousel-inner .prev.item ,.carousel-inner .next.item").index();
+            if (nextIndex > curIndex) {
+                direction = "next";
+            } else {
+                direction = "prev";
+            }
+            return {num: nextIndex, dir: direction};
+        },
+        _refreshIndicator: function (that) {
 
-						$(that.obj)
-							.find('.carousel-indicators li')
-							.eq(index)
-							.addClass("active")
-							.siblings()
-							.removeClass("active");
-					})
-			},
-			_toSlide: function (num, dir, that) {
-				var $activeObj = $(that.obj).find(".carousel-inner .active.item");
-				var $otherObj = $(that.obj).find(".carousel-inner .item");
+            $(that.obj)
+                .find(".carousel-inner .active.item")
+                .promise()
+                .done(function () {
 
-				if (!$activeObj.is(":animated")) {
+                    var index = $(that.obj).find(".carousel-inner .prev.item ,.carousel-inner .next.item").index();
 
-					switch (dir) {
-						case "next":
+                    $(that.obj)
+                        .find('.carousel-indicators li')
+                        .eq(index)
+                        .addClass("active")
+                        .siblings()
+                        .removeClass("active");
+                })
+        },
+        _toSlide: function (num, dir, that) {
+            var $activeObj = $(that.obj).find(".carousel-inner .active.item");
+            var $otherObj = $(that.obj).find(".carousel-inner .item");
 
-							//$otherObj.eq(num).addClass("next").css({"left": "100%"});
+            if (!$activeObj.is(":animated")) {
 
-							$activeObj.stop(false, true).animate(
-								{"left": "-100%"}
-								, "linear", function () {
-									$activeObj.removeClass("active");
-								});
+                switch (dir) {
+                    case "next":
 
-							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(false, true).animate({
-								"left": "0"
-								}, "linear", function () {
-								$otherObj.eq(num)
-									.removeClass("next")
-									.addClass("active");
-								});
+                        $activeObj.stop(true, true).animate(
+                            {"left": "-100%"}
+                            , "linear", function () {
+                                $activeObj.removeClass("active");
+                            });
 
-							break;
-						case "prev":
+                        $otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(true, true).animate({
+                            "left": "0"
+                        }, "linear", function () {
+                            $otherObj.eq(num)
+                                .removeClass("next")
+                                .addClass("active");
+                        });
 
-							$otherObj.eq(num).addClass("prev").css({"left": "-100%"});
+                        break;
+                    case "prev":
 
-							$activeObj.stop(false, true).animate(
-								{"left": "100%"}
-								, "linear", function () {
-									$activeObj.removeClass("active");
-								});
+                        $otherObj.eq(num).addClass("prev").css({"left": "-100%"});
 
-							$otherObj.eq(num).stop(false, true).animate(
-								{"left": "0"}
-								, "linear", function () {
-								$otherObj.eq(num)
-									.removeClass("prev")
-									.addClass("active");
-							});
+                        $activeObj.stop(true, true).animate(
+                            {"left": "100%"}
+                            , "linear", function () {
+                                $activeObj.removeClass("active");
+                            });
 
-							break;
-					}
-				}
-			},
-			_initAutoSlide: function () {
-				var animTime = this.defaults.animTime;
-				var autoSlide = this.defaults.autoSlide;
-				var that = this;
+                        $otherObj.eq(num).stop(true, true).animate(
+                            {"left": "0"}
+                            , "linear", function () {
+                                $otherObj.eq(num)
+                                    .removeClass("prev")
+                                    .addClass("active");
+                            });
 
-				if (autoSlide) {
-					var t = setInterval(function () {
-						that._autoSlide()
-					}, animTime);
-				}
-			},
-			_autoSlide: function () {
-				if (this._autoAnim) {
-					$(this.obj)
-						.find('[data-slide=next]')
-						.trigger("click");
-				}
-			}
-		};
+                        break;
+                }
+            }
+        },
+        _initAutoSlide: function () {
+            var animTime = this.defaults.animTime;
+            var autoAnimate = this.defaults.autoAnimate;
+            var that = this;
 
-		//for debug
-		if(option == 'debug'){
-			return module;
-		}
+            if (autoAnimate) {
+                var t = setInterval(function () {
+                    that._autoSlide()
+                }, animTime);
+            }
+        },
+        _autoSlide: function () {
+            if (this._autoAnim) {
+                $(this.obj)
+                    .find('[data-slide=next]')
+                    .trigger("click");
+            }
+        }
+    };
 
-		return this.each(function () {
-			module._init(this, option);
-		});
-	};
+    $.fn.guiCarousel = function (option) {
+        return this.each(function () {
+            new Module(this, option);
+        });
+    }
 
-	$.fn.guiCarousel.defaults = {
-		indicators: ".carousel-indicators",
-		inner: ".carousel-inner",
-		innerItem: ".item",
-		prevBtn: ".carousel-control-left",
-		nextBtn: ".carousel-control-right",
-		animSpeed: 500,
-		animTime: 5000,
-		hoverToStop: true,
-		autoSlide: true
-	};
+    $.fn.guiCarousel.defaults = {
+        /*indicators: ".carousel-indicators",
+        inner: ".carousel-inner",
+        innerItem: ".item",
+        prevBtn: ".carousel-control-left",
+        nextBtn: ".carousel-control-right",*/
+        animSpeed: 500,
+        animTime: 5000,
+        hoverToStop: true,
+        autoAnimate: true
+    };
 
-	$.fn.guiCarousel.noConflict = function () {
-		$.fn.guiCarousel = old;
-		return this;
-	};
+    $.fn.guiCarousel.Constructor = Module;
 
-	//for debug
-	//$.fn.guiCarousel.debug = module;
+    $.fn.guiCarousel.noConflict = function () {
+        $.fn.guiCarousel = old;
+        return this;
+    };
 
 })(window);
 /* ========================================================================
@@ -2318,7 +2310,8 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 	Module.prototype = {
 		_init: function (obj, option) {
-				this.obj = obj;
+			this.obj = obj;
+			this._initOptions();
 			this._eventHandler();
 		},
 		_initOptions: function (option) {
@@ -2349,14 +2342,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 			});
 		},
 		_judgeTooltipNode: function (e) {
-			return $(e.target).next('.tooltip').length === 0;
+			return $(this.obj).next('.tooltip').length === 0;
 		},
 		_appendTooltip: function (e) {
 
 			var direction;
 
-			if ($(e.target).attr("data-placement") !== undefined) {
-				direction = $(e.target).attr("data-placement");
+			if ($(this.obj).attr("data-placement") !== undefined) {
+				direction = $(this.obj).attr("data-placement");
 			} else {
 				direction = "top";
 			}
@@ -2384,15 +2377,15 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		_calTooltipPos: function (e, tooltipEle) {
 			var parentOffset = $(this.obj).offsetParent().offset();
 
-			var targetOffset = $(e.target).offset();
+			var targetOffset = $(this.obj).offset();
 
-			var tooltipOrgEleWidth = $(e.target).outerWidth();
-			var tooltipOrgEleHeight = $(e.target).outerHeight();
+			var tooltipOrgEleWidth = $(this.obj).outerWidth();
+			var tooltipOrgEleHeight = $(this.obj).outerHeight();
 
 			var w = tooltipEle.outerWidth();
 			var h = tooltipEle.outerHeight();
 
-			var direction = $(e.target).attr('data-placement');
+			var direction = $(this.obj).attr('data-placement');
 
 			var calculatedLeft,
 				calculatedTop;
@@ -2769,16 +2762,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 		},
 		_defaultList : function(){
 
-			$(this.obj).find(".dropdown-toggle").text($(this.obj).find(".dropdown-list li.default").text());
+			$(this.obj).find(".dropdown-toggle span").text($(this.obj).find(".dropdown-list li.default").text());
 
-			if(this.defaults.caret === true){
-				$('<span class="caret">')
-					.appendTo($(this.obj).find(".dropdown-toggle"));
-			}
 		},
 		_toggleList : function(e){
 
-			var $parent = $(e.target).parent(".dropdown").find(".dropdown-list");
+			var $parent = $(this.obj).find(".dropdown-list");
 
 			$parent.addClass("focus");
 
@@ -2786,8 +2775,12 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			if($parent.is(":visible")){
 				$parent.hide();
+
+				$(this.obj).find(".dropdown-toggle").removeClass("dropdown-toggle-open");
 			}else{
 				$parent.show();
+
+				$(this.obj).find(".dropdown-toggle").addClass("dropdown-toggle-open");
 			}
 			$parent.removeClass("focus");
 		},
@@ -2795,17 +2788,14 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			$(".dropdown-list").hide();
 
+			$(".dropdown-toggle").removeClass("dropdown-toggle-open");
+
 		},
 		_changeCurList : function(e){
 
 			var txt = $(e.target).text();
 
-			$(this.obj).find(".dropdown-toggle").text(txt);
-
-			if(this.defaults.caret === true){
-				$('<span class="caret">')
-					.appendTo($(this.obj).find(".dropdown-toggle"));
-			}
+			$(this.obj).find(".dropdown-toggle span").text(txt);
 
 			this._hideList();
 		},
@@ -2814,8 +2804,10 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 			$(this.obj)
 				.on('click.gui.dropdown.data-api',function(e){e.stopPropagation();})
-				.on('click.gui.dropdown.data-api',function(e){that._toggleList(e);})
+				.on('click.gui.dropdown.data-api',".dropdown-toggle",function(e){that._toggleList(e);})
 				.on('click.gui.dropdown.data-api',".dropdown-list a",function(e){that._changeCurList(e);})
+				.on('mouseover.gui.dropdown.data-api',".dropdown-list a",function(e){$(this).parent().addClass("active")})
+				.on('mouseout.gui.dropdown.data-api',".dropdown-list a",function(e){$(".dropdown-list li").removeClass("active")})
 		}
 	}
 
@@ -2829,7 +2821,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	$(document).on('click.gui.dropdown.data-api',function(){Module.prototype._hideList();})
 
 	$.fn.guiDropdown.defaults = {
-		caret : true
+		
 	};
 
 	$.fn.guiDropdown.Constructor = Module;

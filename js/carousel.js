@@ -1,232 +1,232 @@
-//
+
 (function (window, undefined) {
-	"use strict";
+    "use strict";
 
-	var console = window.console,
-		$ = window.jQuery,
-		gui = window.gui,
-		old = $.fn.guiCarousel;
+    var console = window.console,
+        $ = window.jQuery,
+        gui = window.gui,
+        old = $.fn.guiCarousel;
 
-	$.fn.guiCarousel = function (option) {
+    var Module = function (obj, option) {
+        this._init(obj, option);
+    }
 
-		var module = {
-			_init: function (obj, option) {
-				this.obj = obj;
-				this._initOptions(option);
-				this._eventHandler();
-				this._initAutoSlide();
-			},
-			_autoAnim: true,
-			_initOptions: function (option) {
-				this.defaults = $.extend({}, $.fn.guiCarousel.defaults, option);
-			},
-			_eventHandler: function () {
-				var that = this;
+    Module.prototype = {
+        _autoAnim: true,
+        _init: function (obj, option) {
+            this.obj = obj;
+            this._initOptions(option);
+            this._eventHandler();
+            this._initAutoSlide();
+        },
+        _initOptions: function (option) {
+            this.defaults = $.extend({}, $.fn.guiCarousel.defaults, option);
+        },
+        _eventHandler: function () {
+            var that = this;
 
-				$(this.obj)
-					.find('[data-slide=next]')
-					.on("click", function (e) {
+            $(this.obj)
+                .find('[data-slide=next]')
+                .on("click", function (e) {
 
-						e.preventDefault();
+                    e.preventDefault();
 
-						var nextPram = that._calNextItemIndex();
+                    var nextPram = that._calNextItemIndex();
 
-						that._toSlide(nextPram.num, nextPram.dir, that);
-						that._refreshIndicator(that);
-					});
+                    that._toSlide(nextPram.num, nextPram.dir, that);
+                    that._refreshIndicator(that);
+                });
 
-				$(this.obj)
-					.hover(function () {
-						that._autoAnim = false;
-					}, function () {
-						that._autoAnim = true;
-					})
-				$(this.obj)
-					.find('[data-slide=prev]')
-					.on("click", function (e) {
+            if(this.defaults.hoverToStop){
+                $(this.obj)
+                .hover(function () {
+                    that._autoAnim = false;
+                }, function () {
+                    that._autoAnim = true;
+                });
+            }
 
-						e.preventDefault();
+            $(this.obj)
+                .find('[data-slide=prev]')
+                .on("click", function (e) {
 
-						var prevPram = that._calPrevItemIndex();
+                    e.preventDefault();
 
-						that._toSlide(prevPram.num, prevPram.dir, that);
-						that._refreshIndicator(that);
-					});
-				$(this.obj)
-					.find(this.defaults.indicators + " li")
-					.on("click", function (e) {
+                    var prevPram = that._calPrevItemIndex();
 
-						var targetClicked = e.target;
+                    that._toSlide(prevPram.num, prevPram.dir, that);
+                    that._refreshIndicator(that);
+                });
 
-						var nextPram = that._calIndicatorBtnIndex(targetClicked);
-						var curItemIndex = that._getCurrentItemIndex();
+            $(this.obj)
+                .find(".carousel-indicators")
+                .on("click","li", function (e) {
 
-						if(nextPram.num != curItemIndex){
-							that._toSlide(nextPram.num, nextPram.dir, that);
-							that._refreshIndicator(that);
-						}
-					})
-			},
-			_getCurrentItemIndex: function () {
+                    var targetClicked = e.target;
+                    console.log(e)
 
-				var curIndex = $(this.obj).find(".carousel-inner .active.item").index();
+                    var nextPram = that._calIndicatorBtnIndex(targetClicked);
+                    var curItemIndex = that._getCurrentItemIndex();
 
-				return curIndex;
-			},
-			_calNextItemIndex: function () {
+                    if (nextPram.num != curItemIndex) {
+                        that._toSlide(nextPram.num, nextPram.dir, that);
+                        that._refreshIndicator(that);
+                    }
+                })
+        },
+        _getCurrentItemIndex: function () {
 
-				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
+            var curIndex = $(this.obj).find(".carousel-inner .active.item").index();
 
-				var nextIndex;
+            return curIndex;
+        },
+        _calNextItemIndex: function () {
 
-				if (this._getCurrentItemIndex() === lastIndex) {
-					nextIndex = 0;
-				} else {
-					nextIndex = this._getCurrentItemIndex() + 1;
-				}
-				return {num: nextIndex, dir: "next"};
-			},
-			_calPrevItemIndex: function () {
+            var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
 
-				var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
+            var nextIndex;
 
-				var prevIndex;
+            if (this._getCurrentItemIndex() === lastIndex) {
+                nextIndex = 0;
+            } else {
+                nextIndex = this._getCurrentItemIndex() + 1;
+            }
+            return {num: nextIndex, dir: "next"};
+        },
+        _calPrevItemIndex: function () {
 
-				if (this._getCurrentItemIndex() === 0) {
-					prevIndex = lastIndex;
-				} else {
-					prevIndex = this._getCurrentItemIndex() - 1;
-				}
-				return {num: prevIndex, dir: "prev"};
-			},
-			_calIndicatorBtnIndex: function (target) {
+            var lastIndex = $(this.obj).find(".carousel-inner").find(".item").last().index();
 
-				var nextIndex = parseInt($(target).attr("data-slide-to"), 10);
+            var prevIndex;
 
-				var curIndex = this._getCurrentItemIndex();
+            if (this._getCurrentItemIndex() === 0) {
+                prevIndex = lastIndex;
+            } else {
+                prevIndex = this._getCurrentItemIndex() - 1;
+            }
+            return {num: prevIndex, dir: "prev"};
+        },
+        _calIndicatorBtnIndex: function (target) {
 
-				var direction;
+            var nextIndex = parseInt($(target).attr("data-slide-to"), 10);
 
-				if (nextIndex > curIndex) {
-					direction = "next";
-				} else {
-					direction = "prev";
-				}
-				return {num: nextIndex, dir: direction};
-			},
-			_refreshIndicator: function (that) {
+            var curIndex = this._getCurrentItemIndex();
 
-				$(that.obj)
-					.find(".carousel-inner .active.item")
-					.promise()
-					.done(function () {
+            var direction;
 
-						var index = $(that.obj).find(".carousel-inner .prev.item ,.carousel-inner .next.item").index();
+            if (nextIndex > curIndex) {
+                direction = "next";
+            } else {
+                direction = "prev";
+            }
+            return {num: nextIndex, dir: direction};
+        },
+        _refreshIndicator: function (that) {
 
-						$(that.obj)
-							.find('.carousel-indicators li')
-							.eq(index)
-							.addClass("active")
-							.siblings()
-							.removeClass("active");
-					})
-			},
-			_toSlide: function (num, dir, that) {
-				var $activeObj = $(that.obj).find(".carousel-inner .active.item");
-				var $otherObj = $(that.obj).find(".carousel-inner .item");
+            $(that.obj)
+                .find(".carousel-inner .active.item")
+                .promise()
+                .done(function () {
 
-				if (!$activeObj.is(":animated")) {
+                    var index = $(that.obj).find(".carousel-inner .prev.item ,.carousel-inner .next.item").index();
 
-					switch (dir) {
-						case "next":
+                    $(that.obj)
+                        .find('.carousel-indicators li')
+                        .eq(index)
+                        .addClass("active")
+                        .siblings()
+                        .removeClass("active");
+                })
+        },
+        _toSlide: function (num, dir, that) {
+            var $activeObj = $(that.obj).find(".carousel-inner .active.item");
+            var $otherObj = $(that.obj).find(".carousel-inner .item");
 
-							//$otherObj.eq(num).addClass("next").css({"left": "100%"});
+            if (!$activeObj.is(":animated")) {
 
-							$activeObj.stop(false, true).animate(
-								{"left": "-100%"}
-								, "linear", function () {
-									$activeObj.removeClass("active");
-								});
+                switch (dir) {
+                    case "next":
 
-							$otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(false, true).animate({
-								"left": "0"
-								}, "linear", function () {
-								$otherObj.eq(num)
-									.removeClass("next")
-									.addClass("active");
-								});
+                        $activeObj.stop(true, true).animate(
+                            {"left": "-100%"}
+                            , "linear", function () {
+                                $activeObj.removeClass("active");
+                            });
 
-							break;
-						case "prev":
+                        $otherObj.eq(num).addClass("next").css({"left": "100%"}).stop(true, true).animate({
+                            "left": "0"
+                        }, "linear", function () {
+                            $otherObj.eq(num)
+                                .removeClass("next")
+                                .addClass("active");
+                        });
 
-							$otherObj.eq(num).addClass("prev").css({"left": "-100%"});
+                        break;
+                    case "prev":
 
-							$activeObj.stop(false, true).animate(
-								{"left": "100%"}
-								, "linear", function () {
-									$activeObj.removeClass("active");
-								});
+                        $otherObj.eq(num).addClass("prev").css({"left": "-100%"});
 
-							$otherObj.eq(num).stop(false, true).animate(
-								{"left": "0"}
-								, "linear", function () {
-								$otherObj.eq(num)
-									.removeClass("prev")
-									.addClass("active");
-							});
+                        $activeObj.stop(true, true).animate(
+                            {"left": "100%"}
+                            , "linear", function () {
+                                $activeObj.removeClass("active");
+                            });
 
-							break;
-					}
-				}
-			},
-			_initAutoSlide: function () {
-				var animTime = this.defaults.animTime;
-				var autoSlide = this.defaults.autoSlide;
-				var that = this;
+                        $otherObj.eq(num).stop(true, true).animate(
+                            {"left": "0"}
+                            , "linear", function () {
+                                $otherObj.eq(num)
+                                    .removeClass("prev")
+                                    .addClass("active");
+                            });
 
-				if (autoSlide) {
-					var t = setInterval(function () {
-						that._autoSlide()
-					}, animTime);
-				}
-			},
-			_autoSlide: function () {
-				if (this._autoAnim) {
-					$(this.obj)
-						.find('[data-slide=next]')
-						.trigger("click");
-				}
-			}
-		};
+                        break;
+                }
+            }
+        },
+        _initAutoSlide: function () {
+            var animTime = this.defaults.animTime;
+            var autoAnimate = this.defaults.autoAnimate;
+            var that = this;
 
-		//for debug
-		if(option == 'debug'){
-			return module;
-		}
+            if (autoAnimate) {
+                var t = setInterval(function () {
+                    that._autoSlide()
+                }, animTime);
+            }
+        },
+        _autoSlide: function () {
+            if (this._autoAnim) {
+                $(this.obj)
+                    .find('[data-slide=next]')
+                    .trigger("click");
+            }
+        }
+    };
 
-		return this.each(function () {
-			module._init(this, option);
-		});
-	};
+    $.fn.guiCarousel = function (option) {
+        return this.each(function () {
+            new Module(this, option);
+        });
+    }
 
-	$.fn.guiCarousel.defaults = {
-		indicators: ".carousel-indicators",
-		inner: ".carousel-inner",
-		innerItem: ".item",
-		prevBtn: ".carousel-control-left",
-		nextBtn: ".carousel-control-right",
-		animSpeed: 500,
-		animTime: 5000,
-		hoverToStop: true,
-		autoSlide: true
-	};
+    $.fn.guiCarousel.defaults = {
+        /*indicators: ".carousel-indicators",
+        inner: ".carousel-inner",
+        innerItem: ".item",
+        prevBtn: ".carousel-control-left",
+        nextBtn: ".carousel-control-right",*/
+        animSpeed: 500,
+        animTime: 5000,
+        hoverToStop: true,
+        autoAnimate: true
+    };
 
-	$.fn.guiCarousel.noConflict = function () {
-		$.fn.guiCarousel = old;
-		return this;
-	};
+    $.fn.guiCarousel.Constructor = Module;
 
-	//for debug
-	//$.fn.guiCarousel.debug = module;
+    $.fn.guiCarousel.noConflict = function () {
+        $.fn.guiCarousel = old;
+        return this;
+    };
 
 })(window);
