@@ -1,4 +1,4 @@
-//
+
 (function (window, undefined) {
     "use strict";
 
@@ -37,12 +37,15 @@
                     that._refreshIndicator(that);
                 });
 
-            $(this.obj)
+            if(this.defaults.hoverToStop){
+                $(this.obj)
                 .hover(function () {
                     that._autoAnim = false;
                 }, function () {
                     that._autoAnim = true;
-                })
+                });
+            }
+
             $(this.obj)
                 .find('[data-slide=prev]')
                 .on("click", function (e) {
@@ -54,11 +57,13 @@
                     that._toSlide(prevPram.num, prevPram.dir, that);
                     that._refreshIndicator(that);
                 });
+
             $(this.obj)
-                .find(this.defaults.indicators + " li")
-                .on("click", function (e) {
+                .find(".carousel-indicators")
+                .on("click","li", function (e) {
 
                     var targetClicked = e.target;
+                    console.log(e)
 
                     var nextPram = that._calIndicatorBtnIndex(targetClicked);
                     var curItemIndex = that._getCurrentItemIndex();
@@ -181,10 +186,10 @@
         },
         _initAutoSlide: function () {
             var animTime = this.defaults.animTime;
-            var autoSlide = this.defaults.autoSlide;
+            var autoAnimate = this.defaults.autoAnimate;
             var that = this;
 
-            if (autoSlide) {
+            if (autoAnimate) {
                 var t = setInterval(function () {
                     that._autoSlide()
                 }, animTime);
@@ -206,15 +211,15 @@
     }
 
     $.fn.guiCarousel.defaults = {
-        indicators: ".carousel-indicators",
+        /*indicators: ".carousel-indicators",
         inner: ".carousel-inner",
         innerItem: ".item",
         prevBtn: ".carousel-control-left",
-        nextBtn: ".carousel-control-right",
+        nextBtn: ".carousel-control-right",*/
         animSpeed: 500,
         animTime: 5000,
         hoverToStop: true,
-        autoSlide: true
+        autoAnimate: true
     };
 
     $.fn.guiCarousel.Constructor = Module;
