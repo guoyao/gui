@@ -187,7 +187,7 @@
 				btnLeft.push(parseInt($(this.obj)
 					.find("." + this.defaults.btnClass)
 					.get(k)
-					.style.left,10) / 100 * parseInt($(this.obj).find(".slider-btn-wrapper").css("width")));
+					.style.left,10) / 100 * parseInt($(this.obj).find(".slider-btn-wrapper").css("width"),10));
 			}
 			var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
 			$(this.obj)

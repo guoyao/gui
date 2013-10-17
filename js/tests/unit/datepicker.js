@@ -1,26 +1,8 @@
-
 $(function (undefined) {
 
-    var $ = window.jQuery,
-        $testWrapper = $("#qunit-fixture");
-	
-	//var $testobj = $('<div id="date-picker-test" style="position:relative;">' + 
-		//'<input class="datepicker_demo" type="text" data-default-date="now"/>' +
-		//'</div>');
+    var $ = window.jQuery;
 
-	//$testobj.appendTo($testWrapper);
-
-	module("datepicker", {
-        setup: function () {
-            //$testobj.appendTo($testWrapper);
-            //$(".datepicker_demo").guiDatePicker();
-
-		//console.log($(".gui-date-picker").find(".gui-date-title").text())
-        },
-        teardown: function () {
-            //$("#date-picker-test").remove();
-        }
-    });
+    module("datepicker");
 
     test("should provide no conflict", function () {
         var guiDatePicker = $.fn.guiDatePicker.noConflict();
@@ -29,127 +11,178 @@ $(function (undefined) {
     });
 
     test("should be defined on jquery object", function () {
-    	var div = $("<div></div>")
+        var div = $("<div></div>")
         ok(div.guiDatePicker, 'guiDatePicker method is defined');
     });
 
     test("should return element", function () {
-    	var div = $("<div></div>")
-        ok(div.guiDatePicker() == div , 'document.body returned');
+        var div = $("<div></div>")
+        ok(div.guiDatePicker() == div, 'document.body returned');
     });
-	
-	test("should append calender",function(){
 
-		var $inputElem = $('<input id="datepicker_demo" type="text"/>');
+    test("should append calender", function () {
 
-		$inputElem.appendTo("#qunit-fixture").guiDatePicker();
+        var $inputElem = $('<input id="datepicker_demo" type="text"/>');
 
-		var $datePicker = $("#datepicker_demo").next(".gui-date-picker");
+        $inputElem.appendTo("#qunit-fixture").guiDatePicker();
 
-		equal($datePicker.length , 1 , "append datepicker node");
+        var $datePicker = $("#datepicker_demo").next(".gui-date-picker");
 
-	});
+        equal($datePicker.length, 1, "append datepicker node");
 
-	test("check date picker title" , function(){
+    });
 
-		var $inputElem = $('<input id="datepicker_demo" type="text"/>');
+    test("check date picker title", function () {
+        //check date picker title
 
-		$inputElem.appendTo("#qunit-fixture").guiDatePicker().trigger("focus");
+        var $inputElem = $('<input id="datepicker_demo" type="text"/>');
 
-		var today = new Date();
+        $inputElem.appendTo("#qunit-fixture").guiDatePicker();
 
-		var monthOfToday = today.getMonth() + 1;
+        $inputElem.focus();
 
-		var yearOfToday = today.getFullYear();
+        var today = new Date();
 
-		var dateTitle = yearOfToday + ' ' + monthOfToday + '月';
+        var monthOfToday = today.getMonth() + 1;
 
-		equal(dateTitle, $(".gui-date-picker").find(".gui-date-title").text() , "check date picker title");
+        var yearOfToday = today.getFullYear();
 
-	});
+        var dateTitle = yearOfToday + ' ' + monthOfToday + '月';
 
-	test("check total dates of a month" , function(){
+        equal(dateTitle, $(".gui-date-picker").find(".gui-date-title").text(), "check date picker title");
+    });
 
-		var $inputElem = $('<input id="datepicker_demo" type="text"/>');
+    test("check total dates of this month", function () {
+        //check total dates of this month
 
-		$inputElem.appendTo("#qunit-fixture").guiDatePicker().trigger("focus");
+        var $inputElem = $('<input id="datepicker_demo" type="text"/>');
 
-		var today = new Date();
+        $inputElem.appendTo("#qunit-fixture").guiDatePicker();
 
-		today.setMonth(today.getMonth()+1);
+        $inputElem.focus();
 
-		today.setDate(0);
+        var today = new Date();
 
-		var totalDates = today.getDate();
+        today.setMonth(today.getMonth() + 1);
 
-		equal(totalDates, $(".gui-date-picker").find(".gui-date-dates a").length , "check total dates of this month");
+        today.setDate(0);
 
-	});
+        var totalDates = today.getDate();
 
-	test("set the clicked date to input" , function(){
+        equal(totalDates, $(".gui-date-picker").find(".gui-date-dates a").length, "check total dates of this month");
+    });
 
-		var $inputElem = $('<input id="datepicker_demo" type="text"/>');
+    test("change month", function () {
+        //same date
+        var $inputElem = $('<input id="datepicker_demo" type="text"/>');
 
-		$inputElem.appendTo("#qunit-fixture").guiDatePicker().trigger("focus").next(".gui-date-picker")
-			.find(".gui-date-dates a")
-			.last()
-			.click();
+        $inputElem.appendTo("#qunit-fixture").guiDatePicker();
 
-		var today = new Date();
+        $inputElem
+            .focus()
+            .next(".gui-date-picker")
+            .find(".gui-date-pm-btn")
+            .click();
 
-		var curMonth = today.getMonth() + 1;
-		var curYear = today.getFullYear();
+        var today = new Date();
 
-		today.setMonth(today.getMonth() + 1);
-		today.setDate(0);
+        var curMonth = today.getMonth() + 1;
+        var curYear = today.getFullYear();
 
-		var totalDates = today.getDate();
+        if (curMonth - 1 > 1) {
+            curMonth = curMonth - 1;
+        } else {
+            curMonth = 12;
+        }
 
-		var dateSpliter = $.fn.guiDatePicker.defaults.dateSpliter;
+        var title = curYear + ' ' + curMonth + '月';
 
-		var inputDate = curYear + dateSpliter + curMonth + dateSpliter + totalDates;
+        equal(title, $inputElem.next(".gui-date-picker").find(".gui-date-title").text(), "same date");
 
-		equal(inputDate , $inputElem.val(),"should get the same value");
+        $inputElem
+            .focus()
+            .next(".gui-date-picker")
+            .find(".gui-date-nm-btn")
+            .click();
 
-	});
+        today = new Date();
 
-	/*=test("change to previous month page",function(){
-		console.log($("#qunit-fixture").html())
-		stop()
+        if (curMonth + 1 < 12) {
+            curMonth = curMonth + 1;
+        } else {
+            curMonth = 1;
+        }
 
-		setTimeout(function() {
+        title = curYear + ' ' + curMonth + '月';
 
-		var $inputElem = $('<input id="datepicker_demo" type="text"/>');
+        equal(title, $inputElem.next(".gui-date-picker").find(".gui-date-title").text(), "same date");
 
-		$inputElem.appendTo("#qunit-fixture").guiDatePicker().trigger("focus");
-		$inputElem.next(".gui-date-picker")
-			.find(".gui-date-pm-btn")
-			.click();
+    });
 
-			
+    test("change year", function () {
+        //same date
+        var $inputElem = $('<input id="datepicker_demo" type="text"/>');
 
-			console.log($("#qunit-fixture").html())
+        $inputElem.appendTo("#qunit-fixture").guiDatePicker();
 
-		var today = new Date();
+        $inputElem
+            .focus()
+            .next(".gui-date-picker")
+            .find(".gui-date-py-btn")
+            .click();
 
-		var curMonth = today.getMonth() + 1;
-		var curYear = today.getFullYear();
+        var today = new Date();
 
-		if(curMonth - 1 > 1){
-			curMonth = curMonth - 1;
-		}else{
-			curMonth = 12;
-		}
+        var curMonth = today.getMonth() + 1;
+        var curYear = today.getFullYear();
 
-		//var totalDates = today.getDate();
+        curYear -= 1;
 
-		var title = curYear + ' ' + curMonth + '月';
+        var title = curYear + ' ' + curMonth + '月';
 
-		
-			equal( title , $inputElem.next(".gui-date-picker").find(".gui-date-title").text() , "same date");
-        start();    
-    }, 2000); 
+        equal(title, $inputElem.next(".gui-date-picker").find(".gui-date-title").text(), "same date");
 
-	})*/
-	
+        $inputElem
+            .focus()
+            .next(".gui-date-picker")
+            .find(".gui-date-ny-btn")
+            .click();
+
+        curYear += 1;
+
+        title = curYear + ' ' + curMonth + '月';
+
+        equal(title, $inputElem.next(".gui-date-picker").find(".gui-date-title").text(), "same date");
+
+    });
+
+    test("set input value to selected date", function () {
+
+        var $inputElem = $('<input id="datepicker_demo" type="text"/>');
+
+        $inputElem.appendTo("#qunit-fixture").guiDatePicker();
+
+        $inputElem
+            .focus()
+            .next(".gui-date-picker")
+            .find(".gui-date-dates a")
+            .last()
+            .click();
+
+        today = new Date();
+
+        var curMonth = today.getMonth() + 1;
+        var curYear = today.getFullYear();
+
+        today.setMonth(today.getMonth() + 1);
+        today.setDate(0);
+
+        var totalDates = today.getDate();
+
+        var dateSpliter = $.fn.guiDatePicker.defaults.dateSpliter;
+
+        var inputDate = curYear + dateSpliter + curMonth + dateSpliter + totalDates;
+
+        equal(inputDate, $inputElem.val(), "should get the same value");
+    });
 });

@@ -35,12 +35,12 @@
             }
         },
         /*_initNewDate: function () {
-            var initNewDate = this.defaults.initNewDate;
+         var initNewDate = this.defaults.initNewDate;
 
-            this._setNewDate('setFullYear', initNewDate.getFullYear());
-            this._setNewDate('setMonth', initNewDate.getMonth());
-            this._setNewDate('setDate', initNewDate.getDate());
-        },*/
+         this._setNewDate('setFullYear', initNewDate.getFullYear());
+         this._setNewDate('setMonth', initNewDate.getMonth());
+         this._setNewDate('setDate', initNewDate.getDate());
+         },*/
         _setNewDate: function (type, value) {
             this.defaults.initNewDate[type](value);
         },
@@ -70,9 +70,9 @@
                 prop = [];
             if (inputNode) {
                 prop.left = inputNode.offset().left,
-                prop.top = inputNode.offset().top,
-                prop.h = parseInt(inputNode.outerHeight(), 10),
-                prop.w = parseInt(inputNode.outerWidth(), 10);
+                    prop.top = inputNode.offset().top,
+                    prop.h = parseInt(inputNode.outerHeight(), 10),
+                    prop.w = parseInt(inputNode.outerWidth(), 10);
             }
             return prop;
         },
@@ -209,13 +209,17 @@
                     .fadeOut();
 
                 //that._setActiveDate(getActiveDate);
-                that._setNewDate("setDate",getActiveDate);
+                that._setNewDate("setDate", getActiveDate);
                 that._setInputVal();
             });
 
             $(document)
-                .on("click", function () {$('.gui-date-picker').fadeOut();})
-                .on("click", ".gui-date-picker" , function(e){e.stopPropagation()});
+                .on("click", function () {
+                    $('.gui-date-picker').fadeOut();
+                })
+                .on("click", ".gui-date-picker", function (e) {
+                    e.stopPropagation()
+                });
 
             $(this.obj).on("click", function (e) {
                 e.stopPropagation();
@@ -269,7 +273,7 @@
             }
         },
         _appendElem: function () {
-            if($(this.obj).next(".gui-date-picker").length === 0){
+            if ($(this.obj).next(".gui-date-picker").length === 0) {
                 $('<div class="gui-date-picker">' +
                     '<div class="gui-date-header">' +
                     '<a class="gui-date-py-btn">&lt;&lt;</a>' +
