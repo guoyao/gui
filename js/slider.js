@@ -6,20 +6,23 @@
 		gui = window.gui,
 		old = $.fn.guiSlider;
 
-	var module = {
+	var Module = function (obj, option) {
+        this._init(obj, option);
+    }
+
+	Module.prototype = {
+		curTarget: {},
+		//index: [],
 		_init: function (obj, option) {
-			this._mergeOptions(option);
-			this._initVaribles(obj);
+			this.obj = obj;
+			this._initOptions(option);
+			//this._initVaribles(obj);//this.rangeSelectorBar = $(this.obj).find("." + this.defaults.rangeBarClass);
 			this._initNodeWrapper();
 			this._initFetchData();
 		},
-		_mergeOptions: function (option) {
+		_initOptions: function (option) {
 			this.defaults = $.extend({}, $.fn.guiSlider.defaults, option);
 		},
-		//_sliceSelectorSymbol: function (name) {
-		//var reg = /[.#]*/;
-		//return name = name.replace(reg, '');
-		//},
 		_initFetchData: function () {
 			if (this.defaults.remote.url !== undefined) {
 				$.ajax({
@@ -41,34 +44,25 @@
 		_initElements: function () {
 			this._initBtns();
 			this._calculateMoveDistance();
-			this._eventCapture();
 			this._renderRangeBar();
 			this._initAddIndicatorText();
-		},
-		curTarget: {},
-		index: [],
-		_initVaribles: function (obj) {
-			this.obj = obj;
-			if (this.defaults.rangeBar) {
-				this.rangeSelectorBar = this.obj.find("." + this.defaults.rangeBarClass);
-			}
+			this._eventHandler();
 		},
 		_initNodeWrapper: function () {
-			$('<div class="' + this.defaults.btnWrapperClass + '"></div>').appendTo(this.obj);
+			$('<div class="slider-btn-wrapper"></div>').appendTo(this.obj);
 			if (this.defaults.indicatorText) {
-				$('<div class="' + this.defaults.indicatorTextClass + '"></div>').appendTo(this.obj);
+				$('<div class="slider-range-indicator"></div>').appendTo(this.obj);
 			}
 		},
 		_initBtns: function () {
+			this.index = [];
 			for (var i = 0; i < this.defaults.btns.length; i++) {
 				this.index[i] = (this.defaults.btns[i] === 'max') ? this.defaults.data.indicatordata.length - 1 : this.defaults.btns[i];
 
-				$('<a class="' + this.defaults.btnClass + '"></a>')
-					.appendTo($("." + this.defaults.btnWrapperClass))
+				$('<a class="btn"></a>')
+					.appendTo($(this.obj).find(".slider-btn-wrapper"))
 					.css({
 						"left": this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%",
-						"width": this.defaults.btnSize.width,
-						"height": this.defaults.btnSize.height,
 						"margin-left": -(this.defaults.btnSize.width / 4),
 						"margin-top": -(this.defaults.btnSize.height / 4)
 					});
@@ -78,47 +72,47 @@
 			if (this.defaults.indicatorText) {
 				for (var i = 0; i < this.defaults.data.indicatordata.length; i++) {
 					$('<span>' + this.defaults.data.indicatordata[i] + '</span>')
-						.appendTo($("." + this.defaults.indicatorTextClass))
+						.appendTo($(this.obj).find(".slider-range-indicator"))
 						.css({
 							"left": i / (this.defaults.data.indicatordata.length - 1) * 100 + "%",
-							"margin-left": -$("." + this.defaults.indicatorTextClass)
-								.find('span')
+							"margin-left": -$(this.obj).find(".slider-range-indicator span")
 								.eq(i)
 								.width()
 								/ 2 +
-								$("." + this.defaults.btnWrapperClass)
-									.find("." + this.defaults.btnClass)
+								$(this.obj)
+									.find(".btn")
 									.outerWidth()
 									/ 4
 						});
 				}
-				if (parseInt($("." + this.defaults.indicatorTextClass).find("span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $("." + this.defaults.rangeBarClass).outerWidth()) {
+				//console.log(parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length , $(this.obj).find(".slider-btn-wrapper").outerWidth())
+				if (parseInt($(this.obj).find(".slider-range-indicator span").outerWidth(), 10) * this.defaults.data.indicatordata.length > $(this.obj).find(".slider-btn-wrapper").outerWidth()) {
 					for (var j = 0; j < this.defaults.data.indicatordata.length; j++) {
 						if (j % 2 === 0) {
-							$("." + this.defaults.indicatorTextClass)
-								.find("span")
+							$(this.obj).find(".slider-range-indicator span")
 								.eq(j)
 								.css({
-									"top": $("." + this.defaults.indicatorTextClass)
-										.find("span")
-										.height()
+									"top": $(this.obj).find(".slider-range-indicator span").height()
 								});
 						}
 					}
 				}
 			}
 		},
-		_eventCapture: function () {
-			var slider = this;
-			$("." + this.defaults.btnWrapperClass).on("mousedown",function (e) {
+		_eventHandler: function () {
+			var that = this;
+
+			$(this.obj).find(".slider-btn-wrapper").on("mousedown",function(e){
 				e.preventDefault();
-				slider._saveTarget(e);
+
+				that._saveTarget(e);
 			});
 			$(document).on("mousemove",function (e) {
-				slider._refreshPosition(e);
+				e.stopPropagation();
+				that._refreshPosition(e);
 			});
 			$(document).on("mouseup",function (e) {
-				slider._destroyTarget();
+				that._destroyTarget();
 			});
 		},
 		_checkMoveStep: function () {
@@ -134,7 +128,7 @@
 			}
 		},
 		_calculateMoveDistance: function () {
-			this.moveDistance = (parseInt($("." + this.defaults.btnWrapperClass).width(), 10)) / (this.defaults.data.indicatordata.length - 1);
+			this.moveDistance = (parseInt($(this.obj).find(".slider-btn-wrapper").width(), 10)) / (this.defaults.data.indicatordata.length - 1);
 			this.moveDistance = Math.round(this.moveDistance);
 		},
 		_refreshPosition: function (e) {
@@ -160,20 +154,20 @@
 		},
 		_renderRangeBar: function () {
 			if (this.defaults.rangeBar) {
-				if ($("." + this.defaults.btnWrapperClass).find("." + this.defaults.rangeBarClass).length <= 0) {
-					$('<a class="' + this.defaults.rangeBarClass + '"></a>').appendTo($("." + this.defaults.btnWrapperClass));
+				if ($(this.obj).find(".slider-range-button").length <= 0) {
+					$('<a class="slider-range-button"></a>').appendTo($(this.obj).find(".slider-btn-wrapper"));
 				}
 				this._refreshRangeBarPosition();
 			}
 		},
 		_refreshRangeBarPosition: function (e) {
 			var btnLeft = [];
-			if (this.curTarget.className === this.defaults.rangeBarClass) {
+			if (this.curTarget.className === "slider-range-button") {
 				if (this._calculateMoveDirection() === 1 && this._checkRangeBarMoveRange()) {
 					for (var i = 0; i < this.index.length; i++) {
 						this.index[i] += this.defaults.step;
-						$("." + this.defaults.btnWrapperClass)
-							.find("." + this.defaults.btnClass)
+						$(this.obj)
+							.find(".btn")
 							.eq(i)
 							.css({"left": (this.index[i] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
 					}
@@ -181,7 +175,7 @@
 				} else if (this._calculateMoveDirection() === -1 && this._checkRangeBarMoveRange()) {
 					for (var j = 0; j < this.index.length; j++) {
 						this.index[j] -= this.defaults.step;
-						$("." + this.defaults.btnWrapperClass)
+						$(this.obj)
 							.find("." + this.defaults.btnClass)
 							.eq(j)
 							.css({"left": (this.index[j] / (this.defaults.data.indicatordata.length - 1) * 100 + "%")});
@@ -189,16 +183,15 @@
 					this.orgX = this.curX;
 				}
 			}
-			for (var k = 0; k < $("." + this.defaults.btnWrapperClass).find("." + this.defaults.btnClass).length; k++) {
-				btnLeft.push(parseInt($("." + this.defaults.btnWrapperClass)
+			for (var k = 0; k < $(this.obj).find(".btn").length; k++) {
+				btnLeft.push(parseInt($(this.obj)
 					.find("." + this.defaults.btnClass)
-					.eq(k)
-					.css("left")
-					, 10));
+					.get(k)
+					.style.left,10) / 100 * parseInt($(this.obj).find(".slider-btn-wrapper").css("width"),10));
 			}
 			var rangeBar = Math.abs(btnLeft[0] - btnLeft[1]);
-			$("." + this.defaults.btnWrapperClass)
-				.find("." + this.defaults.rangeBarClass)
+			$(this.obj)
+				.find(".slider-range-button")
 				.css({'width': rangeBar,
 					'left': btnLeft[0] - btnLeft[1] > 0 ? btnLeft[1] + this.defaults.btnSize.width / 4 : btnLeft[0] + this.defaults.btnSize.width / 4});
 		},
@@ -223,21 +216,21 @@
 		_saveTarget: function (e) {
 			this.curTarget = e.target;
 			this.orgX = e.pageX;
+
 			//this.curOffset = parseInt(e.target.style.left, 10);
 		},
-		_checkTarget: function (e) {
+		/*_checkTarget: function (e) {
 			return this.curTarget === e.target;
-		},
+		},*/
 		_destroyTarget: function () {
-			this.curTarget = "";
+			this.curTarget = {};
 		}
 	}
 
 	$.fn.guiSlider = function (option) {
-
-		module._init(this, option);
-
-		return this;
+		return this.each(function () {
+            new Module(this, option);
+        });
 	}
 
 	$.fn.guiSlider.defaults = {
@@ -249,9 +242,9 @@
 			height: 30
 		},
 		rangeBar: true,
-		rangeBarClass: 'slider-range-button',
+		/*rangeBarClass: 'slider-range-button',
 		btnWrapperClass: 'slider-btn-wrapper',
-		indicatorTextClass: 'slider-range-indicator',
+		indicatorTextClass: 'slider-range-indicator',*/
 		indicatorText: true,
 		data: {
 			indicatordata: []
@@ -259,12 +252,11 @@
 		remote: {}//'type':'POST','url':'','data':'','dataType':'JSON'
 	}
 
+	$.fn.guiSlider.Constructor = Module;
+
 	$.fn.guiSlider.noConflict = function () {
 		$.fn.guiSlider = old;
 		return this;
 	};
-
-	//for debug
-	$.fn.guiSlider.debug = module;
 
 })(window);
