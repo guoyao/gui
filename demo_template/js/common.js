@@ -9,20 +9,18 @@
  * For any third party dependencies, like jQuery, place them in the lib folder.
  * Configure loading modules from the lib directory.
  */
-requirejs.config({
-    baseUrl: "js/lib",
-    paths: {
-        app: "../app"
-    },
-    shim: {
-        "gui": {
-            deps: ["jquery"]
-        }
-    }
-});
+define(function () {
+    "use strict";
 
-require(["jquery", "prettify", "gui"], function ($) {
-    var gui = window.gui;
+    // External lib dependencies.
+    require("prettify");
+    var $ = require("jquery"),
+        gui = require("gui");
+
+    // App common dependencies
+    require("config");
+    require("app/demo");
+
     $("#top-nav .gui-nav").guiNav();
     if (gui.browserInfo.isIE && gui.browserInfo.version <= 6) {
         $("#navigator").find("li:last-child a").css("border-bottom", 0);

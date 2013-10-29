@@ -5,7 +5,10 @@
  */
 
 //Load common code that includes config, then load the app logic for this page.
-require(['./common'], function (common) {
-    require(['app/index-main']);
+require(["common"], function () {
+    require(["app/index-main"], function () {
+        //..
+    });
 });
+
 

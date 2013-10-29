@@ -4,7 +4,9 @@
  * Blog: http://www.guoyao.me
  */
 
-define(["./demo"], function (demo) {
+define(function (demo) {
+    var demo = require("app/demo");
+
     var Module = demo.Module;
     new demo.Initializer([
         new Module("Affix", "affix"),

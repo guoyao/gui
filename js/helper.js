@@ -149,10 +149,16 @@
         }
     })();
 
+    // Expose gui to the global object
     if (!!window.gui) {
         $.extend(window.gui, gui);
     } else {
         window.gui = gui;
+    }
+
+    // Expose gui as an AMD module
+    if (typeof define === "function" && define.amd) {
+        define( "gui", [], function () { return gui; } );
     }
 
 })(window);

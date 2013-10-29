@@ -1,5 +1,5 @@
 /**
-* gui.js v0.1.0 by @guoyao
+* gui.js v0.2.0 by @guoyao
 * Copyright 2013 Guoyao Wu
 * A Graceful And Cross Browser Web UI Framework
 * http://www.gui.guoyao.me/
@@ -8,7 +8,7 @@
 if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 /* ========================================================================
- * GUI: helper.js v0.1.0
+ * GUI: helper.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -164,10 +164,15 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
         window.gui = gui;
     }
 
+    if (typeof define === "function" && define.amd) {
+        console.log("1212121...............");
+        define( "gui", [], function () { return gui; } );
+    }
+
 })(window);
 
 /* ========================================================================
- * GUI: nav.js v0.1.0
+ * GUI: nav.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -235,7 +240,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 })(window);
 
 /* ========================================================================
- * GUI: tab.js v0.1.0
+ * GUI: tab.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -385,7 +390,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
  * ======================================================================== */
 
 /* ========================================================================
- * GUI: collapse.js v0.1.0
+ * GUI: collapse.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -1105,7 +1110,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
  */
 
 /* ========================================================================
- * GUI: button.js v0.1.0
+ * GUI: button.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -1559,7 +1564,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 /* ========================================================================
- * GUI: button-bar.js v0.1.0
+ * GUI: button-bar.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -1617,7 +1622,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
     };
 })(window);
 /* ========================================================================
- * GUI: affix.js v0.1.0
+ * GUI: affix.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -1920,7 +1925,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 /* ========================================================================
- * GUI: breadcrumb.js v0.1.0
+ * GUI: breadcrumb.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -2048,7 +2053,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 
 })(window);
 /* ========================================================================
- * GUI: tab.js v0.1.0
+ * GUI: tab.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu
@@ -2832,7 +2837,7 @@ if (!jQuery) { throw new Error("GUI requires jQuery") }
 	};
 })(window);
 /* ========================================================================
- * GUI: ie-patch.js v0.1.0
+ * GUI: ie-patch.js v0.2.0
  * http://www.gui.guoyao.me/
  * ========================================================================
  * Copyright 2013 Guoyao Wu

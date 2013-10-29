@@ -5,6 +5,8 @@
  */
 
 //Load common code that includes config, then load the app logic for this page.
-require(['./common'], function (common) {
-    require(['app/css-main']);
+require(["common"], function () {
+    require(["app/css-main"], function () {
+        //..
+    });
 });

@@ -1,28 +1,28 @@
 {
     "appDir": "demo_template",
     "dir": "demo",
+    "optimize": "uglify2",
     "optimizeCss": "standard",
     "removeCombined": true,
-    "mainConfigFile": "demo_template/js/common.js",
+    "findNestedDependencies": true,
+    "preserveLicenseComments": false,
+    "generateSourceMaps": true,
+    "mainConfigFile": "demo_template/js/config.js",
     "modules": [
         {
-            "name": "../common",
-            "include": ["jquery", "app/demo"]
+            "name": "common"
         },
         {
-            "name": "../index",
-            "include": ["app/index-main"],
-            "exclude": ["../common"]
+            "name": "index",
+            "exclude": ["common"]
         },
         {
-            "name": "../css",
-            "include": ["app/css-main"],
-            "exclude": ["../common"]
+            "name": "css",
+            "exclude": ["common"]
         },
         {
-            "name": "../javascript",
-            "include": ["app/javascript-main"],
-            "exclude": ["../common"]
+            "name": "javascript",
+            "exclude": ["common"]
         }
     ]
 }
