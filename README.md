@@ -14,7 +14,7 @@ by [guoyao](http://www.guoyao.me/).
 
 
 
-# [GUI v0.1.0](http://gui.guoyao.me)
+# [GUI v0.2.0](http://gui.guoyao.me)
 
 GUI is a graceful, cross browser, and powerful front-end framework for faster and easier web development, created and maintained by [Guoyao Wu](http://guoyao.me).
 
