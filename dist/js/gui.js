@@ -1,6 +1,6 @@
 /**
 * gui.js v0.2.0 by @guoyao
-* Copyright 2013 Guoyao Wu
+* Copyright 2015 Guoyao Wu
 * A Graceful And Cross Browser Web UI Framework
 * http://www.gui.guoyao.me/
 * http://www.apache.org/licenses/LICENSE-2.0

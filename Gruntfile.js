@@ -73,7 +73,7 @@ module.exports = function (grunt) {
                     {
                         'demo_template/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.min.css',
                         'demo_template/js/lib/<%= pkg.name %>.js': 'dist/js/<%= pkg.name %>.min.js',
-                        'demo_template/js/lib/jquery.js': 'bower_components/jquery/jquery.min.js',
+                        'demo_template/js/lib/jquery.js': 'bower_components/jquery/dist/jquery.min.js',
                         'demo_template/js/lib/prettify.js': 'bower_components/google-code-prettify/src/prettify.js',
                         'demo_template/js/lib/require.js': 'bower_components/requirejs/require.js'
                     },
@@ -83,7 +83,7 @@ module.exports = function (grunt) {
             test: {
                 files: [
                     {
-                        'js/tests/vendor/lib/jquery.js': 'bower_components/jquery/jquery.js',
+                        'js/tests/vendor/lib/jquery.js': 'bower_components/jquery/dist/jquery.js',
                         'js/tests/vendor/lib/qunit.js': 'bower_components/qunit/qunit//qunit.js',
                         'js/tests/vendor/lib/qunit.css': 'bower_components/qunit/qunit/qunit.css',
                         'js/tests/vendor/lib/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.min.css'
