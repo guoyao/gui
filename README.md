@@ -5,10 +5,10 @@
 
 supported browser: ie6+ firefox4+ safari chrome and so on.
 
-project homepage: [http://www.gui.guoyao.me/](http://www.gui.guoyao.me/)
+project homepage: [http://gui.guoyao.me/](http://gui.guoyao.me/)
 
 including source code and demo for
-[*GUI*](http://www.gui.guoyao.me/)
+[*GUI*](http://gui.guoyao.me/)
 by [guoyao](http://www.guoyao.me/).
 
 
